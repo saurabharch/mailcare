@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Email;
 use \PhpMimeMailParser\Parser;
+use Illuminate\Support\Facades\Storage;
 
 class ReceiveEmail extends Command
 {
@@ -60,5 +61,8 @@ class ReceiveEmail extends Command
         $email->subject = $parser->getHeader('subject');
 
         $email->save();
+
+        Storage::put('emails/' . $email->created_at->format('Y/m/d/') . $email->id, file_get_contents($file));
+
     }
 }
