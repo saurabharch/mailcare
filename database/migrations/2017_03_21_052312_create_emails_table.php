@@ -14,11 +14,13 @@ class CreateEmailsTable extends Migration
     public function up()
     {
         Schema::create('emails', function (Blueprint $table) {
-            $table->increments('id');
+            $table->uuid('id');
             $table->string('from', 100);
             $table->string('to', 100);
             $table->string('subject', 100);
             $table->timestamps();
+
+            $table->primary('id');
         });
     }
 
