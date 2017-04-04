@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use \Carbon\Carbon;
 
 class EmailsTest extends TestCase
 {
@@ -12,15 +13,27 @@ class EmailsTest extends TestCase
     /**
      * @test
      */
-    public function it_fetches_emails()
+    public function it_fetches_latest_emails()
     {
-    	$email = factory(\App\Email::class)->create();
+    	$emailOne = factory(\App\Email::class)->create([
+    		'subject' => 'My first email',
+    		'created_at' => Carbon::yesterday()
+    		]);
+    	$emailTwo = factory(\App\Email::class)->create([
+    		'subject' => 'My second email',
+    		'created_at' => Carbon::now()
+    		]);
 
     	$response = $this->json('GET', 'api/v1/emails');
 
         $response
             ->assertStatus(200)
-            ->assertJsonFragment(['subject' => $email->subject]);
+            ->assertJsonFragment(['subject' => $emailOne->subject])
+            ->assertJsonFragment(['subject' => $emailTwo->subject]);
+
+    	$data = json_decode($response->baseResponse->content())->data;
+        $this->assertEquals($emailTwo->subject, $data[0]->subject);
+        $this->assertEquals($emailOne->subject, $data[1]->subject);
     }
 
     /**
@@ -30,7 +43,7 @@ class EmailsTest extends TestCase
     {
     	$email = factory(\App\Email::class)->create();
 
-    	$response = $this->json('GET', 'api/v1/emails/'.$email->id)->data;
+    	$response = $this->json('GET', 'api/v1/emails/'.$email->id);
 
         $response
             ->assertStatus(200)

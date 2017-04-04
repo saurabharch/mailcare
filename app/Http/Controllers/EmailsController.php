@@ -21,7 +21,7 @@ class EmailsController extends ApiController
      */
     public function index()
     {
-        $emails = Email::all();
+        $emails = Email::latest()->get();
 
         return response()->json([
             'data' => $this->emailTransformer->transformCollection($emails->all())

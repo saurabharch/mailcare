@@ -11,6 +11,7 @@ class EmailTransformer extends Transformer {
             'from' => $email['from'],
             'to' => $email['to'],
             'subject' => $email['subject'],
+            'created_at' => $email['created_at'],
         ];
     }
 }
