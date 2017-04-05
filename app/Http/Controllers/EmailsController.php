@@ -21,11 +21,12 @@ class EmailsController extends ApiController
      */
     public function index()
     {
-        $emails = Email::latest()->get();
+        $limit = request()->input('limit') ?: 25;
+        $emails = Email::latest()->paginate($limit);
 
-        return response()->json([
-            'data' => $this->emailTransformer->transformCollection($emails->all())
-            ], 200);
+        return $this->respondWithPagination($emails, [
+            'data' => $this->emailTransformer->transformCollection($emails->all()),
+            ]);
     }
 
     /**
@@ -64,9 +65,9 @@ class EmailsController extends ApiController
             return $this->respondNotFound('Email does not exist.');
         }
 
-        return response()->json([
+        return $this->respond([
             'data' => $this->emailTransformer->transform($email)
-            ], 200);
+            ]);
     }
 
     /**

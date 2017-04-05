@@ -39,6 +39,27 @@ class EmailsTest extends TestCase
     /**
      * @test
      */
+    public function it_fetches_limited_emails_per_default()
+    {
+    	define('MAX_LIMIT', 25);
+    	$emails = factory(\App\Email::class, 100)->create();
+
+    	$response = $this->json('GET', 'api/v1/emails');
+
+        $response->assertStatus(200)->assertJsonFragment(['paginator' => [
+        	'total_count' => 100, 
+        	'total_pages' => 4, 
+        	'current_page' => 1, 
+        	'limit' => MAX_LIMIT
+        	]]);
+
+    	$data = json_decode($response->baseResponse->content())->data;
+    	$this->assertCount(MAX_LIMIT, $data);
+    }
+
+    /**
+     * @test
+     */
     public function it_fetches_a_single_email()
     {
     	$email = factory(\App\Email::class)->create();
