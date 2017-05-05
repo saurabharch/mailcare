@@ -34,12 +34,12 @@ Content-Type: multipart/alternative; boundary=047d7b1635f77236f004df476f83
 --047d7b1635f77236f004df476f83
 Content-Type: text/plain; charset=ISO-8859-1
 
-
+this is text part
 
 --047d7b1635f77236f004df476f83
 Content-Type: text/html; charset=ISO-8859-1
 
-<div dir="ltr"><br></div>
+<div>this is html part</div>
 
 --047d7b1635f77236f004df476f83--
 --047d7b1635f77236f404df476f85

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Email;
+use PhpMimeMailParser\Parser;
 use App\Transformers\EmailTransformer;
 
 class EmailsController extends ApiController
@@ -72,9 +73,31 @@ class EmailsController extends ApiController
             return $this->respondNotFound('Email does not exist.');
         }
 
-        return $this->respond([
+        $acceptedHeaders = ['application/json', 'text/html', 'text/plain', 'message/rfc822'];
+
+        if ('text/html' == request()->prefers($acceptedHeaders))
+        {
+            $parser = new Parser;
+            $parser->setPath($email->fullPath());
+            return $parser->getMessageBody('html');
+        }
+        elseif ('text/plain' == request()->prefers($acceptedHeaders))
+        {
+            $parser = new Parser;
+            $parser->setPath($email->fullPath());
+            return $parser->getMessageBody('text');
+        }
+        elseif ('message/rfc822' == request()->prefers($acceptedHeaders))
+        {
+            return file_get_contents($email->fullPath());
+        }
+        else
+        {
+            return $this->respond([
             'data' => $this->emailTransformer->transform($email)
             ]);
+
+        }
     }
 
     /**

@@ -99,4 +99,51 @@ class EmailsTest extends TestCase
     	$data = json_decode($response->baseResponse->content())->data;
     	$this->assertCount(2, $data);
     }
+
+    /**
+     * @test
+     */
+    public function it_fetches_html_part_of_specific_email()
+    {
+    	$exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
+
+    	$response = $this->json('GET', 'api/v1/emails');
+    	$data = json_decode($response->baseResponse->content())->data;
+    	$response = $this->json('GET', 'api/v1/emails/'.$data[0]->id, [], ['Accept' => 'text/html']);
+        $response
+            ->assertStatus(200)
+            ->assertSee('this is html part');
+    }
+
+    /**
+     * @test
+     */
+    public function it_fetches_text_part_of_specific_email()
+    {
+    	$exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
+
+    	$response = $this->json('GET', 'api/v1/emails');
+    	$data = json_decode($response->baseResponse->content())->data;
+    	$response = $this->json('GET', 'api/v1/emails/'.$data[0]->id, [], ['Accept' => 'text/plain']);
+        $response
+            ->assertStatus(200)
+            ->assertSee('this is text part');
+    }
+
+
+    /**
+     * @test
+     */
+    public function it_fetches_raw_part_of_specific_email()
+    {
+    	$exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
+
+    	$response = $this->json('GET', 'api/v1/emails');
+    	$data = json_decode($response->baseResponse->content())->data;
+    	$response = $this->json('GET', 'api/v1/emails/'.$data[0]->id, [], ['Accept' => 'message/rfc822']);
+        $response
+            ->assertStatus(200)
+            ->assertSee('this is html part')
+            ->assertSee('this is text part');
+    }
 }
