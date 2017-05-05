@@ -82,4 +82,21 @@ class EmailsTest extends TestCase
         $response
             ->assertStatus(404);
     }
+
+    /**
+     * @test
+     */
+    public function it_fetches_all_emails_for_specific_mailbox()
+    {
+
+    	$emails = factory(\App\Email::class, 3)->create();
+    	$emails = factory(\App\Email::class, 2)->create(['to' => 'test@example.com']);
+
+    	$response = $this->json('GET', 'api/v1/emails?to=test@example.com');
+
+        $response
+            ->assertStatus(200);
+    	$data = json_decode($response->baseResponse->content())->data;
+    	$this->assertCount(2, $data);
+    }
 }

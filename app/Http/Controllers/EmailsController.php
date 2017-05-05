@@ -22,7 +22,14 @@ class EmailsController extends ApiController
     public function index()
     {
         $limit = request()->input('limit') ?: 25;
-        $emails = Email::latest()->paginate($limit);
+        $to = request()->input('to');
+
+
+        $emails = Email::when($to, function ($query) use ($to) {
+            return $query->where('to', $to);
+        })
+        ->latest()
+        ->paginate($limit);
 
         return $this->respondWithPagination($emails, [
             'data' => $this->emailTransformer->transformCollection($emails->all()),
