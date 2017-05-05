@@ -62,7 +62,7 @@ class ReceiveEmail extends Command
 
         $email->save();
 
-        Storage::put('emails/' . $email->created_at->format('Y/m/d/') . $email->id, file_get_contents($file));
+        Storage::put($email->path(), file_get_contents($file));
 
     }
 }
