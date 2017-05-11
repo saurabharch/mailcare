@@ -9,6 +9,7 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.1/css/bulma.min.css">
 
         <!-- Styles -->
         <style>
@@ -77,7 +78,7 @@
                 </div>
             @endif
 
-            <div class="content">
+            <div class="content" id='app'>
                 <div class="title m-b-md">
                     Laravel
                 </div>
@@ -89,7 +90,17 @@
                     <a href="https://forge.laravel.com">Forge</a>
                     <a href="https://github.com/laravel/laravel">GitHub</a>
                 </div>
+
+                <list-emails></list-emails>
+
             </div>
         </div>
     </body>
+    <script>
+    window.Laravel = {!! json_encode([
+        'csrfToken' => csrf_token(),
+    ]) !!};
+</script>
+        <script src="/js/app.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </html>
