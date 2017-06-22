@@ -127,7 +127,8 @@ class EmailsTest extends TestCase
     	$response = $this->json('GET', 'api/v1/emails/'.$data[0]->id, [], ['Accept' => 'text/html']);
         $response
             ->assertStatus(200)
-            ->assertSee('this is html part');
+            ->assertSee('this is html part')
+            ->assertHeader('Content-Type', 'text/html; charset=UTF-8');
     }
 
     /**
@@ -142,7 +143,8 @@ class EmailsTest extends TestCase
     	$response = $this->json('GET', 'api/v1/emails/'.$data[0]->id, [], ['Accept' => 'text/plain']);
         $response
             ->assertStatus(200)
-            ->assertSee('this is text part');
+            ->assertSee('this is text part')
+            ->assertHeader('Content-Type', 'text/plain; charset=UTF-8');
     }
 
 
@@ -159,6 +161,43 @@ class EmailsTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertSee('this is html part')
-            ->assertSee('this is text part');
+            ->assertSee('this is text part')
+            ->assertHeader('Content-Type', 'message/rfc822; charset=UTF-8');
     }
+
+
+    /**
+     * @test
+     */
+    public function it_fetches_html_part_when_i_prefer_it()
+    {
+        $exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
+
+        $response = $this->json('GET', 'api/v1/emails');
+        $data = json_decode($response->baseResponse->content())->data;
+        $response = $this->json('GET', 'api/v1/emails/'.$data[0]->id, [], ['Accept' => 'text/plain; q=0.5, text/html']);
+        $response
+            ->assertStatus(200)
+            ->assertSee('this is html part')
+            ->assertDontSee('this is text part')
+            ->assertHeader('Content-Type', 'text/html; charset=UTF-8');
+    }
+
+
+    /**
+     * @test
+     */
+    public function it_fetches_text_part_when_i_prefer_it()
+    {
+        $exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
+
+        $response = $this->json('GET', 'api/v1/emails');
+        $data = json_decode($response->baseResponse->content())->data;
+        $response = $this->json('GET', 'api/v1/emails/'.$data[0]->id, [], ['Accept' => 'text/html; q=0.5, text/plain']);
+        $response
+            ->assertStatus(200)
+            ->assertSee('this is text part')
+            ->assertDontSee('this is html part');
+    }
+
 }

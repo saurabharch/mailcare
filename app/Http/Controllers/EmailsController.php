@@ -79,17 +79,17 @@ class EmailsController extends ApiController
         {
             $parser = new Parser;
             $parser->setPath($email->fullPath());
-            return $parser->getMessageBody('html');
+            return response($parser->getMessageBody('html'))->header('Content-Type', 'text/html; charset=UTF-8');
         }
         elseif ('text/plain' == request()->prefers($acceptedHeaders))
         {
             $parser = new Parser;
             $parser->setPath($email->fullPath());
-            return $parser->getMessageBody('text');
+            return response($parser->getMessageBody('text'))->header('Content-Type', 'text/plain; charset=UTF-8');
         }
         elseif ('message/rfc822' == request()->prefers($acceptedHeaders))
-        {
-            return file_get_contents($email->fullPath());
+        {;
+            return response(file_get_contents($email->fullPath()))->header('Content-Type', 'message/rfc822; charset=UTF-8');
         }
         else
         {
