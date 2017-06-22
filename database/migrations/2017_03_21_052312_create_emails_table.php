@@ -18,6 +18,8 @@ class CreateEmailsTable extends Migration
             $table->string('from', 100);
             $table->string('to', 100);
             $table->string('subject', 100);
+            $table->boolean('is_html')->default(false);
+            $table->boolean('is_text')->default(false);
             $table->timestamps();
 
             $table->primary('id');

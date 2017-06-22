@@ -60,6 +60,15 @@ class ReceiveEmail extends Command
         $email->to = $parser->getHeader('to');
         $email->subject = $parser->getHeader('subject');
 
+        if (!empty($parser->getMessageBody('html')))
+        {
+            $email->is_html = true;
+        }
+        if (!empty($parser->getMessageBody('text')))
+        {
+            $email->is_text = true;
+        }
+
         $email->save();
 
         Storage::put($email->path(), file_get_contents($file));

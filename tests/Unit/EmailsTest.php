@@ -103,6 +103,21 @@ class EmailsTest extends TestCase
     /**
      * @test
      */
+    public function it_fetches_whitch_body_type_is_available()
+    {
+        $exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
+
+        $response = $this->json('GET', 'api/v1/emails');
+        $data = json_decode($response->baseResponse->content())->data;
+        $response = $this->json('GET', 'api/v1/emails/'.$data[0]->id);
+        $response
+            ->assertStatus(200)
+            ->assertJsonFragment(['subject' => 'Mail avec fichier attaché de 1ko', 'is_html' => true, 'is_text' => true]);
+    }
+
+    /**
+     * @test
+     */
     public function it_fetches_html_part_of_specific_email()
     {
     	$exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
