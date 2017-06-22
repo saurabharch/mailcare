@@ -14,6 +14,10 @@ require('./bootstrap');
  */
 
 Vue.component('list-emails', require('./components/list-emails.vue'));
+Vue.component('show-email', require('./components/show-email.vue'));
+Vue.component('show-email-body', require('./components/show-email-body.vue'));
+Vue.component('i-frame', require('./components/i-frame.vue'));
+
 
 const app = new Vue({
     el: '#app'

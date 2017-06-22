@@ -15,6 +15,10 @@ Route::get('/', function () {
     return view('emails.index');
 });
 
+Route::get('/emails/{id}', function ($id) {
+    return view('emails.show')->withId($id);
+});
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
