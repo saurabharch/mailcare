@@ -103,6 +103,25 @@ class EmailsTest extends TestCase
     /**
      * @test
      */
+    public function it_fetches_all_emails_for_a_search()
+    {
+
+        $emails = factory(\App\Email::class, 3)->create();
+        $emails = factory(\App\Email::class)->create(['from' => 'myyyyyfrom@example.com']);
+        $emails = factory(\App\Email::class)->create(['to' => 'myyyyyto@example.com']);
+        $emails = factory(\App\Email::class)->create(['subject' => 'myyyyy subject']);
+
+        $response = $this->json('GET', 'api/v1/emails?search=myyyyy');
+
+        $response
+            ->assertStatus(200);
+        $data = json_decode($response->baseResponse->content())->data;
+        $this->assertCount(3, $data);
+    }
+
+    /**
+     * @test
+     */
     public function it_fetches_whitch_body_type_is_available()
     {
         $exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
