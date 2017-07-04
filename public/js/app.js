@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 165);
+/******/ 	return __webpack_require__(__webpack_require__.s = 167);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1899,7 +1899,7 @@ function loadLocale(name) {
             module && module.exports) {
         try {
             oldLocale = globalLocale._abbr;
-            __webpack_require__(154)("./" + name);
+            __webpack_require__(155)("./" + name);
             // because defineLocale currently also sets the global locale, we
             // want to undo that for lazy loaded locales
             getSetGlobalLocale(oldLocale);
@@ -4844,6 +4844,59 @@ module.exports = {
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports) {
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  scopeId,
+  cssModules
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  // inject cssModules
+  if (cssModules) {
+    var computed = options.computed || (options.computed = {})
+    Object.keys(cssModules).forEach(function (key) {
+      var module = cssModules[key]
+      computed[key] = function () { return module }
+    })
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
+
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4941,10 +4994,10 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -5134,59 +5187,6 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-module.exports = function normalizeComponent (
-  rawScriptExports,
-  compiledTemplate,
-  scopeId,
-  cssModules
-) {
-  var esModule
-  var scriptExports = rawScriptExports = rawScriptExports || {}
-
-  // ES6 modules interop
-  var type = typeof rawScriptExports.default
-  if (type === 'object' || type === 'function') {
-    esModule = rawScriptExports
-    scriptExports = rawScriptExports.default
-  }
-
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (compiledTemplate) {
-    options.render = compiledTemplate.render
-    options.staticRenderFns = compiledTemplate.staticRenderFns
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = scopeId
-  }
-
-  // inject cssModules
-  if (cssModules) {
-    var computed = options.computed || (options.computed = {})
-    Object.keys(cssModules).forEach(function (key) {
-      var module = cssModules[key]
-      computed[key] = function () { return module }
-    })
-  }
-
-  return {
-    esModule: esModule,
-    exports: scriptExports,
-    options: options
-  }
-}
-
-
-/***/ }),
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -5369,7 +5369,7 @@ module.exports = function xhrAdapter(config) {
   });
 };
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
 /* 6 */
@@ -16597,7 +16597,7 @@ module.exports = function(module) {
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-__webpack_require__(150);
+__webpack_require__(151);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -16605,10 +16605,10 @@ __webpack_require__(150);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('list-emails', __webpack_require__(155));
-Vue.component('show-email', __webpack_require__(157));
-Vue.component('show-email-body', __webpack_require__(156));
-Vue.component('i-frame', __webpack_require__(174));
+Vue.component('list-emails', __webpack_require__(157));
+Vue.component('show-email', __webpack_require__(159));
+Vue.component('show-email-body', __webpack_require__(158));
+Vue.component('i-frame', __webpack_require__(156));
 
 var app = new Vue({
   el: '#app'
@@ -16636,7 +16636,7 @@ module.exports = __webpack_require__(130);
 var utils = __webpack_require__(1);
 var bind = __webpack_require__(9);
 var Axios = __webpack_require__(132);
-var defaults = __webpack_require__(2);
+var defaults = __webpack_require__(3);
 
 /**
  * Create an instance of Axios
@@ -16756,7 +16756,7 @@ module.exports = CancelToken;
 "use strict";
 
 
-var defaults = __webpack_require__(2);
+var defaults = __webpack_require__(3);
 var utils = __webpack_require__(1);
 var InterceptorManager = __webpack_require__(133);
 var dispatchRequest = __webpack_require__(134);
@@ -16910,7 +16910,7 @@ module.exports = InterceptorManager;
 var utils = __webpack_require__(1);
 var transformData = __webpack_require__(137);
 var isCancel = __webpack_require__(7);
-var defaults = __webpack_require__(2);
+var defaults = __webpack_require__(3);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -17469,6 +17469,88 @@ module.exports = function spread(callback) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moment__);
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  render: function render(h) {
+    return h('iframe', {
+      on: { load: this.renderChildren }
+    });
+  },
+  beforeUpdate: function beforeUpdate() {
+    //freezing to prevent unnessessary Reactifiation of vNodes
+    if (this.iApp) {
+      this.iApp.children = Object.freeze(this.$slots.default);
+    }
+  },
+
+
+  methods: {
+    renderChildren: function renderChildren() {
+      var children = this.$slots.default;
+      var body = this.$el.contentDocument.body;
+      var el = document.createElement('DIV'); // we will mount or nested app to this element
+      body.appendChild(el);
+
+      var iApp = new Vue({
+        name: 'iApp',
+        //freezing to prevent unnessessary Reactifiation of vNodes
+        data: { children: Object.freeze(children) },
+        render: function render(h) {
+          return h('div', this.children);
+        }
+      });
+
+      iApp.$mount(el); // mount into iframe
+
+      this.iApp = iApp; // cache instance for later updates
+    }
+  }
+});
+
+/***/ }),
+/* 148 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moment__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -17499,7 +17581,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      emails: []
+      emails: [],
+      totalCount: null,
+      emailFiltered: null
     };
   },
 
@@ -17511,19 +17595,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   mounted: function mounted() {
-    var _this = this;
-
     axios.get('/api/v1/emails').then(function (response) {
-      return _this.emails = response.data.data;
-    });
+      this.emails = response.data.data;
+      this.totalCount = response.data.paginator.total_count;
+    }.bind(this));
   },
 
 
-  methods: {}
+  methods: {
+    updateValue: function updateValue(value) {
+      axios.get('/api/v1/emails?search=' + value).then(function (response) {
+        this.emails = response.data.data;
+        this.totalCount = response.data.paginator.total_count;
+      }.bind(this));
+    }
+  }
 });
 
 /***/ }),
-/* 148 */
+/* 149 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17610,7 +17700,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 149 */
+/* 150 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17667,11 +17757,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 150 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-window._ = __webpack_require__(153);
+window._ = __webpack_require__(154);
 
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces
@@ -17679,7 +17769,7 @@ window._ = __webpack_require__(153);
  * and simple, leaving you to focus on building your next great project.
  */
 
-window.Vue = __webpack_require__(164);
+window.Vue = __webpack_require__(166);
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -17708,14 +17798,14 @@ window.axios.defaults.headers.common = {
 // });
 
 /***/ }),
-/* 151 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(152)();
+exports = module.exports = __webpack_require__(153)();
 exports.push([module.i, "\n.my-frame[data-v-d1e86092] {\n  border: 1px solid #CCC;\n  box-shadow: 0 0 3px 2x rgba(0,0,0,.3);\n  margin: 20px auto;\n  height: 200px;\n  width: 95%;\n}\n", ""]);
 
 /***/ }),
-/* 152 */
+/* 153 */
 /***/ (function(module, exports) {
 
 /*
@@ -17771,7 +17861,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 153 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -34863,7 +34953,7 @@ module.exports = function() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(125), __webpack_require__(126)(module)))
 
 /***/ }),
-/* 154 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -35112,17 +35202,50 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 154;
+webpackContext.id = 155;
 
 /***/ }),
-/* 155 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Component = __webpack_require__(4)(
+var Component = __webpack_require__(2)(
   /* script */
   __webpack_require__(147),
   /* template */
-  __webpack_require__(159),
+  null,
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/home/vdauce/Code/mailcare/mailcare/resources/assets/js/components/i-frame.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-c75edc86", Component.options)
+  } else {
+    hotAPI.reload("data-v-c75edc86", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 157 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(2)(
+  /* script */
+  __webpack_require__(148),
+  /* template */
+  __webpack_require__(161),
   /* scopeId */
   null,
   /* cssModules */
@@ -35149,18 +35272,18 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 156 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(161)
+__webpack_require__(163)
 
-var Component = __webpack_require__(4)(
+var Component = __webpack_require__(2)(
   /* script */
-  __webpack_require__(148),
+  __webpack_require__(149),
   /* template */
-  __webpack_require__(160),
+  __webpack_require__(162),
   /* scopeId */
   "data-v-d1e86092",
   /* cssModules */
@@ -35187,14 +35310,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 157 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Component = __webpack_require__(4)(
+var Component = __webpack_require__(2)(
   /* script */
-  __webpack_require__(149),
+  __webpack_require__(150),
   /* template */
-  __webpack_require__(158),
+  __webpack_require__(160),
   /* scopeId */
   null,
   /* cssModules */
@@ -35221,7 +35344,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 158 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -35253,21 +35376,68 @@ if (false) {
 }
 
 /***/ }),
-/* 159 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('table', {
+  return _c('div', [_c('nav', {
+    staticClass: "level"
+  }, [_c('div', {
+    staticClass: "level-left"
+  }, [_c('div', {
+    staticClass: "level-item"
+  }, [_c('p', {
+    staticClass: "subtitle is-5"
+  }, [_c('strong', [_vm._v(_vm._s(_vm.totalCount))]), _vm._v(" emails\n      ")])]), _vm._v(" "), _c('div', {
+    staticClass: "level-item"
+  }, [_c('div', {
+    staticClass: "field has-addons"
+  }, [_c('p', {
+    staticClass: "control"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.emailFiltered),
+      expression: "emailFiltered"
+    }],
+    staticClass: "input",
+    attrs: {
+      "type": "text",
+      "placeholder": "Start with..."
+    },
+    domProps: {
+      "value": (_vm.emailFiltered)
+    },
+    on: {
+      "input": [function($event) {
+        if ($event.target.composing) { return; }
+        _vm.emailFiltered = $event.target.value
+      }, function($event) {
+        _vm.updateValue($event.target.value)
+      }]
+    }
+  })])])])]), _vm._v(" "), _vm._m(0)]), _vm._v(" "), _c('table', {
     staticClass: "table"
-  }, [_vm._m(0), _vm._v(" "), _c('tbody', _vm._l((_vm.emails), function(email) {
+  }, [_vm._m(1), _vm._v(" "), _c('tbody', _vm._l((_vm.emails), function(email) {
     return _c('tr', [_c('td', [_vm._v(_vm._s(_vm._f("ago")(email.created_at)))]), _vm._v(" "), _c('td', [_c('a', {
       attrs: {
         "href": '/emails/' + email.id,
         "id": email.id
       }
     }, [_vm._v(_vm._s(email.subject))])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(email.from))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(email.to))])])
-  }))])
+  }))])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "level-right"
+  }, [_c('p', {
+    staticClass: "level-item"
+  }, [_c('strong', [_vm._v("All")])]), _vm._v(" "), _c('p', {
+    staticClass: "level-item"
+  }, [_c('a', [_vm._v("Unread")])]), _vm._v(" "), _c('p', {
+    staticClass: "level-item"
+  }, [_c('a', [_vm._v("Favorited")])])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('thead', [_c('tr', [_c('th', [_c('abbr', {
     attrs: {
       "title": "Received date"
@@ -35283,7 +35453,7 @@ if (false) {
 }
 
 /***/ }),
-/* 160 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -35326,17 +35496,17 @@ if (false) {
 }
 
 /***/ }),
-/* 161 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(151);
+var content = __webpack_require__(152);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(162)("7e5e50a0", content, false);
+var update = __webpack_require__(164)("7e5e50a0", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -35352,7 +35522,7 @@ if(false) {
 }
 
 /***/ }),
-/* 162 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -35371,7 +35541,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(163)
+var listToStyles = __webpack_require__(165)
 
 /*
 type StyleObject = {
@@ -35573,7 +35743,7 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-/* 163 */
+/* 165 */
 /***/ (function(module, exports) {
 
 /**
@@ -35606,7 +35776,7 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 164 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -45241,103 +45411,14 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(125)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(125)))
 
 /***/ }),
-/* 165 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(127);
 module.exports = __webpack_require__(128);
-
-
-/***/ }),
-/* 166 */,
-/* 167 */,
-/* 168 */,
-/* 169 */,
-/* 170 */,
-/* 171 */,
-/* 172 */,
-/* 173 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moment__);
-
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  render: function render(h) {
-    return h('iframe', {
-      on: { load: this.renderChildren }
-    });
-  },
-  beforeUpdate: function beforeUpdate() {
-    //freezing to prevent unnessessary Reactifiation of vNodes
-    if (this.iApp) {
-      this.iApp.children = Object.freeze(this.$slots.default);
-    }
-  },
-
-
-  methods: {
-    renderChildren: function renderChildren() {
-      var children = this.$slots.default;
-      var body = this.$el.contentDocument.body;
-      var el = document.createElement('DIV'); // we will mount or nested app to this element
-      body.appendChild(el);
-
-      var iApp = new Vue({
-        name: 'iApp',
-        //freezing to prevent unnessessary Reactifiation of vNodes
-        data: { children: Object.freeze(children) },
-        render: function render(h) {
-          return h('div', this.children);
-        }
-      });
-
-      iApp.$mount(el); // mount into iframe
-
-      this.iApp = iApp; // cache instance for later updates
-    }
-  }
-});
-
-/***/ }),
-/* 174 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Component = __webpack_require__(4)(
-  /* script */
-  __webpack_require__(173),
-  /* template */
-  null,
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "/home/vdauce/Code/mailcare/mailcare/resources/assets/js/components/i-frame.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-c75edc86", Component.options)
-  } else {
-    hotAPI.reload("data-v-c75edc86", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
 
 
 /***/ })

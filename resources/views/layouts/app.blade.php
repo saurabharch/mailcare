@@ -11,9 +11,10 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles --><!-- 
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.1/css/bulma.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css"> -->
+
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- Scripts -->
@@ -25,26 +26,47 @@
 </head>
 <body>
 
-    <div id="app" class="container">
-
-      <div class="nav-left">
-        <a class="nav-item is-brand" href="{{ url('/') }}">
-          <img src="{{ asset('renard.png') }}" alt="Bulma: a modern CSS framework based on Flexbox">
-        </a>
+    <nav class="nav has-shadow">
+      <div class="container">
+        <div class="nav-left">
+          <a class="nav-item" href="{{ url('/') }}">
+            <img src="{{ asset('logo-mailcare-renard.png') }}" alt="MailCare: a modern webmail">
+          </a>
+        </div>
+        <div class="nav-right nav-menu">
+          <a class="nav-item is-tab is-hidden-mobile is-active" href="{{ url('/') }}">Home</a>
+          <a class="nav-item is-tab is-hidden-mobile" href="{{ url('/data') }}">Data</a>
+          <a class="nav-item is-tab is-hidden-mobile" href="{{ url('/about') }}">About</a>
+        </div>
       </div>
+    </nav>
 
-      <div id="nav-menu" class="nav-right nav-menu">
-        <a class="nav-item " href="{{ url('/') }}">
-          Home
-        </a>
+    
+    <section class="section">
+
+        <div id="app" class="container">
+
+            @yield('content')
+
+        </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="content has-text-centered">
+          <p>
+            <strong>MailCare.io</strong> by <a href="http://jgthms.com">Vincent Dauce</a>. The source code is licensed
+            <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
+            is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC ANS 4.0</a>.
+          </p>
+          <p>
+            <a class="icon" href="https://github.com/mailcare/mailcare">
+              <i class="fa fa-github"></i>
+            </a>
+          </p>
+        </div>
       </div>
-
-
-    @yield('content')
-
-
-    </div>
-
+    </footer>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
