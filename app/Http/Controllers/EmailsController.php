@@ -24,10 +24,16 @@ class EmailsController extends ApiController
     {
         $limit = request()->input('limit') ?: 25;
         $to = request()->input('to');
+        $search = request()->input('search');
 
 
         $emails = Email::when($to, function ($query) use ($to) {
             return $query->where('to', $to);
+        })
+        ->when($search, function ($query) use ($search) {
+            return $query->where('to', 'like', $search.'%')
+            ->orWhere('from', 'like', $search.'%')
+            ->orWhere('subject', 'like', $search.'%');
         })
         ->latest()
         ->paginate($limit);
