@@ -12,6 +12,7 @@ class EmailTransformer extends Transformer {
             'to' => $email['to'],
             'subject' => $email['subject'],
             'created_at' => $email['created_at'],
+            'read' => $email['read'],
             'is_html' => (boolean) $email['is_html'],
             'is_text' => (boolean) $email['is_text'],
         ];

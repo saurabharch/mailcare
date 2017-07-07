@@ -219,4 +219,24 @@ class EmailsTest extends TestCase
             ->assertDontSee('this is html part');
     }
 
+    /**
+     * @test
+     */
+    public function email_can_be_read()
+    {
+        $email = factory(\App\Email::class)->create();
+
+        $response = $this->json('GET', 'api/v1/emails/'.$email->id);
+
+        $response
+            ->assertStatus(200)
+            ->assertJsonFragment(['read' => null]);
+
+        $response = $this->json('GET', 'api/v1/emails/'.$email->id);
+
+        $response
+            ->assertStatus(200)
+            ->assertJsonMissing(['read' => null]);
+    }
+
 }

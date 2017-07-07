@@ -25,18 +25,24 @@ class EmailsController extends ApiController
         $limit = request()->input('limit') ?: 25;
         $to = request()->input('to');
         $search = request()->input('search');
-
+        $unread = request()->input('unread');
 
         $emails = Email::when($to, function ($query) use ($to) {
             return $query->where('to', $to);
         })
         ->when($search, function ($query) use ($search) {
-            return $query->where('to', 'like', $search.'%')
-            ->orWhere('from', 'like', $search.'%')
-            ->orWhere('subject', 'like', $search.'%');
+            $query->where(function ($query) use ($search) {
+                $query->where('to', 'like', $search.'%')
+                        ->orWhere('from', 'like', $search.'%')
+                        ->orWhere('subject', 'like', $search.'%');
+            });
+        })
+        ->when($unread, function ($query) {
+            return $query->whereNull('read');
         })
         ->latest()
         ->paginate($limit);
+
 
         return $this->respondWithPagination($emails, [
             'data' => $this->emailTransformer->transformCollection($emails->all()),
@@ -99,9 +105,15 @@ class EmailsController extends ApiController
         }
         else
         {
-            return $this->respond([
-            'data' => $this->emailTransformer->transform($email)
-            ]);
+            $data = $this->emailTransformer->transform($email);
+
+
+            if ($email->isUnread())
+            {
+                $email->read();
+            }
+
+            return $this->respond(['data' => $data]);
 
         }
     }

@@ -15,7 +15,7 @@
     <div class="level-item">
       <div class="field has-addons">
         <p class="control">
-          <input class="input" type="text" placeholder="Start with..." v-model="emailFiltered" v-on:input="updateValue($event.target.value)">
+          <input class="input" type="text" placeholder="Start with..." v-model="emailFiltered" v-on:input="getEmails()">
         </p>
       </div>
     </div>
@@ -23,9 +23,30 @@
 
   <!-- Right side -->
   <div class="level-right">
-    <p class="level-item"><strong>All</strong></p>
-    <p class="level-item"><a>Unread</a></p>
-    <p class="level-item"><a>Favorited</a></p>
+
+    <div class="tabs is-small is-toggle">
+      <ul>
+        <li :class="classes(!this.filteredBy)">
+          <a @click="filterBy()">
+            <span class="icon is-small"><i class="fa fa-asterisk"></i></span>
+            <span>All</span>
+          </a>
+        </li>
+        <li :class="classes(this.filteredByUnread())">
+          <a @click="filterBy('unread')">
+            <span class="icon is-small"><i class="fa fa-circle"></i></span>
+            <span>Unread</span>
+          </a>
+        </li>
+        <li :class="classes(this.filteredByFavorited())">
+          <a @click="filterBy('favorited')">
+            <span class="icon is-small"><i class="fa fa-heart"></i></span>
+            <span>Favorited</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
   </div>
 </nav>
 
@@ -42,6 +63,10 @@
         <tr v-for="email in emails">
           <td>{{ email.created_at | ago }}</td>
           <td>
+            <span class="icon is-small">
+              <i v-if="email.favorited" class="fa fa-star"></i>
+              <i v-else-if="!email.read" class="fa fa-circle"></i>
+            </span>
             <a v-bind:href="'/emails/' + email.id" v-bind:id="email.id">{{ email.subject }}</a>
           </td>
           <td>{{ email.from }}</td>
@@ -49,7 +74,10 @@
         </tr>
       </tbody>
     </table>
-
+    <div>
+    </div>
+    <div>
+    </div>
 
   </div>
 </template>
@@ -64,7 +92,8 @@
           return {
             emails: [],
             totalCount: null,
-            emailFiltered: null
+            emailFiltered: null,
+            filteredBy: null,
           }
         },
 
@@ -72,23 +101,42 @@
           ago(date) {
             return moment(date.date).fromNow();
           }
-
         },
 
         mounted() {
-            axios.get('/api/v1/emails').then(function(response) {
-              this.emails = response.data.data
-              this.totalCount = response.data.paginator.total_count
-            }.bind(this));
+          this.getEmails()
         },
 
         methods: {
-          updateValue(value) {
-            axios.get('/api/v1/emails?search=' + value).then(function(response) {
+
+          filteredByUnread() {
+            return this.filteredBy == 'unread';
+          },
+
+          filteredByFavorited() {
+            return this.filteredBy == 'favorited';
+          },
+
+          classes(filtered) {
+            return [filtered ? 'is-active' : ''];
+          },
+
+          filterBy(filtered = null) {
+            this.filteredBy = filtered
+            this.getEmails()
+          },
+
+          getEmails() {
+            axios.get('/api/v1/emails', { params: {
+              'search': (this.emailFiltered ? this.emailFiltered : null),
+              'unread': (this.filteredByUnread() ? '1' : null),
+              'favorited': (this.filteredByFavorited() ? '1' : null),
+            }}).then(function(response) {
               this.emails = response.data.data
               this.totalCount = response.data.paginator.total_count
             }.bind(this));
-          }
+
+          },
         }
     }
 </script>

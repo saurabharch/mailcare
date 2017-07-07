@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Uuids;
+use Carbon\Carbon;
 
 class Email extends Model
 {
@@ -20,4 +21,15 @@ class Email extends Model
 	{
 		return storage_path('app/'.$this->path());
 	}
+
+    public function isUnread()
+    {
+        return empty($this->read);
+    }
+
+    public function read()
+    {
+        $this->read = Carbon::now();
+        $this->save();
+    }
 }

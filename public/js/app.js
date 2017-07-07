@@ -17574,6 +17574,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -17583,7 +17611,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       emails: [],
       totalCount: null,
-      emailFiltered: null
+      emailFiltered: null,
+      filteredBy: null
     };
   },
 
@@ -17595,16 +17624,32 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   mounted: function mounted() {
-    axios.get('/api/v1/emails').then(function (response) {
-      this.emails = response.data.data;
-      this.totalCount = response.data.paginator.total_count;
-    }.bind(this));
+    this.getEmails();
   },
 
 
   methods: {
-    updateValue: function updateValue(value) {
-      axios.get('/api/v1/emails?search=' + value).then(function (response) {
+    filteredByUnread: function filteredByUnread() {
+      return this.filteredBy == 'unread';
+    },
+    filteredByFavorited: function filteredByFavorited() {
+      return this.filteredBy == 'favorited';
+    },
+    classes: function classes(filtered) {
+      return [filtered ? 'is-active' : ''];
+    },
+    filterBy: function filterBy() {
+      var filtered = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+      this.filteredBy = filtered;
+      this.getEmails();
+    },
+    getEmails: function getEmails() {
+      axios.get('/api/v1/emails', { params: {
+          'search': this.emailFiltered ? this.emailFiltered : null,
+          'unread': this.filteredByUnread() ? '1' : null,
+          'favorited': this.filteredByFavorited() ? '1' : null
+        } }).then(function (response) {
         this.emails = response.data.data;
         this.totalCount = response.data.paginator.total_count;
       }.bind(this));
@@ -35414,29 +35459,71 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         if ($event.target.composing) { return; }
         _vm.emailFiltered = $event.target.value
       }, function($event) {
-        _vm.updateValue($event.target.value)
+        _vm.getEmails()
       }]
     }
-  })])])])]), _vm._v(" "), _vm._m(0)]), _vm._v(" "), _c('table', {
+  })])])])]), _vm._v(" "), _c('div', {
+    staticClass: "level-right"
+  }, [_c('div', {
+    staticClass: "tabs is-small is-toggle"
+  }, [_c('ul', [_c('li', {
+    class: _vm.classes(!this.filteredBy)
+  }, [_c('a', {
+    on: {
+      "click": function($event) {
+        _vm.filterBy()
+      }
+    }
+  }, [_vm._m(0), _vm._v(" "), _c('span', [_vm._v("All")])])]), _vm._v(" "), _c('li', {
+    class: _vm.classes(this.filteredByUnread())
+  }, [_c('a', {
+    on: {
+      "click": function($event) {
+        _vm.filterBy('unread')
+      }
+    }
+  }, [_vm._m(1), _vm._v(" "), _c('span', [_vm._v("Unread")])])]), _vm._v(" "), _c('li', {
+    class: _vm.classes(this.filteredByFavorited())
+  }, [_c('a', {
+    on: {
+      "click": function($event) {
+        _vm.filterBy('favorited')
+      }
+    }
+  }, [_vm._m(2), _vm._v(" "), _c('span', [_vm._v("Favorited")])])])])])])]), _vm._v(" "), _c('table', {
     staticClass: "table"
-  }, [_vm._m(1), _vm._v(" "), _c('tbody', _vm._l((_vm.emails), function(email) {
-    return _c('tr', [_c('td', [_vm._v(_vm._s(_vm._f("ago")(email.created_at)))]), _vm._v(" "), _c('td', [_c('a', {
+  }, [_vm._m(3), _vm._v(" "), _c('tbody', _vm._l((_vm.emails), function(email) {
+    return _c('tr', [_c('td', [_vm._v(_vm._s(_vm._f("ago")(email.created_at)))]), _vm._v(" "), _c('td', [_c('span', {
+      staticClass: "icon is-small"
+    }, [(email.favorited) ? _c('i', {
+      staticClass: "fa fa-star"
+    }) : (!email.read) ? _c('i', {
+      staticClass: "fa fa-circle"
+    }) : _vm._e()]), _vm._v(" "), _c('a', {
       attrs: {
         "href": '/emails/' + email.id,
         "id": email.id
       }
     }, [_vm._v(_vm._s(email.subject))])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(email.from))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(email.to))])])
-  }))])])
+  }))]), _vm._v(" "), _c('div'), _vm._v(" "), _c('div')])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "level-right"
-  }, [_c('p', {
-    staticClass: "level-item"
-  }, [_c('strong', [_vm._v("All")])]), _vm._v(" "), _c('p', {
-    staticClass: "level-item"
-  }, [_c('a', [_vm._v("Unread")])]), _vm._v(" "), _c('p', {
-    staticClass: "level-item"
-  }, [_c('a', [_vm._v("Favorited")])])])
+  return _c('span', {
+    staticClass: "icon is-small"
+  }, [_c('i', {
+    staticClass: "fa fa-asterisk"
+  })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('span', {
+    staticClass: "icon is-small"
+  }, [_c('i', {
+    staticClass: "fa fa-circle"
+  })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('span', {
+    staticClass: "icon is-small"
+  }, [_c('i', {
+    staticClass: "fa fa-heart"
+  })])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('thead', [_c('tr', [_c('th', [_c('abbr', {
     attrs: {
