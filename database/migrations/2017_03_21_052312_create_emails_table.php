@@ -19,6 +19,7 @@ class CreateEmailsTable extends Migration
             $table->string('to', 100);
             $table->string('subject', 100);
             $table->dateTime('read')->nullable();
+            $table->boolean('favorite')->default(false);
             $table->boolean('is_html')->default(false);
             $table->boolean('is_text')->default(false);
             $table->timestamps();

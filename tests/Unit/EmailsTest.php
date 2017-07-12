@@ -122,6 +122,41 @@ class EmailsTest extends TestCase
     /**
      * @test
      */
+    public function it_fetches_all_emails_unread()
+    {
+
+        $emails = factory(\App\Email::class)->create();
+        $emails = factory(\App\Email::class, 2)->create(['read' => Carbon::now()]);
+
+        $response = $this->json('GET', 'api/v1/emails?unread=1');
+
+        $response
+            ->assertStatus(200);
+        $data = json_decode($response->baseResponse->content())->data;
+        $this->assertCount(1, $data);
+    }
+
+
+    /**
+     * @test
+     */
+    public function it_fetches_all_emails_favorites()
+    {
+
+        $emails = factory(\App\Email::class)->create();
+        $emails = factory(\App\Email::class, 2)->create(['favorite' => true]);
+
+        $response = $this->json('GET', 'api/v1/emails?favorite=1');
+
+        $response
+            ->assertStatus(200);
+        $data = json_decode($response->baseResponse->content())->data;
+        $this->assertCount(2, $data);
+    }
+
+    /**
+     * @test
+     */
     public function it_fetches_whitch_body_type_is_available()
     {
         $exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
@@ -237,6 +272,34 @@ class EmailsTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJsonMissing(['read' => null]);
+    }
+
+    /**
+     * @test
+     */
+    public function email_can_be_favorite()
+    {
+        $email = factory(\App\Email::class)->create();
+
+        $response = $this->json('GET', 'api/v1/emails/'.$email->id);
+        $response
+            ->assertStatus(200)
+            ->assertJsonFragment(['favorite' => false]);
+
+        $response = $this->json('POST', 'api/v1/emails/'.$email->id.'/favorite');
+
+        $response = $this->json('GET', 'api/v1/emails/'.$email->id);
+        $response
+            ->assertStatus(200)
+            ->assertJsonFragment(['favorite' => true]);
+
+        $response = $this->json('DELETE', 'api/v1/emails/'.$email->id.'/favorite');
+
+
+        $response = $this->json('GET', 'api/v1/emails/'.$email->id);
+        $response
+            ->assertStatus(200)
+            ->assertJsonFragment(['favorite' => false]);
     }
 
 }

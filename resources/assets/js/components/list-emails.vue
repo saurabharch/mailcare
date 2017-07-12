@@ -38,10 +38,10 @@
             <span>Unread</span>
           </a>
         </li>
-        <li :class="classes(this.filteredByFavorited())">
-          <a @click="filterBy('favorited')">
+        <li :class="classes(this.filteredByFavorite())">
+          <a @click="filterBy('favorite')">
             <span class="icon is-small"><i class="fa fa-heart"></i></span>
-            <span>Favorited</span>
+            <span>Favorite</span>
           </a>
         </li>
       </ul>
@@ -113,8 +113,8 @@
             return this.filteredBy == 'unread';
           },
 
-          filteredByFavorited() {
-            return this.filteredBy == 'favorited';
+          filteredByFavorite() {
+            return this.filteredBy == 'favorite';
           },
 
           classes(filtered) {
@@ -130,7 +130,7 @@
             axios.get('/api/v1/emails', { params: {
               'search': (this.emailFiltered ? this.emailFiltered : null),
               'unread': (this.filteredByUnread() ? '1' : null),
-              'favorited': (this.filteredByFavorited() ? '1' : null),
+              'favorite': (this.filteredByFavorite() ? '1' : null),
             }}).then(function(response) {
               this.emails = response.data.data
               this.totalCount = response.data.paginator.total_count

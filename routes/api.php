@@ -21,4 +21,7 @@ use Illuminate\Http\Request;
 
 Route::group(['prefix' => 'v1'], function () {
     Route::resource('emails', 'EmailsController');
+
+    Route::post('emails/{email}/favorite', 'EmailsController@favorite');
+    Route::delete('emails/{email}/favorite', 'EmailsController@unfavorite');
 });

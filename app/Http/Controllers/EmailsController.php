@@ -26,6 +26,7 @@ class EmailsController extends ApiController
         $to = request()->input('to');
         $search = request()->input('search');
         $unread = request()->input('unread');
+        $favorite = request()->input('favorite');
 
         $emails = Email::when($to, function ($query) use ($to) {
             return $query->where('to', $to);
@@ -39,6 +40,9 @@ class EmailsController extends ApiController
         })
         ->when($unread, function ($query) {
             return $query->whereNull('read');
+        })
+        ->when($favorite, function ($query) {
+            return $query->where('favorite', true);
         })
         ->latest()
         ->paginate($limit);
@@ -150,5 +154,21 @@ class EmailsController extends ApiController
     public function destroy($id)
     {
         //
+    }
+
+    public function favorite(Email $email)
+    {
+        if (!$email->favorite) {
+            $email->favorite = true;
+            $email->save();
+        }
+    }
+
+    public function unfavorite(Email $email)
+    {
+        if ($email->favorite) {
+            $email->favorite = false;
+            $email->save();
+        }
     }
 }
