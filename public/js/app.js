@@ -17686,6 +17686,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -17705,7 +17712,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   methods: {
     classesLink: function classesLink(bodyType) {
-      return ['button', bodyType.isActive ? 'is-success' : ''];
+      return [bodyType.isActive ? 'is-active' : ''];
     },
     classes: function classes(bodyType) {
       return ['fa', bodyType.icon];
@@ -17875,7 +17882,7 @@ window.axios.defaults.headers.common = {
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(153)();
-exports.push([module.i, "\n.my-frame[data-v-d1e86092] {\n  border: 1px solid #CCC;\n  box-shadow: 0 0 3px 2x rgba(0,0,0,.3);\n  margin: 20px auto;\n  height: 200px;\n  width: 95%;\n}\n", ""]);
+exports.push([module.i, "\n.my-frame[data-v-d1e86092] {\n  min-height: 100%;\n  border: 1px solid #363636;\n  margin: 20px auto;\n  height: 400px;\n  width: 100%;\n}\n", ""]);
 
 /***/ }),
 /* 153 */
@@ -35589,10 +35596,12 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('p', {
-    staticClass: "field"
-  }, _vm._l((_vm.bodyTypes), function(bodyType) {
-    return _c('a', {
+  return _c('div', [_c('div', {
+    staticClass: "level-left"
+  }, [_c('div', {
+    staticClass: "tabs is-small is-toggle"
+  }, [_c('ul', _vm._l((_vm.bodyTypes), function(bodyType) {
+    return _c('li', {
       class: _vm.classesLink(bodyType),
       attrs: {
         "disabled": _vm.isDisabled(bodyType)
@@ -35602,16 +35611,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           _vm.getContent(bodyType.accept)
         }
       }
-    }, [_c('span', {
-      staticClass: "icon"
+    }, [_c('a', [_c('span', {
+      staticClass: "icon is-small"
     }, [_c('i', {
       class: _vm.classes(bodyType)
     })]), _vm._v(" "), _c('span', {
       domProps: {
         "textContent": _vm._s(bodyType.label)
       }
-    })])
-  })), _vm._v(" "), _c('div', [_c('i-frame', {
+    })])])
+  }))])]), _vm._v(" "), _c('div', [_c('i-frame', {
     staticClass: "my-frame"
   }, [_c('div', {
     domProps: {

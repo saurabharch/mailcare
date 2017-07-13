@@ -1,24 +1,31 @@
 <template>
-
   <div>
 
-    <p class="field">
-      <a v-for="bodyType in bodyTypes" :class="classesLink(bodyType)" :disabled="isDisabled(bodyType)"  @click="getContent(bodyType.accept)">
-        <span class="icon">
-          <i :class="classes(bodyType)"></i>
-        </span>
-        <span v-text="bodyType.label"></span>
-      </a>
-    </p>
+  <div class="level-left">
 
-    <div>
-      <i-frame class="my-frame">
-        <div v-html="body"></div>
-      </i-frame> 
+    <div class="tabs is-small is-toggle">
+
+      <ul>
+        <li v-for="bodyType in bodyTypes" :class="classesLink(bodyType)" :disabled="isDisabled(bodyType)"  @click="getContent(bodyType.accept)">
+          <a>
+            <span class="icon is-small">
+              <i :class="classes(bodyType)"></i>
+            </span>
+            <span v-text="bodyType.label"></span>
+          </a>
+        </li>
+      </ul>
     </div>
 
   </div>
 
+  <div>
+    <i-frame class="my-frame">
+      <div v-html="body"></div>
+    </i-frame> 
+  </div>
+
+  </div>
 </template>
 
 <script>
@@ -46,7 +53,7 @@
 
           classesLink(bodyType)
           {
-            return ['button', bodyType.isActive ? 'is-success' : '']
+            return [bodyType.isActive ? 'is-active' : '']
           },
 
           classes(bodyType) {
@@ -102,11 +109,14 @@
 
 
 <style scoped>
+
   .my-frame {
-    border: 1px solid #CCC;
-    box-shadow: 0 0 3px 2x rgba(0,0,0,.3);
+    min-height: 100%;
+    border: 1px solid #363636;
     margin: 20px auto;
-    height: 200px;
-    width: 95%;
+    height: 400px;
+    width: 100%;
+
   }
 </style>
+
