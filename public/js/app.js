@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 167);
+/******/ 	return __webpack_require__(__webpack_require__.s = 170);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1899,7 +1899,7 @@ function loadLocale(name) {
             module && module.exports) {
         try {
             oldLocale = globalLocale._abbr;
-            __webpack_require__(155)("./" + name);
+            __webpack_require__(156)("./" + name);
             // because defineLocale currently also sets the global locale, we
             // want to undo that for lazy loaded locales
             getSetGlobalLocale(oldLocale);
@@ -16597,7 +16597,7 @@ module.exports = function(module) {
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-__webpack_require__(151);
+__webpack_require__(152);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -16605,10 +16605,11 @@ __webpack_require__(151);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('list-emails', __webpack_require__(157));
-Vue.component('show-email', __webpack_require__(159));
-Vue.component('show-email-body', __webpack_require__(158));
-Vue.component('i-frame', __webpack_require__(156));
+Vue.component('list-emails', __webpack_require__(158));
+Vue.component('show-email', __webpack_require__(160));
+Vue.component('show-email-body', __webpack_require__(159));
+Vue.component('i-frame', __webpack_require__(157));
+Vue.component('statistics', __webpack_require__(161));
 
 var app = new Vue({
   el: '#app'
@@ -17838,10 +17839,126 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 /* 151 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      metadata: [],
+      data: []
+    };
+  },
+
+
+  filters: {},
+
+  mounted: function mounted() {
+    axios.get('/api/v1/statistics').then(function (response) {
+      this.metadata = response.data.metadata;
+      this.data = response.data.data;
+
+      var ctx = document.getElementById("myChart").getContext('2d');
+
+      var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: _.map(this.data, 'created_at'),
+          datasets: [{
+            label: 'Emails received by date',
+            data: _.map(this.data, 'emails_received'),
+            borderColor: '#e65722',
+            backgroundColor: '#FDBCB4'
+          }]
+        }
+      });
+    }.bind(this));
+
+    // var myChart = new Chart(ctx, {
+    //     type: 'bar',
+    //     data: {
+    //         labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+    //         datasets: [{
+    //             label: '# of Votes',
+    //             data: [12, 19, 3, 5, 2, 3],
+    //             backgroundColor: [
+    //                 'rgba(255, 99, 132, 0.2)',
+    //                 'rgba(54, 162, 235, 0.2)',
+    //                 'rgba(255, 206, 86, 0.2)',
+    //                 'rgba(75, 192, 192, 0.2)',
+    //                 'rgba(153, 102, 255, 0.2)',
+    //                 'rgba(255, 159, 64, 0.2)'
+    //             ],
+    //             borderColor: [
+    //                 'rgba(255,99,132,1)',
+    //                 'rgba(54, 162, 235, 1)',
+    //                 'rgba(255, 206, 86, 1)',
+    //                 'rgba(75, 192, 192, 1)',
+    //                 'rgba(153, 102, 255, 1)',
+    //                 'rgba(255, 159, 64, 1)'
+    //             ],
+    //             borderWidth: 1
+    //         }]
+    //     },
+    //     options: {
+    //         scales: {
+    //             yAxes: [{
+    //                 ticks: {
+    //                     beginAtZero:true
+    //                 }
+    //             }]
+    //         }
+    //     }
+    // });
+
+  },
+
+
+  methods: {}
+});
+
+/***/ }),
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-window._ = __webpack_require__(154);
+window._ = __webpack_require__(155);
 
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces
@@ -17849,7 +17966,7 @@ window._ = __webpack_require__(154);
  * and simple, leaving you to focus on building your next great project.
  */
 
-window.Vue = __webpack_require__(166);
+window.Vue = __webpack_require__(169);
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -17878,14 +17995,14 @@ window.axios.defaults.headers.common = {
 // });
 
 /***/ }),
-/* 152 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(153)();
+exports = module.exports = __webpack_require__(154)();
 exports.push([module.i, "\n.my-frame[data-v-d1e86092] {\n  min-height: 100%;\n  border: 1px solid #363636;\n  margin: 20px auto;\n  height: 400px;\n  width: 100%;\n}\n", ""]);
 
 /***/ }),
-/* 153 */
+/* 154 */
 /***/ (function(module, exports) {
 
 /*
@@ -17941,7 +18058,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 154 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -35033,7 +35150,7 @@ module.exports = function() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(125), __webpack_require__(126)(module)))
 
 /***/ }),
-/* 155 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -35282,10 +35399,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 155;
+webpackContext.id = 156;
 
 /***/ }),
-/* 156 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(2)(
@@ -35318,14 +35435,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 157 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(2)(
   /* script */
   __webpack_require__(148),
   /* template */
-  __webpack_require__(161),
+  __webpack_require__(163),
   /* scopeId */
   null,
   /* cssModules */
@@ -35352,18 +35469,18 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 158 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(163)
+__webpack_require__(166)
 
 var Component = __webpack_require__(2)(
   /* script */
   __webpack_require__(149),
   /* template */
-  __webpack_require__(162),
+  __webpack_require__(165),
   /* scopeId */
   "data-v-d1e86092",
   /* cssModules */
@@ -35390,14 +35507,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 159 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Component = __webpack_require__(2)(
   /* script */
   __webpack_require__(150),
   /* template */
-  __webpack_require__(160),
+  __webpack_require__(162),
   /* scopeId */
   null,
   /* cssModules */
@@ -35424,7 +35541,41 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 160 */
+/* 161 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Component = __webpack_require__(2)(
+  /* script */
+  __webpack_require__(151),
+  /* template */
+  __webpack_require__(164),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "/home/vdauce/Code/mailcare/mailcare/resources/assets/js/components/statistics.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] statistics.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7a6cf7c2", Component.options)
+  } else {
+    hotAPI.reload("data-v-7a6cf7c2", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -35473,7 +35624,7 @@ if (false) {
 }
 
 /***/ }),
-/* 161 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -35592,7 +35743,59 @@ if (false) {
 }
 
 /***/ }),
-/* 162 */
+/* 164 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [_c('nav', {
+    staticClass: "level"
+  }, [_c('div', {
+    staticClass: "level-item has-text-centered"
+  }, [_c('div', [_c('p', {
+    staticClass: "heading"
+  }, [_vm._v("Emails received")]), _vm._v(" "), _c('p', {
+    staticClass: "title",
+    domProps: {
+      "textContent": _vm._s(_vm.metadata.emails_received)
+    }
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "level-item has-text-centered"
+  }, [_c('div', [_c('p', {
+    staticClass: "heading"
+  }, [_vm._v("Inboxes created")]), _vm._v(" "), _c('p', {
+    staticClass: "title",
+    domProps: {
+      "textContent": _vm._s(_vm.metadata.inboxes_created)
+    }
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "level-item has-text-centered"
+  }, [_c('div', [_c('p', {
+    staticClass: "heading"
+  }, [_vm._v("Storage used")]), _vm._v(" "), _c('p', {
+    staticClass: "title",
+    domProps: {
+      "textContent": _vm._s(_vm.metadata.storage_used_for_human)
+    }
+  })])])]), _vm._v(" "), _vm._m(0)])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "container"
+  }, [_c('canvas', {
+    attrs: {
+      "id": "myChart"
+    }
+  })])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-7a6cf7c2", module.exports)
+  }
+}
+
+/***/ }),
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -35637,17 +35840,17 @@ if (false) {
 }
 
 /***/ }),
-/* 163 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(152);
+var content = __webpack_require__(153);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(164)("7e5e50a0", content, false);
+var update = __webpack_require__(167)("7e5e50a0", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -35663,7 +35866,7 @@ if(false) {
 }
 
 /***/ }),
-/* 164 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -35682,7 +35885,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(165)
+var listToStyles = __webpack_require__(168)
 
 /*
 type StyleObject = {
@@ -35884,7 +36087,7 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-/* 165 */
+/* 168 */
 /***/ (function(module, exports) {
 
 /**
@@ -35917,7 +36120,7 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 166 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -45555,7 +45758,7 @@ module.exports = Vue$3;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(125)))
 
 /***/ }),
-/* 167 */
+/* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(127);

@@ -29,11 +29,15 @@ class EmailsController extends ApiController
         $favorite = request()->input('favorite');
 
         $emails = Email::when($to, function ($query) use ($to) {
-            return $query->where('to', $to);
+            $inbox = \App\Inbox::where('recipient', $to)->first();
+            return $query->where('inbox_id', $inbox->id);
         })
         ->when($search, function ($query) use ($search) {
             $query->where(function ($query) use ($search) {
-                $query->where('to', 'like', $search.'%')
+
+                $inboxes = \App\Inbox::where('recipient', 'like', $search.'%')->pluck('id')->all();
+
+                $query->whereIn('inbox_id', $inboxes)
                         ->orWhere('from', 'like', $search.'%')
                         ->orWhere('subject', 'like', $search.'%');
             });
@@ -44,6 +48,7 @@ class EmailsController extends ApiController
         ->when($favorite, function ($query) {
             return $query->where('favorite', true);
         })
+        ->with('inbox')
         ->latest()
         ->paginate($limit);
 

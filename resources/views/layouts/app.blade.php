@@ -17,6 +17,8 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
+    @stack('scripts')
+
     <!-- Scripts -->
     <script>
         window.Laravel = {!! json_encode([
@@ -34,9 +36,9 @@
           </a>
         </div>
         <div class="nav-right nav-menu">
-          <a class="nav-item is-tab is-hidden-mobile is-active" href="{{ url('/') }}">Home</a>
-          <a class="nav-item is-tab is-hidden-mobile" href="{{ url('/data') }}">Data</a>
-          <a class="nav-item is-tab is-hidden-mobile" href="{{ url('/about') }}">About</a>
+          <a class="nav-item is-tab is-hidden-mobile {{ Request::is('/') ? 'is-active' : '' }}" href="{{ url('/') }}">Home</a>
+          <a class="nav-item is-tab is-hidden-mobile {{ Request::is('statistics') ? 'is-active' : '' }}" href="{{ url('/statistics') }}">Statistics</a>
+          <a class="nav-item is-tab is-hidden-mobile {{ Request::is('about') ? 'is-active' : '' }}" href="{{ url('/about') }}">About</a>
         </div>
       </div>
     </nav>

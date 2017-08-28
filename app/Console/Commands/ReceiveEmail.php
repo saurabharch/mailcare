@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Email;
+use App\Inbox;
 use \PhpMimeMailParser\Parser;
 use Illuminate\Support\Facades\Storage;
 
@@ -55,9 +56,12 @@ class ReceiveEmail extends Command
             $parser->setStream(fopen("php://stdin", "r"));
         }
 
+        $inbox = Inbox::updateOrCreate([
+            'recipient' => $parser->getHeader('to')
+        ]);
+
         $email = new Email;
         $email->from = $parser->getHeader('from');
-        $email->to = $parser->getHeader('to');
         $email->subject = $parser->getHeader('subject');
 
         if (!empty($parser->getMessageBody('html')))
@@ -69,9 +73,13 @@ class ReceiveEmail extends Command
             $email->is_text = true;
         }
 
-        $email->save();
+        $inbox->emails()->save($email);
 
         Storage::put($email->path(), file_get_contents($file));
+
+        $email->size_in_bytes = Storage::size($email->path());
+
+        $email->save();
 
     }
 }

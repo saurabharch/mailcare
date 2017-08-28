@@ -24,4 +24,6 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::post('emails/{email}/favorite', 'EmailsController@favorite');
     Route::delete('emails/{email}/favorite', 'EmailsController@unfavorite');
+
+    Route::get('statistics', 'StatisticsController@index');
 });

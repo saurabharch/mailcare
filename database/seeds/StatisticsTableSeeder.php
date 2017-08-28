@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class StatisticsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,7 +11,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(EmailsTableSeeder::class);
-        $this->call(StatisticsTableSeeder::class);
+	    factory(App\Statistic::class, 50)->create();
     }
 }

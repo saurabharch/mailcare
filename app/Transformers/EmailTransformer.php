@@ -9,13 +9,14 @@ class EmailTransformer extends Transformer {
         return [
             'id' => $email['id'],
             'from' => $email['from'],
-            'to' => $email['to'],
+            'to' => $email['inbox']['recipient'],
             'subject' => $email['subject'],
             'created_at' => $email['created_at'],
             'read' => $email['read'],
             'favorite' => (boolean) $email['favorite'],
             'is_html' => (boolean) $email['is_html'],
             'is_text' => (boolean) $email['is_text'],
+            'size_in_bytes' => (integer) $email['size_in_bytes'],
         ];
     }
 }
