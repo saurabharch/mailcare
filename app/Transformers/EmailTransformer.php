@@ -17,6 +17,7 @@ class EmailTransformer extends Transformer {
             'is_html' => (boolean) $email['is_html'],
             'is_text' => (boolean) $email['is_text'],
             'size_in_bytes' => (integer) $email['size_in_bytes'],
+            'attachments' => $email->attachments,
         ];
     }
 }

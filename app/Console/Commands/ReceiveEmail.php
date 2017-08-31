@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Email;
 use App\Inbox;
+use App\Attachment;
 use \PhpMimeMailParser\Parser;
 use Illuminate\Support\Facades\Storage;
 
@@ -80,6 +81,16 @@ class ReceiveEmail extends Command
         $email->size_in_bytes = Storage::size($email->path());
 
         $email->save();
+
+        foreach($parser->getAttachments() as $attachmentParsed)
+        {
+            $attachment = new Attachment;
+            $attachment->email_id = $email->id;
+            $attachment->file_name = $attachmentParsed->getFileName();
+            $attachment->content_type = $attachmentParsed->getContentType();
+            $attachment->size_in_bytes = strlen($attachmentParsed->getMimePartStr());
+            $attachment->save();
+        }
 
     }
 }

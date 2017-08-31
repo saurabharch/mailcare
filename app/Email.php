@@ -17,6 +17,11 @@ class Email extends Model
 		return $this->belongsTo('App\Inbox');
 	}
 
+    public function attachments()
+    {
+    	return $this->hasMany('App\Attachment');
+    }
+
 	public function path()
 	{
 		return 'emails/' . $this->created_at->format('Y/m/d/') . $this->id;

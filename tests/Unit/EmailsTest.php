@@ -308,4 +308,24 @@ class EmailsTest extends TestCase
             ->assertJsonFragment(['favorite' => false]);
     }
 
+    /**
+     * @test
+     */
+    public function it_fetches_attachments_of_email()
+    {
+        $exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email_with_attachments.txt']);
+
+        $response = $this->json('GET', 'api/v1/emails');
+        $data = json_decode($response->baseResponse->content())->data;
+        $response = $this->json('GET', 'api/v1/emails/'.$data[0]->id);
+
+        $response
+            ->assertStatus(200)
+            ->assertJsonFragment([
+                'file_name' => 'attach01',
+                'content_type' => 'application/octet-stream',
+                'size_in_bytes' => '173',
+                ]);
+    }
+
 }
