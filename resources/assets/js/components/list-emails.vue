@@ -50,7 +50,7 @@
   </div>
 </nav>
 
-    <table class="table">
+    <table class="table table is-fullwidth">
       <thead>
         <tr>
           <th><abbr title="Received date">Date</abbr></th>
