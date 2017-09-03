@@ -25,3 +25,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/statistics', function () {
     return view('statistics.index');
 });
+
+Route::get('/emails/{emailId}/attachments/{attachmentId}', 'AttachmentsController@show');

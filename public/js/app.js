@@ -17694,6 +17694,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -17712,6 +17728,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
   methods: {
+    classesContentType: function classesContentType(contentType) {
+      if (contentType.startsWith("image")) {
+        return ['fa', 'fa-image-o'];
+      } else if (contentType.startsWith("audio")) {
+        return ['fa', 'fa-audio-o'];
+      } else if (contentType.startsWith("text")) {
+        return ['fa', 'fa-text-o'];
+      } else if (contentType.startsWith("video")) {
+        return ['fa', 'fa-video-o'];
+      } else if (contentType.includes("excel") || contentType.includes("spreadsheet")) {
+        return ['fa', 'fa-excel-o'];
+      } else if (contentType.includes("powerpoint") || contentType.includes("presentation")) {
+        return ['fa', 'fa-powerpoint-o'];
+      } else if (contentType.includes("zip")) {
+        return ['fa', 'fa-archive-o'];
+      } else if (contentType.includes("pdf")) {
+        return ['fa', 'fa-pdf-o'];
+      } else if (contentType.includes("word")) {
+        return ['fa', 'fa-word-o'];
+      } else {
+        return ['fa', 'fa-file-o'];
+      }
+    },
     classesLink: function classesLink(bodyType) {
       return [bodyType.isActive ? 'is-active' : ''];
     },
@@ -35799,7 +35838,9 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('div', {
+  return _c('div', [_c('nav', {
+    staticClass: "level"
+  }, [_c('div', {
     staticClass: "level-left"
   }, [_c('div', {
     staticClass: "tabs is-small is-toggle"
@@ -35823,7 +35864,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "textContent": _vm._s(bodyType.label)
       }
     })])])
-  }))])]), _vm._v(" "), _c('div', [_c('i-frame', {
+  }))])]), _vm._v(" "), _c('div', {
+    staticClass: "level-right is-small"
+  }, [_c('nav', {
+    staticClass: "panel"
+  }, [_c('p', {
+    staticClass: "panel-heading"
+  }, [_vm._v("\n          " + _vm._s(this.email.attachments.length) + " attachments\n        ")]), _vm._v(" "), _vm._l((this.email.attachments), function(attachment) {
+    return _c('a', {
+      staticClass: "panel-block",
+      attrs: {
+        "href": '/emails/' + _vm.email.id + '/attachments/' + attachment.id
+      }
+    }, [_c('span', {
+      staticClass: "panel-icon"
+    }, [_c('i', {
+      class: _vm.classesContentType(attachment.content_type)
+    })]), _vm._v("\n          " + _vm._s(attachment.file_name) + " (" + _vm._s(attachment.size_for_human) + ")\n        ")])
+  })], 2)])]), _vm._v(" "), _c('div', [_c('i-frame', {
     staticClass: "my-frame"
   }, [_c('div', {
     domProps: {

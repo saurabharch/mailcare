@@ -1,31 +1,47 @@
 <template>
   <div>
 
-  <div class="level-left">
+    <nav class="level">
 
-    <div class="tabs is-small is-toggle">
+      <div class="level-left">
+        <div class="tabs is-small is-toggle">
+          <ul>
+            <li v-for="bodyType in bodyTypes" :class="classesLink(bodyType)" :disabled="isDisabled(bodyType)"  @click="getContent(bodyType.accept)">
+              <a>
+                <span class="icon is-small">
+                  <i :class="classes(bodyType)"></i>
+                </span>
+                <span v-text="bodyType.label"></span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
 
-      <ul>
-        <li v-for="bodyType in bodyTypes" :class="classesLink(bodyType)" :disabled="isDisabled(bodyType)"  @click="getContent(bodyType.accept)">
-          <a>
-            <span class="icon is-small">
-              <i :class="classes(bodyType)"></i>
+      <div class="level-right is-small">
+        <nav class="panel">
+          <p class="panel-heading">
+            {{ this.email.attachments.length }} attachments
+          </p>
+          <a v-for="attachment in this.email.attachments" class="panel-block" v-bind:href="'/emails/' + email.id + '/attachments/' + attachment.id">
+            <span class="panel-icon">
+              <i :class="classesContentType(attachment.content_type)"></i>
             </span>
-            <span v-text="bodyType.label"></span>
+            {{ attachment.file_name }} ({{ attachment.size_for_human }})
           </a>
-        </li>
-      </ul>
+        </nav>
+      </div>
+
+    </nav>
+
+    <div>
+      <i-frame class="my-frame">
+        <div v-html="body"></div>
+      </i-frame> 
     </div>
 
   </div>
-
-  <div>
-    <i-frame class="my-frame">
-      <div v-html="body"></div>
-    </i-frame> 
-  </div>
-
-  </div>
+  
 </template>
 
 <script>
@@ -50,6 +66,50 @@
         },
 
         methods: {
+
+          classesContentType(contentType)
+          {
+            if (contentType.startsWith("image"))
+            {
+              return ['fa', 'fa-image-o']
+            }
+            else if (contentType.startsWith("audio"))
+            {
+              return ['fa', 'fa-audio-o']
+            }
+            else if (contentType.startsWith("text"))
+            {
+              return ['fa', 'fa-text-o']
+            }
+            else if (contentType.startsWith("video"))
+            {
+              return ['fa', 'fa-video-o']
+            }
+            else if (contentType.includes("excel") || contentType.includes("spreadsheet"))
+            {
+              return ['fa', 'fa-excel-o']
+            }
+            else if (contentType.includes("powerpoint") || contentType.includes("presentation"))
+            {
+              return ['fa', 'fa-powerpoint-o']
+            }
+            else if (contentType.includes("zip"))
+            {
+              return ['fa', 'fa-archive-o']
+            }
+            else if (contentType.includes("pdf"))
+            {
+              return ['fa', 'fa-pdf-o']
+            }
+            else if (contentType.includes("word"))
+            {
+              return ['fa', 'fa-word-o']
+            }
+            else
+            {
+              return ['fa', 'fa-file-o']
+            }
+          },
 
           classesLink(bodyType)
           {

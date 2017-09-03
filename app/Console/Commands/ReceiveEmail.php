@@ -86,6 +86,7 @@ class ReceiveEmail extends Command
         {
             $attachment = new Attachment;
             $attachment->email_id = $email->id;
+            $attachment->headers_hashed = $attachment->hashHeaders($attachmentParsed->getHeaders());
             $attachment->file_name = $attachmentParsed->getFileName();
             $attachment->content_type = $attachmentParsed->getContentType();
             $attachment->size_in_bytes = strlen($attachmentParsed->getMimePartStr());
