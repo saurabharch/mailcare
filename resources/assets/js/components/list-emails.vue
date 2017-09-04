@@ -64,7 +64,7 @@
           <td>{{ email.created_at | ago }}</td>
           <td>
             <span class="icon is-small">
-              <i v-if="email.favorited" class="fa fa-star"></i>
+              <i v-if="email.favorite" class="fa fa-heart"></i>
               <i v-else-if="!email.read" class="fa fa-circle"></i>
             </span>
             <a v-bind:href="'/emails/' + email.id" v-bind:id="email.id">{{ email.subject }}</a>

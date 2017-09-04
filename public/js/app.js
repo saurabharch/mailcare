@@ -35737,8 +35737,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._m(3), _vm._v(" "), _c('tbody', _vm._l((_vm.emails), function(email) {
     return _c('tr', [_c('td', [_vm._v(_vm._s(_vm._f("ago")(email.created_at)))]), _vm._v(" "), _c('td', [_c('span', {
       staticClass: "icon is-small"
-    }, [(email.favorited) ? _c('i', {
-      staticClass: "fa fa-star"
+    }, [(email.favorite) ? _c('i', {
+      staticClass: "fa fa-heart"
     }) : (!email.read) ? _c('i', {
       staticClass: "fa fa-circle"
     }) : _vm._e()]), _vm._v(" "), _c('a', {
