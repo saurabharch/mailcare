@@ -175,7 +175,7 @@ class EmailsTest extends TestCase
         $response = $this->json('GET', 'api/v1/emails/'.$data[0]->id);
         $response
             ->assertStatus(200)
-            ->assertJsonFragment(['subject' => 'Mail avec fichier attaché de 1ko', 'is_html' => true, 'is_text' => true]);
+            ->assertJsonFragment(['subject' => 'Mail avec fichier attaché de 1ko', 'has_html' => true, 'has_text' => true]);
     }
 
     /**

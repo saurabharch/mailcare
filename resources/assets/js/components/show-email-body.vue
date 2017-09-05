@@ -124,11 +124,11 @@
 
             if (bodyType.label == 'Html')
             {
-              return !this.email.is_html;
+              return !this.email.has_html;
             }
             else if (bodyType.label == 'Text')
             {
-              return !this.email.is_text;
+              return !this.email.has_text;
             }
             else
             {

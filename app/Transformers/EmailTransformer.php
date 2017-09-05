@@ -14,8 +14,8 @@ class EmailTransformer extends Transformer {
             'created_at' => $email['created_at'],
             'read' => $email['read'],
             'favorite' => (boolean) $email['favorite'],
-            'is_html' => (boolean) $email['is_html'],
-            'is_text' => (boolean) $email['is_text'],
+            'has_html' => (boolean) $email['has_html'],
+            'has_text' => (boolean) $email['has_text'],
             'size_in_bytes' => (integer) $email['size_in_bytes'],
             'attachments' => $email->attachments,
         ];

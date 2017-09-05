@@ -20,8 +20,8 @@ class CreateEmailsTable extends Migration
             $table->string('subject', 100);
             $table->dateTime('read')->nullable();
             $table->boolean('favorite')->default(false);
-            $table->boolean('is_html')->default(false);
-            $table->boolean('is_text')->default(false);
+            $table->boolean('has_html')->default(false);
+            $table->boolean('has_text')->default(false);
             $table->integer('size_in_bytes')->nullable();
             $table->timestamps();
 

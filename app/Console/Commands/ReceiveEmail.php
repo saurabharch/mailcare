@@ -67,11 +67,11 @@ class ReceiveEmail extends Command
 
         if (!empty($parser->getMessageBody('html')))
         {
-            $email->is_html = true;
+            $email->has_html = true;
         }
         if (!empty($parser->getMessageBody('text')))
         {
-            $email->is_text = true;
+            $email->has_text = true;
         }
 
         $sender = Sender::updateOrCreate(
