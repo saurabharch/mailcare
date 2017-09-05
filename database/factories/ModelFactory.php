@@ -23,6 +23,15 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(App\Sender::class, function (Faker\Generator $faker) {
+    return [
+        'email' => $faker->email,
+        'display_name' => $faker->name,
+        'local_part' => '',
+        'domain' => '',
+    ];
+});
+
 $factory->define(App\Inbox::class, function (Faker\Generator $faker) {
     return [
         'recipient' => $faker->email,
@@ -32,7 +41,9 @@ $factory->define(App\Inbox::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Email::class, function (Faker\Generator $faker) {
     return [
-        'from' => $faker->email,
+        'sender_id' => function(){
+            return factory(App\Sender::class)->create()->id;
+        },
         'inbox_id' => function(){
             return factory(App\Inbox::class)->create()->id;
         },

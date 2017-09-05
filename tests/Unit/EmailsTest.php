@@ -109,9 +109,12 @@ class EmailsTest extends TestCase
     public function it_fetches_all_emails_for_a_search()
     {
         $inbox = factory(\App\Inbox::class)->create(['recipient' => 'myyyyyto@example.com']);
+        $sender = factory(\App\Sender::class)->create(['email' => 'myyyyyfrom@example.com']);
 
         $emails = factory(\App\Email::class, 3)->create();
-        $emails = factory(\App\Email::class)->create(['from' => 'myyyyyfrom@example.com']);
+        $emails = factory(\App\Email::class)->create([
+            'sender_id' => $sender->id
+        ]);
         $emails = factory(\App\Email::class)->create([
             'inbox_id' => $inbox->id
         ]);

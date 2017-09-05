@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Email;
 use App\Inbox;
 use App\Attachment;
+use App\Sender;
 use \PhpMimeMailParser\Parser;
 use Illuminate\Support\Facades\Storage;
 
@@ -62,7 +63,6 @@ class ReceiveEmail extends Command
         ]);
 
         $email = new Email;
-        $email->from = $parser->getHeader('from');
         $email->subject = $parser->getHeader('subject');
 
         if (!empty($parser->getMessageBody('html')))
@@ -73,6 +73,18 @@ class ReceiveEmail extends Command
         {
             $email->is_text = true;
         }
+
+        $sender = Sender::updateOrCreate(
+            [
+                'email' => $parser->getAddresses('from')[0]["address"]
+            ],
+            [
+                'display_name' => $parser->getAddresses('from')[0]["display"],
+                'local_part' => '',
+                'domain' => '',
+            ]
+        );
+        $email->sender()->associate($sender);
 
         $inbox->emails()->save($email);
 

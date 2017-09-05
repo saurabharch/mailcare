@@ -8,7 +8,7 @@ class EmailTransformer extends Transformer {
     {
         return [
             'id' => $email['id'],
-            'from' => $email['from'],
+            'sender' => $email->sender,
             'to' => $email['inbox']['recipient'],
             'subject' => $email['subject'],
             'created_at' => $email['created_at'],

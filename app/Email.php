@@ -12,6 +12,11 @@ class Email extends Model
 
 	use Uuids;
 
+	public function sender()
+	{
+		return $this->belongsTo('App\Sender');
+	}
+
 	public function inbox()
 	{
 		return $this->belongsTo('App\Inbox');

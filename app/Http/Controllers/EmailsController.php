@@ -36,9 +36,10 @@ class EmailsController extends ApiController
             $query->where(function ($query) use ($search) {
 
                 $inboxes = \App\Inbox::where('recipient', 'like', $search.'%')->pluck('id')->all();
+                $senders = \App\Sender::where('email', 'like', $search.'%')->pluck('id')->all();
 
                 $query->whereIn('inbox_id', $inboxes)
-                        ->orWhere('from', 'like', $search.'%')
+                        ->orWhereIn('sender_id', $senders)
                         ->orWhere('subject', 'like', $search.'%');
             });
         })
