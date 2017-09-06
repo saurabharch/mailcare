@@ -14,9 +14,11 @@ class CreateInboxesTable extends Migration
     public function up()
     {
         Schema::create('inboxes', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('recipient', 100)->unique();
-            $table->integer('emails_received')->nullable();
+            $table->uuid('id');
+            $table->string('display_name');
+            $table->string('email')->unique();
+            $table->string('local_part');
+            $table->string('domain');
             $table->timestamps();
         });
     }

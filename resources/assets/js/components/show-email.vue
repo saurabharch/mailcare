@@ -5,7 +5,7 @@
         <div class="level-left">
           <div>
             <h1 class="title is-spaced">{{ email.subject }}</h1>
-            <h2 class="subtitle is-5" v-if="email.created_at">From <a>{{ email.sender.email }}</a> to <a>{{ email.to }}</a></h2>
+            <h2 class="subtitle is-5" v-if="email.created_at">From <a>{{ email.sender.email }}</a> to <a>{{ email.inbox.email }}</a></h2>
           </div>
         </div>
         <div class="level-right has-text-centered">

@@ -57,10 +57,28 @@ class ReceiveEmail extends Command
         {
             $parser->setStream(fopen("php://stdin", "r"));
         }
-
-        $inbox = Inbox::updateOrCreate([
-            'recipient' => $parser->getHeader('to')
-        ]);
+        
+        $sender = Sender::updateOrCreate(
+            [
+                'email' => $parser->getAddresses('from')[0]["address"]
+            ],
+            [
+                'display_name' => $parser->getAddresses('from')[0]["display"],
+                'local_part' => '',
+                'domain' => '',
+            ]
+        );
+        
+        $inbox = Inbox::updateOrCreate(
+            [
+                'email' => $parser->getAddresses('to')[0]["address"]
+            ],
+            [
+                'display_name' => $parser->getAddresses('to')[0]["display"],
+                'local_part' => '',
+                'domain' => '',
+            ]
+        );
 
         $email = new Email;
         $email->subject = $parser->getHeader('subject');
@@ -74,16 +92,6 @@ class ReceiveEmail extends Command
             $email->has_text = true;
         }
 
-        $sender = Sender::updateOrCreate(
-            [
-                'email' => $parser->getAddresses('from')[0]["address"]
-            ],
-            [
-                'display_name' => $parser->getAddresses('from')[0]["display"],
-                'local_part' => '',
-                'domain' => '',
-            ]
-        );
         $email->sender()->associate($sender);
 
         $inbox->emails()->save($email);

@@ -34,7 +34,10 @@ $factory->define(App\Sender::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Inbox::class, function (Faker\Generator $faker) {
     return [
-        'recipient' => $faker->email,
+        'email' => $faker->email,
+        'display_name' => $faker->name,
+        'local_part' => '',
+        'domain' => '',
     ];
 });
 

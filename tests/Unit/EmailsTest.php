@@ -88,14 +88,14 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_all_emails_for_specific_mailbox()
     {
-        $inbox = factory(\App\Inbox::class)->create(['recipient' => 'test@example.com']);
+        $inbox = factory(\App\Inbox::class)->create(['email' => 'test@example.com']);
 
     	$emails = factory(\App\Email::class, 3)->create();
     	$emails = factory(\App\Email::class, 2)->create([
             'inbox_id' => $inbox->id
         ]);
 
-    	$response = $this->json('GET', 'api/v1/emails?to=test@example.com');
+    	$response = $this->json('GET', 'api/v1/emails?inbox=test@example.com');
 
         $response
             ->assertStatus(200);
@@ -108,7 +108,7 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_all_emails_for_a_search()
     {
-        $inbox = factory(\App\Inbox::class)->create(['recipient' => 'myyyyyto@example.com']);
+        $inbox = factory(\App\Inbox::class)->create(['email' => 'myyyyyto@example.com']);
         $sender = factory(\App\Sender::class)->create(['email' => 'myyyyyfrom@example.com']);
 
         $emails = factory(\App\Email::class, 3)->create();

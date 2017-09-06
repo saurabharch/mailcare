@@ -56,7 +56,7 @@
           <th><abbr title="Received date">Date</abbr></th>
           <th>Subject</th>
           <th>Sender</th>
-          <th>To</th>
+          <th>Inbox</th>
         </tr>
       </thead>
       <tbody>
@@ -70,7 +70,7 @@
             <a v-bind:href="'/emails/' + email.id" v-bind:id="email.id">{{ email.subject }}</a>
           </td>
           <td>{{ email.sender.email }}</td>
-          <td>{{ email.to }}</td>
+          <td>{{ email.inbox.email }}</td>
         </tr>
       </tbody>
     </table>

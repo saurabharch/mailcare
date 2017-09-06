@@ -23,19 +23,19 @@ class EmailsController extends ApiController
     public function index()
     {
         $limit = request()->input('limit') ?: 25;
-        $to = request()->input('to');
+        $inbox = request()->input('inbox');
         $search = request()->input('search');
         $unread = request()->input('unread');
         $favorite = request()->input('favorite');
 
-        $emails = Email::when($to, function ($query) use ($to) {
-            $inbox = \App\Inbox::where('recipient', $to)->first();
+        $emails = Email::when($inbox, function ($query) use ($inbox) {
+            $inbox = \App\Inbox::where('email', $inbox)->first();
             return $query->where('inbox_id', $inbox->id);
         })
         ->when($search, function ($query) use ($search) {
             $query->where(function ($query) use ($search) {
 
-                $inboxes = \App\Inbox::where('recipient', 'like', $search.'%')->pluck('id')->all();
+                $inboxes = \App\Inbox::where('email', 'like', $search.'%')->pluck('id')->all();
                 $senders = \App\Sender::where('email', 'like', $search.'%')->pluck('id')->all();
 
                 $query->whereIn('inbox_id', $inboxes)

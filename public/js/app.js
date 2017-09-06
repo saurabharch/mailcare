@@ -35630,7 +35630,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "title is-spaced"
   }, [_vm._v(_vm._s(_vm.email.subject))]), _vm._v(" "), (_vm.email.created_at) ? _c('h2', {
     staticClass: "subtitle is-5"
-  }, [_vm._v("From "), _c('a', [_vm._v(_vm._s(_vm.email.sender.email))]), _vm._v(" to "), _c('a', [_vm._v(_vm._s(_vm.email.to))])]) : _vm._e()])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("From "), _c('a', [_vm._v(_vm._s(_vm.email.sender.email))]), _vm._v(" to "), _c('a', [_vm._v(_vm._s(_vm.email.inbox.email))])]) : _vm._e()])]), _vm._v(" "), _c('div', {
     staticClass: "level-right has-text-centered"
   }, [_c('div', [_c('p', {
     staticClass: "heading"
@@ -35746,7 +35746,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "href": '/emails/' + email.id,
         "id": email.id
       }
-    }, [_vm._v(_vm._s(email.subject))])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(email.sender.email))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(email.to))])])
+    }, [_vm._v(_vm._s(email.subject))])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(email.sender.email))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(email.inbox.email))])])
   }))]), _vm._v(" "), _c('div'), _vm._v(" "), _c('div')])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('span', {
@@ -35771,7 +35771,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "title": "Received date"
     }
-  }, [_vm._v("Date")])]), _vm._v(" "), _c('th', [_vm._v("Subject")]), _vm._v(" "), _c('th', [_vm._v("Sender")]), _vm._v(" "), _c('th', [_vm._v("To")])])])
+  }, [_vm._v("Date")])]), _vm._v(" "), _c('th', [_vm._v("Subject")]), _vm._v(" "), _c('th', [_vm._v("Sender")]), _vm._v(" "), _c('th', [_vm._v("Inbox")])])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
