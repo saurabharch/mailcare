@@ -79,8 +79,7 @@ class EmailsTest extends TestCase
 
     	$response = $this->json('GET', 'api/v1/emails/id-doesnt-exist');
 
-        $response
-            ->assertStatus(404);
+        $response->assertStatus(404);
     }
 
     /**

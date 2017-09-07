@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Email;
-use PhpMimeMailParser\Parser;
 use App\Transformers\EmailTransformer;
 use App\Filters\EmailFilters;
+use App\Responses\EmailResponse;
 
 class EmailsController extends ApiController
 {
@@ -62,46 +62,12 @@ class EmailsController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, EmailResponse $emailResponse)
     {
-        $email = Email::find($id);
 
-        if ( ! $email)
-        {
-            return $this->respondNotFound('Email does not exist.');
-        }
+        $email = Email::findOrFail($id);
 
-        $acceptedHeaders = ['application/json', 'text/html', 'text/plain', 'message/rfc822'];
-
-        if ('text/html' == request()->prefers($acceptedHeaders))
-        {
-            $parser = new Parser;
-            $parser->setPath($email->fullPath());
-            return response($parser->getMessageBody('html'))->header('Content-Type', 'text/html; charset=UTF-8');
-        }
-        elseif ('text/plain' == request()->prefers($acceptedHeaders))
-        {
-            $parser = new Parser;
-            $parser->setPath($email->fullPath());
-            return response($parser->getMessageBody('text'))->header('Content-Type', 'text/plain; charset=UTF-8');
-        }
-        elseif ('message/rfc822' == request()->prefers($acceptedHeaders))
-        {;
-            return response(file_get_contents($email->fullPath()))->header('Content-Type', 'message/rfc822; charset=UTF-8');
-        }
-        else
-        {
-            $data = $this->emailTransformer->transform($email);
-
-
-            if ($email->isUnread())
-            {
-                $email->read();
-            }
-
-            return $this->respond(['data' => $data]);
-
-        }
+        return $emailResponse->make($email);
     }
 
     /**
