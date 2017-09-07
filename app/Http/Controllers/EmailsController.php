@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Email;
 use PhpMimeMailParser\Parser;
 use App\Transformers\EmailTransformer;
+use App\Filters\EmailFilters;
 
 class EmailsController extends ApiController
 {
@@ -20,39 +21,14 @@ class EmailsController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(EmailFilters $filters)
     {
         $limit = request()->input('limit') ?: 25;
-        $inbox = request()->input('inbox');
-        $search = request()->input('search');
-        $unread = request()->input('unread');
-        $favorite = request()->input('favorite');
 
-        $emails = Email::when($inbox, function ($query) use ($inbox) {
-            $inbox = \App\Inbox::where('email', $inbox)->first();
-            return $query->where('inbox_id', $inbox->id);
-        })
-        ->when($search, function ($query) use ($search) {
-            $query->where(function ($query) use ($search) {
-
-                $inboxes = \App\Inbox::where('email', 'like', $search.'%')->pluck('id')->all();
-                $senders = \App\Sender::where('email', 'like', $search.'%')->pluck('id')->all();
-
-                $query->whereIn('inbox_id', $inboxes)
-                        ->orWhereIn('sender_id', $senders)
-                        ->orWhere('subject', 'like', $search.'%');
-            });
-        })
-        ->when($unread, function ($query) {
-            return $query->whereNull('read');
-        })
-        ->when($favorite, function ($query) {
-            return $query->where('favorite', true);
-        })
-        ->with('inbox')
-        ->latest()
-        ->paginate($limit);
-
+        $emails = Email::with('inbox')
+                        ->latest()
+                        ->filter($filters)
+                        ->paginate($limit);
 
         return $this->respondWithPagination($emails, [
             'data' => $this->emailTransformer->transformCollection($emails->all()),

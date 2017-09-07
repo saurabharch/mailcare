@@ -47,4 +47,9 @@ class Email extends Model
         $this->read = Carbon::now();
         $this->save();
     }
+
+    public function scopeFilter($query, $filters)
+    {
+    	return $filters->apply($query);
+    }
 }
