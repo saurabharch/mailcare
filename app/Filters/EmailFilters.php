@@ -7,7 +7,7 @@ use App\Sender;
 
 class EmailFilters extends Filters
 {
-	protected $filters = ['inbox', 'search', 'unread', 'favorite'];
+	protected $filters = ['inbox', 'sender', 'search', 'unread', 'favorite'];
 
 	protected function inbox($email)
 	{
@@ -16,15 +16,25 @@ class EmailFilters extends Filters
 		return $this->builder->where('inbox_id', $inbox->id);
 	}
 
+	protected function sender($email)
+	{
+		$sender = Sender::where('email', $email)->firstOrFail();
+
+		return $this->builder->where('sender_id', $sender->id);
+	}
+
 	protected function search($keywords)
 	{
 		$inboxes = Inbox::where('email', 'like', "$keywords%")->pluck('id')->all();
 		$senders = Sender::where('email', 'like', "$keywords%")->pluck('id')->all();
 
 		return $this->builder
-			->whereIn('inbox_id', $inboxes)
+			->where(function ($query) use ($inboxes, $senders, $keywords) {
+				$query
+			->orWhereIn('inbox_id', $inboxes)
 			->orWhereIn('sender_id', $senders)
 			->orWhere('subject', 'like', "$keywords%");
+			});
 	}
 
 	protected function unread()

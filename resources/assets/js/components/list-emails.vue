@@ -1,8 +1,6 @@
 <template>
 
 <div>
-
-
 <!-- Main container -->
 <nav class="level">
   <!-- Left side -->
@@ -24,30 +22,48 @@
   <!-- Right side -->
   <div class="level-right">
 
-    <div class="tabs is-small is-toggle">
-      <ul>
-        <li :class="classes(!this.filteredBy)">
-          <a @click="filterBy()">
-            <span class="icon is-small"><i class="fa fa-asterisk"></i></span>
-            <span>All</span>
-          </a>
-        </li>
-        <li :class="classes(this.filteredByUnread())">
-          <a @click="filterBy('unread')">
-            <span class="icon is-small"><i class="fa fa-circle"></i></span>
-            <span>Unread</span>
-          </a>
-        </li>
-        <li :class="classes(this.filteredByFavorite())">
-          <a @click="filterBy('favorite')">
-            <span class="icon is-small"><i class="fa fa-heart"></i></span>
-            <span>Favorite</span>
-          </a>
-        </li>
-      </ul>
+    <div>
+    <p>
+      <div class="tabs is-small is-toggle">
+        <ul>
+          <li :class="classes(!this.filteredBy)">
+            <a @click="filterBy()">
+              <span class="icon is-small"><i class="fa fa-asterisk"></i></span>
+              <span>All</span>
+            </a>
+          </li>
+          <li :class="classes(this.filteredByUnread())">
+            <a @click="filterBy('unread')">
+              <span class="icon is-small"><i class="fa fa-circle"></i></span>
+              <span>Unread</span>
+            </a>
+          </li>
+          <li :class="classes(this.filteredByFavorite())">
+            <a @click="filterBy('favorite')">
+              <span class="icon is-small"><i class="fa fa-heart"></i></span>
+              <span>Favorite</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </p>
+    <p v-if="this.inbox">
+    Filtered by inbox:
+    <span class="tag is-primary">
+      name@company2.com
+      <button class="delete is-small"></button>
+    </span>
+    </p>
+    <p v-if="this.sender">
+    Filtered by sender:
+    <span class="tag is-primary">
+      name@company2.com 
+      <button class="delete is-small"></button>
+    </span>
+    </p>
     </div>
-
   </div>
+
 </nav>
 
     <table class="table table is-fullwidth">
@@ -87,6 +103,8 @@
     import moment from 'moment';
 
     export default {
+
+        props: ['inbox', 'sender'],
 
         data() {
           return {
@@ -128,6 +146,8 @@
 
           getEmails() {
             axios.get('/api/v1/emails', { params: {
+              'inbox': (this.inbox ? this.inbox : null),
+              'sender': (this.sender ? this.sender : null),
               'search': (this.emailFiltered ? this.emailFiltered : null),
               'unread': (this.filteredByUnread() ? '1' : null),
               'favorite': (this.filteredByFavorite() ? '1' : null),

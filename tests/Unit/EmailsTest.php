@@ -85,7 +85,7 @@ class EmailsTest extends TestCase
     /**
      * @test
      */
-    public function it_fetches_all_emails_for_specific_mailbox()
+    public function it_fetches_all_emails_for_specific_inbox()
     {
         $inbox = factory(\App\Inbox::class)->create(['email' => 'test@example.com']);
 
@@ -100,6 +100,26 @@ class EmailsTest extends TestCase
             ->assertStatus(200);
     	$data = json_decode($response->baseResponse->content())->data;
     	$this->assertCount(2, $data);
+    }
+
+    /**
+     * @test
+     */
+    public function it_fetches_all_emails_for_specific_sender()
+    {
+        $sender = factory(\App\Sender::class)->create(['email' => 'test@example.com']);
+
+        $emails = factory(\App\Email::class, 3)->create();
+        $emails = factory(\App\Email::class, 2)->create([
+            'sender_id' => $sender->id
+        ]);
+
+        $response = $this->json('GET', 'api/v1/emails?sender=test@example.com');
+
+        $response
+            ->assertStatus(200);
+        $data = json_decode($response->baseResponse->content())->data;
+        $this->assertCount(2, $data);
     }
 
     /**
