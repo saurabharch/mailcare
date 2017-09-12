@@ -51,14 +51,14 @@
     Filtered by inbox:
     <span class="tag is-primary">
       name@company2.com
-      <button class="delete is-small"></button>
+      <button @click="removeFilter()" class="delete is-small"></button>
     </span>
     </p>
     <p v-if="this.sender">
     Filtered by sender:
     <span class="tag is-primary">
       name@company2.com 
-      <button class="delete is-small"></button>
+      <button @click="removeFilter()" class="delete is-small"></button>
     </span>
     </p>
     </div>
@@ -126,6 +126,10 @@
         },
 
         methods: {
+
+          removeFilter() {
+            window.location = "/"
+          },
 
           filteredByUnread() {
             return this.filteredBy == 'unread';

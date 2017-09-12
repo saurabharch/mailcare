@@ -17649,6 +17649,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
   methods: {
+    removeFilter: function removeFilter() {
+      window.location = "/";
+    },
     filteredByUnread: function filteredByUnread() {
       return this.filteredBy == 'unread';
     },
@@ -35763,9 +35766,27 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.filterBy('favorite')
       }
     }
-  }, [_vm._m(2), _vm._v(" "), _c('span', [_vm._v("Favorite")])])])])]), _vm._v(" "), _c('p'), _vm._v(" "), (this.inbox) ? _c('p', [_vm._v("\n    Filtered by inbox:\n    "), _vm._m(3)]) : _vm._e(), _vm._v(" "), (this.sender) ? _c('p', [_vm._v("\n    Filtered by sender:\n    "), _vm._m(4)]) : _vm._e()])])]), _vm._v(" "), _c('table', {
+  }, [_vm._m(2), _vm._v(" "), _c('span', [_vm._v("Favorite")])])])])]), _vm._v(" "), _c('p'), _vm._v(" "), (this.inbox) ? _c('p', [_vm._v("\n    Filtered by inbox:\n    "), _c('span', {
+    staticClass: "tag is-primary"
+  }, [_vm._v("\n      name@company2.com\n      "), _c('button', {
+    staticClass: "delete is-small",
+    on: {
+      "click": function($event) {
+        _vm.removeFilter()
+      }
+    }
+  })])]) : _vm._e(), _vm._v(" "), (this.sender) ? _c('p', [_vm._v("\n    Filtered by sender:\n    "), _c('span', {
+    staticClass: "tag is-primary"
+  }, [_vm._v("\n      name@company2.com \n      "), _c('button', {
+    staticClass: "delete is-small",
+    on: {
+      "click": function($event) {
+        _vm.removeFilter()
+      }
+    }
+  })])]) : _vm._e()])])]), _vm._v(" "), _c('table', {
     staticClass: "table table is-fullwidth"
-  }, [_vm._m(5), _vm._v(" "), _c('tbody', _vm._l((_vm.emails), function(email) {
+  }, [_vm._m(3), _vm._v(" "), _c('tbody', _vm._l((_vm.emails), function(email) {
     return _c('tr', [_c('td', [_vm._v(_vm._s(_vm._f("ago")(email.created_at)))]), _vm._v(" "), _c('td', [_c('span', {
       staticClass: "icon is-small"
     }, [(email.favorite) ? _c('i', {
@@ -35796,18 +35817,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "icon is-small"
   }, [_c('i', {
     staticClass: "fa fa-heart"
-  })])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('span', {
-    staticClass: "tag is-primary"
-  }, [_vm._v("\n      name@company2.com\n      "), _c('button', {
-    staticClass: "delete is-small"
-  })])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('span', {
-    staticClass: "tag is-primary"
-  }, [_vm._v("\n      name@company2.com \n      "), _c('button', {
-    staticClass: "delete is-small"
   })])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('thead', [_c('tr', [_c('th', [_c('abbr', {
