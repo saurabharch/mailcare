@@ -239,12 +239,12 @@ class EmailsTest extends TestCase
 
     	$response = $this->json('GET', 'api/v1/emails');
     	$data = json_decode($response->baseResponse->content())->data;
-    	$response = $this->json('GET', 'api/v1/emails/'.$data[0]->id, [], ['Accept' => 'message/rfc822']);
+    	$response = $this->json('GET', 'api/v1/emails/'.$data[0]->id, [], ['Accept' => 'message/rfc2822']);
         $response
             ->assertStatus(200)
             ->assertSee('this is html part')
             ->assertSee('this is text part')
-            ->assertHeader('Content-Type', 'message/rfc822; charset=UTF-8');
+            ->assertHeader('Content-Type', 'message/rfc2822; charset=UTF-8');
     }
 
 
@@ -279,6 +279,22 @@ class EmailsTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertSee('this is text part')
+            ->assertDontSee('this is html part');
+    }
+
+    /**
+     * @test
+     */
+    public function it_return_not_acceptable_when_i_fetches_unsupported_accept()
+    {
+        $exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
+
+        $response = $this->json('GET', 'api/v1/emails');
+        $data = json_decode($response->baseResponse->content())->data;
+        $response = $this->json('GET', 'api/v1/emails/'.$data[0]->id, [], ['Accept' => 'message/rfc822']);
+        $response
+            ->assertStatus(406)
+            ->assertDontSee('this is text part')
             ->assertDontSee('this is html part');
     }
 

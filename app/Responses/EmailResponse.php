@@ -9,7 +9,7 @@ use App\Transformers\EmailTransformer;
 class EmailResponse
 {
 	protected $request, $parser;
-	protected $acceptedHeaders = ['application/json', 'text/html', 'text/plain', 'message/rfc822'];
+	protected $acceptedHeaders = ['application/json', 'text/html', 'text/plain', 'message/rfc2822'];
 
 	public function __construct(Request $request, Parser $parser)
 	{
@@ -29,13 +29,17 @@ class EmailResponse
 		{
 			return $this->makeText();
 		}
-		elseif ($this->requestPrefer('message/rfc822'))
+		elseif ($this->requestPrefer('message/rfc2822'))
 		{
 			return $this->makeRaw();
 		}
-		else 
+		elseif ($this->requestPrefer('application/json'))
 		{
 			return $this->makeJson();
+		}
+		else 
+		{
+			return $this->makeNotAcceptable();
 		}
 	}
 
@@ -60,7 +64,7 @@ class EmailResponse
 
 	protected function makeRaw()
 	{
-        return response(file_get_contents($this->email->fullPath()))->header('Content-Type', 'message/rfc822; charset=UTF-8');
+        return response(file_get_contents($this->email->fullPath()))->header('Content-Type', 'message/rfc2822; charset=UTF-8');
 	}
 
 	protected function makeJson()
@@ -74,5 +78,12 @@ class EmailResponse
         }
 
         return response()->json(['data' => $data]);
+	}
+
+	protected function makeNotAcceptable()
+	{
+        return response()->json([
+        	'error' => "Not acceptable 'Accept' header. Please use this list: " . implode(",", $this->acceptedHeaders) . "."
+        	], 406);
 	}
 }
