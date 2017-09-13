@@ -66,7 +66,7 @@
 
 </nav>
 
-    <table class="table table is-fullwidth">
+    <table class="table table is-fullwidth" v-if="totalCount">
       <thead>
         <tr>
           <th><abbr title="Received date">Date</abbr></th>
@@ -90,6 +90,22 @@
         </tr>
       </tbody>
     </table>
+
+
+    <article class="message" v-else>
+      <div class="message-header" style="justify-content: flex-start;">
+        <span class="icon is-medium"><i class="fa fa-meh-o"></i></span>
+        <span>Oops! No emails matched your query.</span>
+      </div>
+      <div class="message-body">
+      <p>A few things that might help:</p>
+      <p>- Use MailCare to receive your first email</p>
+      <p>- Remove your query filter Start with...</p>
+      <p>- Change your query filter Unread/Favorite to All</p>
+      <p>- Remove your query filter Inbox/Sender</p>
+      </div>
+    </article>
+
     <div>
     </div>
     <div>
@@ -123,6 +139,7 @@
 
         mounted() {
           this.getEmails()
+          console.log(this.emails)
         },
 
         methods: {

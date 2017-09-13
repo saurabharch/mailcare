@@ -17619,6 +17619,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -17645,6 +17661,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   mounted: function mounted() {
     this.getEmails();
+    console.log(this.emails);
   },
 
 
@@ -35784,7 +35801,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.removeFilter()
       }
     }
-  })])]) : _vm._e()])])]), _vm._v(" "), _c('table', {
+  })])]) : _vm._e()])])]), _vm._v(" "), (_vm.totalCount) ? _c('table', {
     staticClass: "table table is-fullwidth"
   }, [_vm._m(3), _vm._v(" "), _c('tbody', _vm._l((_vm.emails), function(email) {
     return _c('tr', [_c('td', [_vm._v(_vm._s(_vm._f("ago")(email.created_at)))]), _vm._v(" "), _c('td', [_c('span', {
@@ -35799,7 +35816,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "id": email.id
       }
     }, [_vm._v(_vm._s(email.subject))])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(email.sender.email))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(email.inbox.email))])])
-  }))]), _vm._v(" "), _c('div'), _vm._v(" "), _c('div')])
+  }))]) : _c('article', {
+    staticClass: "message"
+  }, [_vm._m(4), _vm._v(" "), _vm._m(5)]), _vm._v(" "), _c('div'), _vm._v(" "), _c('div')])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('span', {
     staticClass: "icon is-small"
@@ -35824,6 +35843,21 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "title": "Received date"
     }
   }, [_vm._v("Date")])]), _vm._v(" "), _c('th', [_vm._v("Subject")]), _vm._v(" "), _c('th', [_vm._v("Sender")]), _vm._v(" "), _c('th', [_vm._v("Inbox")])])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "message-header",
+    staticStyle: {
+      "justify-content": "flex-start"
+    }
+  }, [_c('span', {
+    staticClass: "icon is-medium"
+  }, [_c('i', {
+    staticClass: "fa fa-meh-o"
+  })]), _vm._v(" "), _c('span', [_vm._v("Oops! No emails matched your query.")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "message-body"
+  }, [_c('p', [_vm._v("A few things that might help:")]), _vm._v(" "), _c('p', [_vm._v("- Use MailCare to receive your first email")]), _vm._v(" "), _c('p', [_vm._v("- Remove your query filter Start with...")]), _vm._v(" "), _c('p', [_vm._v("- Change your query filter Unread/Favorite to All")]), _vm._v(" "), _c('p', [_vm._v("- Remove your query filter Inbox/Sender")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
