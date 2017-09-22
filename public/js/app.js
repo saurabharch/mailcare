@@ -17635,6 +17635,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -17646,9 +17663,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       emails: [],
-      totalCount: null,
-      emailFiltered: null,
-      filteredBy: null
+      totalCount: 1,
+      keywords: null,
+      filteredBy: null,
+      pageRequested: null
     };
   },
 
@@ -17661,11 +17679,53 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   mounted: function mounted() {
     this.getEmails();
-    console.log(this.emails);
   },
 
 
   methods: {
+    hasPreviousPage: function hasPreviousPage() {
+      return this.paginator.current_page > 1;
+    },
+    loadPreviousPage: function loadPreviousPage() {
+      this.goToPage(this.paginator.current_page - 1);
+    },
+    hasNextPage: function hasNextPage() {
+      return this.paginator.current_page < this.paginator.total_pages;
+    },
+    loadNextPage: function loadNextPage() {
+      this.goToPage(this.paginator.current_page + 1);
+    },
+    goToPage: function goToPage(page) {
+      this.pageRequested = page;
+      this.getEmails();
+    },
+    getPages: function getPages() {
+
+      var pages = [];
+      var i;
+
+      if (this.paginator.current_page - 3 > 1) {
+        pages.push(1);
+      }
+      if (this.paginator.current_page - 3 > 2) {
+        pages.push('...');
+      }
+
+      for (i = this.paginator.current_page - 3; i <= this.paginator.current_page + 3; i++) {
+        if (i > 0 && i <= this.paginator.total_pages) {
+          pages.push(i);
+        }
+      }
+      if (this.paginator.total_pages > this.paginator.current_page + 3 + 1) {
+        pages.push('...');
+      }
+
+      if (this.paginator.total_pages > this.paginator.current_page + 3) {
+        pages.push(this.paginator.total_pages);
+      }
+
+      return pages;
+    },
     removeFilter: function removeFilter() {
       window.location = "/";
     },
@@ -17681,18 +17741,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     filterBy: function filterBy() {
       var filtered = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 
+      this.pageRequested = null;
       this.filteredBy = filtered;
+      this.getEmails();
+    },
+    filterByKeywords: function filterByKeywords() {
+      this.pageRequested = null;
       this.getEmails();
     },
     getEmails: function getEmails() {
       axios.get('/api/v1/emails', { params: {
           'inbox': this.inbox ? this.inbox : null,
           'sender': this.sender ? this.sender : null,
-          'search': this.emailFiltered ? this.emailFiltered : null,
+          'search': this.keywords ? this.keywords : null,
           'unread': this.filteredByUnread() ? '1' : null,
-          'favorite': this.filteredByFavorite() ? '1' : null
+          'favorite': this.filteredByFavorite() ? '1' : null,
+          'page': this.pageRequested ? this.pageRequested : null
         } }).then(function (response) {
         this.emails = response.data.data;
+        this.paginator = response.data.paginator;
         this.totalCount = response.data.paginator.total_count;
       }.bind(this));
     }
@@ -35736,8 +35803,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.emailFiltered),
-      expression: "emailFiltered"
+      value: (_vm.keywords),
+      expression: "keywords"
     }],
     staticClass: "input",
     attrs: {
@@ -35745,14 +35812,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "Start with..."
     },
     domProps: {
-      "value": (_vm.emailFiltered)
+      "value": (_vm.keywords)
     },
     on: {
       "input": [function($event) {
         if ($event.target.composing) { return; }
-        _vm.emailFiltered = $event.target.value
+        _vm.keywords = $event.target.value
       }, function($event) {
-        _vm.getEmails()
+        _vm.filterByKeywords()
       }]
     }
   })])])])]), _vm._v(" "), _c('div', {
@@ -35801,7 +35868,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.removeFilter()
       }
     }
-  })])]) : _vm._e()])])]), _vm._v(" "), (_vm.totalCount) ? _c('table', {
+  })])]) : _vm._e()])])]), _vm._v(" "), (_vm.totalCount) ? _c('div', [(_vm.totalCount) ? _c('table', {
     staticClass: "table table is-fullwidth"
   }, [_vm._m(3), _vm._v(" "), _c('tbody', _vm._l((_vm.emails), function(email) {
     return _c('tr', [_c('td', [_vm._v(_vm._s(_vm._f("ago")(email.created_at)))]), _vm._v(" "), _c('td', [_c('span', {
@@ -35816,7 +35883,50 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "id": email.id
       }
     }, [_vm._v(_vm._s(email.subject))])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(email.sender.email))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(email.inbox.email))])])
-  }))]) : _c('article', {
+  }))]) : _vm._e(), _vm._v(" "), _c('nav', {
+    staticClass: "pagination is-centered",
+    attrs: {
+      "role": "navigation",
+      "aria-label": "pagination"
+    }
+  }, [(_vm.hasPreviousPage()) ? _c('a', {
+    staticClass: "pagination-previous",
+    on: {
+      "click": function($event) {
+        _vm.loadPreviousPage()
+      }
+    }
+  }, [_vm._v("Previous")]) : _vm._e(), _vm._v(" "), (_vm.hasNextPage()) ? _c('a', {
+    staticClass: "pagination-next",
+    on: {
+      "click": function($event) {
+        _vm.loadNextPage()
+      }
+    }
+  }, [_vm._v("Next page")]) : _vm._e(), _vm._v(" "), _c('ul', {
+    staticClass: "pagination-list"
+  }, _vm._l((_vm.getPages()), function(page) {
+    return _c('li', [(page == _vm.paginator.current_page) ? _c('a', {
+      staticClass: "pagination-link is-current",
+      attrs: {
+        "aria-current": "page"
+      },
+      on: {
+        "click": function($event) {
+          _vm.goToPage(page)
+        }
+      }
+    }, [_vm._v(_vm._s(page))]) : (page == '...') ? _c('span', {
+      staticClass: "pagination-ellipsis"
+    }, [_vm._v("…")]) : _c('a', {
+      staticClass: "pagination-link",
+      on: {
+        "click": function($event) {
+          _vm.goToPage(page)
+        }
+      }
+    }, [_vm._v(_vm._s(page))])])
+  }))])]) : _c('article', {
     staticClass: "message"
   }, [_vm._m(4), _vm._v(" "), _vm._m(5)]), _vm._v(" "), _c('div'), _vm._v(" "), _c('div')])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;

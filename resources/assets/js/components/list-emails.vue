@@ -13,7 +13,7 @@
     <div class="level-item">
       <div class="field has-addons">
         <p class="control">
-          <input class="input" type="text" placeholder="Start with..." v-model="emailFiltered" v-on:input="getEmails()">
+          <input class="input" type="text" placeholder="Start with..." v-model="keywords" v-on:input="filterByKeywords()">
         </p>
       </div>
     </div>
@@ -66,6 +66,7 @@
 
 </nav>
 
+  <div v-if="totalCount">
     <table class="table table is-fullwidth" v-if="totalCount">
       <thead>
         <tr>
@@ -91,6 +92,22 @@
       </tbody>
     </table>
 
+    <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+      <a class="pagination-previous" v-if="hasPreviousPage()" @click="loadPreviousPage()">Previous</a>
+      <a class="pagination-next" v-if="hasNextPage()" @click="loadNextPage()">Next page</a>
+      <ul class="pagination-list">
+        <li v-for="page in getPages()">
+
+          <a v-if="page == paginator.current_page" 
+            class="pagination-link is-current" 
+            aria-current="page" @click="goToPage(page)">{{ page }}</a>
+          <span v-else-if="page == '...'" 
+            class="pagination-ellipsis">&hellip;</span>
+          <a class="pagination-link" @click="goToPage(page)" v-else>{{ page }}</a>
+        </li>
+      </ul>
+    </nav>
+    </div>
 
     <article class="message" v-else>
       <div class="message-header" style="justify-content: flex-start;">
@@ -125,9 +142,10 @@
         data() {
           return {
             emails: [],
-            totalCount: null,
-            emailFiltered: null,
+            totalCount: 1,
+            keywords: null,
             filteredBy: null,
+            pageRequested: null,
           }
         },
 
@@ -139,10 +157,64 @@
 
         mounted() {
           this.getEmails()
-          console.log(this.emails)
         },
 
         methods: {
+
+          hasPreviousPage() {
+            return this.paginator.current_page > 1;
+          },
+
+          loadPreviousPage() {
+            this.goToPage(this.paginator.current_page - 1)
+          },
+
+          hasNextPage() {
+            return this.paginator.current_page < this.paginator.total_pages;
+          },
+
+          loadNextPage() {
+            this.goToPage(this.paginator.current_page + 1)
+          },
+
+          goToPage(page)
+          {
+            this.pageRequested = page
+            this.getEmails()
+          },
+
+          getPages() {
+
+            var pages = []
+            var i
+
+            if (this.paginator.current_page - 3 > 1)
+            {
+              pages.push(1)
+            }
+            if (this.paginator.current_page - 3 > 2)
+            {
+              pages.push('...')
+            }
+
+            for (i = this.paginator.current_page - 3; i <= this.paginator.current_page + 3; i++) {
+                if (i > 0 && i <= this.paginator.total_pages) {
+                  pages.push(i)
+                }
+            } 
+            if (this.paginator.total_pages > this.paginator.current_page + 3 + 1)
+            {
+              pages.push('...')
+            }
+
+            if (this.paginator.total_pages > this.paginator.current_page + 3)
+            {
+              pages.push(this.paginator.total_pages)
+            }
+
+            return pages
+
+          },
 
           removeFilter() {
             window.location = "/"
@@ -161,7 +233,14 @@
           },
 
           filterBy(filtered = null) {
+            this.pageRequested = null
             this.filteredBy = filtered
+            this.getEmails()
+          },
+
+          filterByKeywords()
+          {
+            this.pageRequested = null
             this.getEmails()
           },
 
@@ -169,11 +248,13 @@
             axios.get('/api/v1/emails', { params: {
               'inbox': (this.inbox ? this.inbox : null),
               'sender': (this.sender ? this.sender : null),
-              'search': (this.emailFiltered ? this.emailFiltered : null),
+              'search': (this.keywords ? this.keywords : null),
               'unread': (this.filteredByUnread() ? '1' : null),
               'favorite': (this.filteredByFavorite() ? '1' : null),
+              'page': (this.pageRequested ? this.pageRequested : null),
             }}).then(function(response) {
               this.emails = response.data.data
+              this.paginator = response.data.paginator
               this.totalCount = response.data.paginator.total_count
             }.bind(this));
 
