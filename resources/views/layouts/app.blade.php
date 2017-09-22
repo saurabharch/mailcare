@@ -8,14 +8,9 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Styles --><!-- 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.1/css/bulma.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css"> -->
+    <title>{{ config('app.name') }}</title>
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
     @stack('scripts')
 
@@ -25,24 +20,43 @@
             'csrfToken' => csrf_token(),
         ]) !!};
     </script>
+
+    <style type="text/css">
+      body {
+        font-size: 1.25rem;
+      }
+      .navbar-item {
+        font-family: 'Exo 2', sans-serif;
+      }
+    </style>
 </head>
 <body>
 
-    <nav class="nav has-shadow">
-      <div class="container">
-        <div class="nav-left">
-          <a class="nav-item" href="{{ url('/') }}">
-            <img src="{{ asset('logo-mailcare-renard.png') }}" alt="MailCare: a modern webmail">
-          </a>
-        </div>
-        <div class="nav-right nav-menu">
-          <a class="nav-item is-tab is-hidden-mobile {{ Request::is('/') ? 'is-active' : '' }}" href="{{ url('/') }}">Home</a>
-          <a class="nav-item is-tab is-hidden-mobile {{ Request::is('statistics') ? 'is-active' : '' }}" href="{{ url('/statistics') }}">Statistics</a>
-          <a class="nav-item is-tab is-hidden-mobile {{ Request::is('about') ? 'is-active' : '' }}" href="{{ url('/about') }}">About</a>
-        </div>
-      </div>
-    </nav>
 
+
+<nav class="navbar is-transparent  has-shadow" role="navigation" aria-label="main navigation">
+<div class="container">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="{{ url('/') }}">
+      <img src="{{ asset('logo-mailcare-renard.png') }}" alt="MailCare: a modern disposable email address" width="32" height="50">
+    </a>
+  </div>
+  <div class="navbar-menu is-active">
+    <div class="navbar-start">
+      <a class="navbar-item title is-3" href="{{ url('/') }}">
+        {{ config('app.name') }}
+      </a>
+    </div>
+    <div class="navbar-end">
+      <div class="navbar-tabs">
+          <a class="navbar-item is-tab {{ Request::is('/', 'emails*') ? 'is-active' : '' }}" href="{{ url('/') }}">Emails</a>
+          <a class="navbar-item is-tab {{ Request::is('statistics') ? 'is-active' : '' }}" href="{{ url('/statistics') }}">Statistics</a>
+          <a class="navbar-item is-tab {{ Request::is('about') ? 'is-active' : '' }}" href="{{ url('/about') }}">About</a>
+      </div>
+    </div>
+  </div>
+</div>
+</nav>
     
     <section class="section">
 

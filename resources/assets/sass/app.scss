@@ -1,15 +1,16 @@
 
 // Fonts
-@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+@import url(https://fonts.googleapis.com/css?family=Exo+2:500|Roboto);
 
-// Variables
-@import "variables";
+// Icons
+@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css);
 
 // Bulma
-
-
-
 $primary: #e65722;
-$family-primary: "Montserrat", sans-serif;
+
+$family-primary: 'Roboto', sans-serif;
+
+$navbar-height: 4rem;
+$navbar-item-img-max-height: 4rem;
 
 @import "~bulma";

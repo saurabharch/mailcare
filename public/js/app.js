@@ -17663,7 +17663,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       emails: [],
-      totalCount: 1,
+      totalCount: null,
       keywords: null,
       filteredBy: null,
       pageRequested: null
@@ -35926,9 +35926,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }
       }
     }, [_vm._v(_vm._s(page))])])
-  }))])]) : _c('article', {
+  }))])]) : (_vm.totalCount == 0) ? _c('article', {
     staticClass: "message"
-  }, [_vm._m(4), _vm._v(" "), _vm._m(5)]), _vm._v(" "), _c('div'), _vm._v(" "), _c('div')])
+  }, [_vm._m(4), _vm._v(" "), _vm._m(5)]) : _vm._e(), _vm._v(" "), _c('div'), _vm._v(" "), _c('div')])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('span', {
     staticClass: "icon is-small"

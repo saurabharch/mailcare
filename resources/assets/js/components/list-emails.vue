@@ -109,7 +109,7 @@
     </nav>
     </div>
 
-    <article class="message" v-else>
+    <article class="message" v-else-if="totalCount == 0">
       <div class="message-header" style="justify-content: flex-start;">
         <span class="icon is-medium"><i class="fa fa-meh-o"></i></span>
         <span>Oops! No emails matched your query.</span>
@@ -142,7 +142,7 @@
         data() {
           return {
             emails: [],
-            totalCount: 1,
+            totalCount: null,
             keywords: null,
             filteredBy: null,
             pageRequested: null,
