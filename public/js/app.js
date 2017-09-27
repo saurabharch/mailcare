@@ -36039,7 +36039,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "level-left"
   }, [_c('div', {
-    staticClass: "tabs is-small is-toggle"
+    staticClass: "tabs is-toggle"
   }, [_c('ul', _vm._l((_vm.bodyTypes), function(bodyType) {
     return _c('li', {
       class: _vm.classesLink(bodyType),

@@ -4,7 +4,7 @@
     <nav class="level">
 
       <div class="level-left">
-        <div class="tabs is-small is-toggle">
+        <div class="tabs is-toggle">
           <ul>
             <li v-for="bodyType in bodyTypes" :class="classesLink(bodyType)" :disabled="isDisabled(bodyType)"  @click="getContent(bodyType.accept)">
               <a>
