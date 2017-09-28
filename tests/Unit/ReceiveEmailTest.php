@@ -17,9 +17,4 @@ class ReceiveEmailTest extends TestCase
     	$this->assertEquals(0, $exitCode);
     	$this->assertDatabaseHas('emails', ['subject' => 'Mail avec fichier attaché de 1ko']);
     }
-
-    public function test_system_can_receive_email_from_stdin()
-    {
-    	//TODO with stdin
-    }
 }
