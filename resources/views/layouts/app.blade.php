@@ -51,7 +51,6 @@
       <div class="navbar-tabs">
           <a class="navbar-item is-tab {{ Request::is('/', 'emails*') ? 'is-active' : '' }}" href="{{ url('/') }}">Emails</a>
           <a class="navbar-item is-tab {{ Request::is('statistics') ? 'is-active' : '' }}" href="{{ url('/statistics') }}">Statistics</a>
-          <a class="navbar-item is-tab {{ Request::is('about') ? 'is-active' : '' }}" href="{{ url('/about') }}">About</a>
       </div>
     </div>
   </div>
