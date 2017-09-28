@@ -20,15 +20,6 @@
             'csrfToken' => csrf_token(),
         ]) !!};
     </script>
-
-    <style type="text/css">
-      body {
-        font-size: 1.25rem;
-      }
-      .navbar-item {
-        font-family: 'Exo 2', sans-serif;
-      }
-    </style>
 </head>
 <body>
 
