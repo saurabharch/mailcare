@@ -172,7 +172,7 @@
 
   .my-frame {
     min-height: 100%;
-    border: 1px solid #363636;
+    border: 1px solid #d6dbe1;
     margin: 20px auto;
     height: 400px;
     width: 100%;

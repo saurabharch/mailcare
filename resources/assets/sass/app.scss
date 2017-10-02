@@ -6,37 +6,58 @@
 @import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css);
 
 // Bulma
+
+
+$black:        #000a14;
+$black-bis:    #001124;
+$black-ter:    #002347;
+
+$grey-darker:  #253341;
+$grey-dark:    #2e3f52;
+$grey:         #607285;
+$grey-light:   #a9b4c1;
+$grey-lighter: #d6dbe1;
+
+@import "~bulma/sass/utilities/initial-variables.sass";
+
 $primary: #e65722;
 
 $family-primary: 'Roboto', sans-serif;
+$body-size: 1.25rem;
 
 $navbar-height: 4rem;
 $navbar-item-img-max-height: 4rem;
 
 //@import "~bulma";
-@import "~bulma/sass/utilities/_all.sass";
+@import "~bulma/sass/utilities/functions.sass";
+@import "~bulma/sass/utilities/derived-variables.sass";
+@import "~bulma/sass/utilities/animations.sass";
+@import "~bulma/sass/utilities/mixins.sass";
+@import "~bulma/sass/utilities/controls.sass";
+
 @import "~bulma/sass/base/_all.sass";
+
+@import "~bulma/sass/elements/button.sass";
 @import "~bulma/sass/elements/container.sass";
-@import "~bulma/sass/layout/footer.sass";
-@import "~bulma/sass/layout/section.sass";
-@import "~bulma/sass/components/navbar.sass";
-@import "~bulma/sass/components/level.sass";
-@import "~bulma/sass/components/tabs.sass";
-@import "~bulma/sass/elements/table.sass";
-@import "~bulma/sass/components/message.sass";
 @import "~bulma/sass/elements/form.sass";
-@import "~bulma/sass/components/card.sass";
-@import "~bulma/sass/elements/title.sass";
-@import "~bulma/sass/components/panel.sass";
 @import "~bulma/sass/elements/icon.sass";
-@import "~bulma/sass/components/pagination.sass";
+@import "~bulma/sass/elements/table.sass";
 @import "~bulma/sass/elements/tag.sass";
+@import "~bulma/sass/elements/title.sass";
 @import "~bulma/sass/elements/other.sass";
 
+@import "~bulma/sass/components/card.sass";
+@import "~bulma/sass/components/level.sass";
+@import "~bulma/sass/components/message.sass";
+@import "~bulma/sass/components/navbar.sass";
+@import "~bulma/sass/components/pagination.sass";
+@import "~bulma/sass/components/panel.sass";
+@import "~bulma/sass/components/tabs.sass";
 
-body {
-font-size: 1.25rem;
-}
+@import "~bulma/sass/layout/section.sass";
+@import "~bulma/sass/layout/footer.sass";
+
+
 .navbar-item {
-font-family: 'Exo 2', sans-serif;
+	font-family: 'Exo 2', sans-serif;
 }

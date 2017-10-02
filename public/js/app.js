@@ -18148,7 +18148,7 @@ window.axios.defaults.headers.common = {
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(154)();
-exports.push([module.i, "\n.my-frame[data-v-d1e86092] {\n  min-height: 100%;\n  border: 1px solid #363636;\n  margin: 20px auto;\n  height: 400px;\n  width: 100%;\n}\n", ""]);
+exports.push([module.i, "\n.my-frame[data-v-d1e86092] {\n  min-height: 100%;\n  border: 1px solid #d6dbe1;\n  margin: 20px auto;\n  height: 400px;\n  width: 100%;\n}\n", ""]);
 
 /***/ }),
 /* 154 */
