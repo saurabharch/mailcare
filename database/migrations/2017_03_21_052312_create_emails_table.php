@@ -16,7 +16,7 @@ class CreateEmailsTable extends Migration
         Schema::create('emails', function (Blueprint $table) {
             $table->uuid('id');
             $table->uuid('sender_id');
-            $table->integer('inbox_id');
+            $table->uuid('inbox_id');
             $table->string('subject', 100);
             $table->dateTime('read')->nullable();
             $table->boolean('favorite')->default(false);
