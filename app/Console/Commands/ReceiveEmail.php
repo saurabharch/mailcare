@@ -17,7 +17,7 @@ class ReceiveEmail extends Command
      *
      * @var string
      */
-    protected $signature = 'email:receive {file? : The file of the email}';
+    protected $signature = 'email:receive {file=stream: The file of the email}';
 
     /**
      * The console command description.
@@ -49,13 +49,15 @@ class ReceiveEmail extends Command
 
         $file = $this->argument('file');
 
-        if ($file)
+        if ($file == 'stream')
         {
-            $parser->setPath($file); 
+            $this->info("from stream");
+            $parser->setStream(fopen("php://stdin", "r"));
         }
         else
         {
-            $parser->setStream(fopen("php://stdin", "r"));
+            $this->info("from path $file");
+            $parser->setPath($file); 
         }
         
         $sender = Sender::updateOrCreate(
