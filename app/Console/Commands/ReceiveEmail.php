@@ -17,7 +17,7 @@ class ReceiveEmail extends Command
      *
      * @var string
      */
-    protected $signature = 'email:receive {file=stream: The file of the email}';
+    protected $signature = 'email:receive {file=stream : The file of the email}';
 
     /**
      * The console command description.
