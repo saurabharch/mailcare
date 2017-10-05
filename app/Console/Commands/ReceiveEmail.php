@@ -100,7 +100,7 @@ class ReceiveEmail extends Command
 
         if ($file == 'stream')
         {
-            Storage::put($email->path(), file_get_contents(fopen("php://stdin", "r")));
+            Storage::put($email->path(), stream_get_contents(fopen("php://stdin", "r")));
         }
         else
         {
