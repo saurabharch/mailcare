@@ -98,7 +98,14 @@ class ReceiveEmail extends Command
 
         $inbox->emails()->save($email);
 
-        Storage::put($email->path(), file_get_contents($file));
+        if ($file == 'stream')
+        {
+            Storage::put($email->path(), file_get_contents(fopen("php://stdin", "r")));
+        }
+        else
+        {
+            Storage::put($email->path(), file_get_contents($file));
+        }
 
         $email->size_in_bytes = Storage::size($email->path());
 
