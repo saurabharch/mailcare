@@ -17826,7 +17826,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   data: function data() {
     return {
-      bodyTypes: [{ label: 'Html', icon: 'fa-image', accept: 'text/html', br: false }, { label: 'Text', icon: 'fa-file-text-o', accept: 'text/plain', br: true }, { label: 'Raw', icon: 'fa-sticky-note', accept: 'message/rfc822', br: true }],
+      bodyTypes: [{ label: 'Html', icon: 'fa-image', accept: 'text/html', br: false }, { label: 'Text', icon: 'fa-file-text-o', accept: 'text/plain', br: true }, { label: 'Raw', icon: 'fa-sticky-note', accept: 'message/rfc2822', br: true }],
       body: null
     };
   },
