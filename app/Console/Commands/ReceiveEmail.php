@@ -52,7 +52,14 @@ class ReceiveEmail extends Command
         if ($file == 'stream')
         {
             $this->info("from stream");
-            $parser->setStream(fopen("php://stdin", "r"));
+            //$parser->setStream(fopen("php://stdin", "r"));
+            $fd = fopen("php://stdin", "r");
+            $rawEmail = "";
+            while (!feof($fd)) {
+                $rawEmail .= fread($fd, 1024);
+            }
+            fclose($fd);
+
         }
         else
         {
@@ -100,7 +107,8 @@ class ReceiveEmail extends Command
 
         if ($file == 'stream')
         {
-            Storage::put($email->path(), file_get_contents("php://stdin"));
+            //Storage::putStream($email->path(), file_get_contents("php://stdin"));
+            Storage::put($email->path(), $rawEmail);
         }
         else
         {
