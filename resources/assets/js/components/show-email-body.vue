@@ -144,19 +144,22 @@
                 headers: {'Accept': accept}
               })
               .then(function (response) {
-
                 this.bodyTypes.forEach(bodyType => {
-                  if (response.headers['content-type'].indexOf(bodyType.accept))
+                  if (response.headers['content-type'].indexOf(bodyType.accept) > -1)
                   {
                     if (bodyType.br)
+                    {
                       this.body = response.data.replace(/(\r\n|\n|\r)/gm, "<br>");
+                    }
                     else
+                    {
                       this.body = response.data
-                    bodyType.isActive = false
+                    }
+                    bodyType.isActive = true
                   }
                   else
                   {
-                    bodyType.isActive = true
+                    bodyType.isActive = false
                   }
                 })
 

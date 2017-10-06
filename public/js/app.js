@@ -17887,11 +17887,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var _this = this;
 
         this.bodyTypes.forEach(function (bodyType) {
-          if (response.headers['content-type'].indexOf(bodyType.accept)) {
-            if (bodyType.br) _this.body = response.data.replace(/(\r\n|\n|\r)/gm, "<br>");else _this.body = response.data;
-            bodyType.isActive = false;
-          } else {
+          if (response.headers['content-type'].indexOf(bodyType.accept) > -1) {
+            if (bodyType.br) {
+              _this.body = response.data.replace(/(\r\n|\n|\r)/gm, "<br>");
+            } else {
+              _this.body = response.data;
+            }
             bodyType.isActive = true;
+          } else {
+            bodyType.isActive = false;
           }
         });
       }.bind(this));
