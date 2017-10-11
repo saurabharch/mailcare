@@ -229,7 +229,7 @@ class EmailsTest extends TestCase
     	$response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'message/rfc2822']);
         $response
             ->assertStatus(200)
-            ->assertSee('this is html part')
+            ->assertSee('&lt;div&gt;this is html part&lt;/div&gt;')
             ->assertSee('this is text part')
             ->assertHeader('Content-Type', 'message/rfc2822; charset=UTF-8');
     }
@@ -246,7 +246,7 @@ class EmailsTest extends TestCase
         $response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'text/plain; q=0.5, text/html']);
         $response
             ->assertStatus(200)
-            ->assertSee('this is html part')
+            ->assertSee('<div>this is html part</div>')
             ->assertDontSee('this is text part')
             ->assertHeader('Content-Type', 'text/html; charset=UTF-8');
     }

@@ -64,7 +64,7 @@ class EmailResponse
 
 	protected function makeRaw()
 	{
-        return response(file_get_contents($this->email->fullPath()))->header('Content-Type', 'message/rfc2822; charset=UTF-8');
+        return response(e(file_get_contents($this->email->fullPath())))->header('Content-Type', 'message/rfc2822; charset=UTF-8');
 	}
 
 	protected function makeJson()
