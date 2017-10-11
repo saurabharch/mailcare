@@ -59,6 +59,7 @@ class ReceiveEmail extends Command
                 $rawEmail .= fread($fd, 1024);
             }
             fclose($fd);
+            $parser->setText($rawEmail); 
 
         }
         else
