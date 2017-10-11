@@ -27,7 +27,7 @@ class StatisticsController extends ApiController
                     'storage_used_for_human' => $this->human_filesize((int) Statistic::storageUsed()),
         			'storage_used' => (int) Statistic::storageUsed(),
     			],
-                'data' => $this->statisticTransformer->transformCollection(Statistic::paginate(100)->all()),
+                'data' => $this->statisticTransformer->transformCollection(Statistic::oldest()->simplePaginate(100)->all()),
                 ]);
     }
 }
