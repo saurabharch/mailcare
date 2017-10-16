@@ -56,7 +56,12 @@
         },
 
         mounted() {
-            axios.get('/api/v1/emails/' + this.id).then(response => this.email = response.data.data);
+          axios({
+            method:'get',
+            url:'/api/v1/emails/' + this.id,
+            headers: {'Accept': 'application/json'}
+          })
+          .then(response => this.email = response.data.data);
         },
 
         methods: {

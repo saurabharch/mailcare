@@ -17860,23 +17860,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
     },
     classesLink: function classesLink(bodyType) {
-      return [bodyType.isActive ? 'is-active' : ''];
+      var isDisabled = false;
+      if (bodyType.label == 'Html') {
+        isDisabled = !this.email.has_html;
+      } else if (bodyType.label == 'Text') {
+        isDisabled = !this.email.has_text;
+      }
+
+      if (isDisabled) return [bodyType.isActive ? 'is-active' : '', 'is-disabled'];else return [bodyType.isActive ? 'is-active' : ''];
     },
     classes: function classes(bodyType) {
       return ['fa', bodyType.icon];
     },
-    isDisabled: function isDisabled(bodyType) {
-
-      if (bodyType.label == 'Html') {
-        return !this.email.has_html;
-      } else if (bodyType.label == 'Text') {
-        return !this.email.has_text;
-      } else {
-        return false;
-      }
-    },
     getContent: function getContent() {
-      var accept = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'text/html,text/plain';
+      var accept = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'text/html,text/plain,message/rfc2822';
 
 
       axios({
@@ -17971,7 +17968,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   mounted: function mounted() {
     var _this = this;
 
-    axios.get('/api/v1/emails/' + this.id).then(function (response) {
+    axios({
+      method: 'get',
+      url: '/api/v1/emails/' + this.id,
+      headers: { 'Accept': 'application/json' }
+    }).then(function (response) {
       return _this.email = response.data.data;
     });
   },
@@ -18152,7 +18153,7 @@ window.axios.defaults.headers.common = {
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(154)();
-exports.push([module.i, "\n.my-frame[data-v-d1e86092] {\n  min-height: 100%;\n  border: 1px solid #d6dbe1;\n  margin: 20px auto;\n  height: 400px;\n  width: 100%;\n}\n", ""]);
+exports.push([module.i, "\n.my-frame[data-v-d1e86092] {\n  min-height: 100%;\n  border: 1px solid #d6dbe1;\n  margin: 20px auto;\n  height: 400px;\n  width: 100%;\n}\n.is-disabled[data-v-d1e86092]{\n  pointer-events: none;\n  opacity: .65;\n}\n", ""]);
 
 /***/ }),
 /* 154 */
@@ -36047,9 +36048,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('ul', _vm._l((_vm.bodyTypes), function(bodyType) {
     return _c('li', {
       class: _vm.classesLink(bodyType),
-      attrs: {
-        "disabled": _vm.isDisabled(bodyType)
-      },
       on: {
         "click": function($event) {
           _vm.getContent(bodyType.accept)

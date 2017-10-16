@@ -45,7 +45,19 @@ class EmailResponse
 
 	protected function requestPrefer($contentType)
 	{
-		return $contentType == $this->request->prefers($this->acceptedHeaders);
+		$acceptedHeaders = $this->acceptedHeaders;
+
+		if(!$this->email->has_html)
+		{
+			$acceptedHeaders = array_diff($acceptedHeaders, array('text/html'));
+		}
+
+		if(!$this->email->has_text)
+		{
+			$acceptedHeaders = array_diff($acceptedHeaders, array('text/plain'));
+		}
+
+		return $contentType == $this->request->prefers($acceptedHeaders);
 	}
 
 	protected function makeHtml()

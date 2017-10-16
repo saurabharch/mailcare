@@ -6,7 +6,7 @@
       <div class="level-left">
         <div class="tabs is-toggle">
           <ul>
-            <li v-for="bodyType in bodyTypes" :class="classesLink(bodyType)" :disabled="isDisabled(bodyType)"  @click="getContent(bodyType.accept)">
+            <li v-for="bodyType in bodyTypes" :class="classesLink(bodyType)" @click="getContent(bodyType.accept)">
               <a>
                 <span class="icon is-small">
                   <i :class="classes(bodyType)"></i>
@@ -113,30 +113,27 @@
 
           classesLink(bodyType)
           {
-            return [bodyType.isActive ? 'is-active' : '']
+            var isDisabled = false
+            if (bodyType.label == 'Html')
+            {
+              isDisabled = !this.email.has_html;
+            }
+            else if (bodyType.label == 'Text')
+            {
+              isDisabled = !this.email.has_text;
+            }
+
+            if (isDisabled)
+              return [bodyType.isActive ? 'is-active' : '', 'is-disabled']
+            else
+              return [bodyType.isActive ? 'is-active' : '']
           },
 
           classes(bodyType) {
             return ['fa', bodyType.icon]
           },
 
-          isDisabled(bodyType) {
-
-            if (bodyType.label == 'Html')
-            {
-              return !this.email.has_html;
-            }
-            else if (bodyType.label == 'Text')
-            {
-              return !this.email.has_text;
-            }
-            else
-            {
-              return false;
-            }
-          },
-
-          getContent(accept = 'text/html,text/plain') {
+          getContent(accept = 'text/html,text/plain,message/rfc2822') {
 
               axios({
                 method:'get',
@@ -180,6 +177,11 @@
     height: 400px;
     width: 100%;
 
+  }
+
+  .is-disabled{
+    pointer-events: none;
+    opacity: .65;
   }
 </style>
 
