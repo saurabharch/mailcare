@@ -37,11 +37,11 @@
     <div>
       <i-frame class="my-frame">
         <div v-html="body"></div>
-      </i-frame> 
+      </i-frame>
     </div>
 
   </div>
-  
+
 </template>
 
 <script>
@@ -53,8 +53,8 @@
         data() {
           return {
             bodyTypes: [
-                {label: 'Html', icon: 'fa-image', accept: 'text/html', br: false}, 
-                {label: 'Text', icon: 'fa-file-text-o', accept: 'text/plain', br: true}, 
+                {label: 'Html', icon: 'fa-image', accept: 'text/html', br: false},
+                {label: 'Text', icon: 'fa-file-text-o', accept: 'text/plain', br: true},
                 {label: 'Raw', icon: 'fa-sticky-note', accept: 'message/rfc2822', br: true}
                 ],
             body: null,
@@ -160,7 +160,7 @@
                   }
                 })
 
-              }.bind(this));  
+              }.bind(this));
 
           },
         }
@@ -174,7 +174,7 @@
     min-height: 100%;
     border: 1px solid #d6dbe1;
     margin: 20px auto;
-    height: 400px;
+    height: 800px;
     width: 100%;
 
   }
