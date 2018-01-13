@@ -13,7 +13,7 @@
     <div class="level-item">
       <div class="field has-addons">
         <p class="control">
-          <input class="input" type="text" placeholder="Start with..." v-model="keywords" v-on:input="filterByKeywords()">
+          <input class="input" type="text" placeholder="Search..." v-model="keywords" v-on:input="filterByKeywords()">
         </p>
       </div>
     </div>
@@ -57,7 +57,7 @@
     <p v-if="this.sender">
     Filtered by sender:
     <span class="tag is-primary">
-      name@company2.com 
+      name@company2.com
       <button @click="removeFilter()" class="delete is-small"></button>
     </span>
     </p>
@@ -98,10 +98,10 @@
       <ul class="pagination-list">
         <li v-for="page in getPages()">
 
-          <a v-if="page == paginator.current_page" 
-            class="pagination-link is-current" 
+          <a v-if="page == paginator.current_page"
+            class="pagination-link is-current"
             aria-current="page" @click="goToPage(page)">{{ page }}</a>
-          <span v-else-if="page == '...'" 
+          <span v-else-if="page == '...'"
             class="pagination-ellipsis">&hellip;</span>
           <a class="pagination-link" @click="goToPage(page)" v-else>{{ page }}</a>
         </li>
@@ -117,7 +117,7 @@
       <div class="message-body">
       <p>A few things that might help:</p>
       <p>- Use MailCare to receive your first email</p>
-      <p>- Remove your query filter Start with...</p>
+      <p>- Remove your search query filter...</p>
       <p>- Change your query filter Unread/Favorite to All</p>
       <p>- Remove your query filter Inbox/Sender</p>
       </div>
@@ -201,7 +201,7 @@
                 if (i > 0 && i <= this.paginator.total_pages) {
                   pages.push(i)
                 }
-            } 
+            }
             if (this.paginator.total_pages > this.paginator.current_page + 3 + 1)
             {
               pages.push('...')

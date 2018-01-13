@@ -15,23 +15,23 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_latest_emails()
     {
-    	$emailOne = factory(\App\Email::class)->create([
-    		'subject' => 'My first email',
-    		'created_at' => Carbon::yesterday()
-    		]);
-    	$emailTwo = factory(\App\Email::class)->create([
-    		'subject' => 'My second email',
-    		'created_at' => Carbon::now()
-    		]);
+        $emailOne = factory(\App\Email::class)->create([
+            'subject' => 'My first email',
+            'created_at' => Carbon::yesterday()
+            ]);
+        $emailTwo = factory(\App\Email::class)->create([
+            'subject' => 'My second email',
+            'created_at' => Carbon::now()
+            ]);
 
-    	$response = $this->json('GET', 'api/v1/emails');
+        $response = $this->json('GET', 'api/v1/emails');
 
         $response
             ->assertStatus(200)
             ->assertJsonFragment(['subject' => $emailOne->subject])
             ->assertJsonFragment(['subject' => $emailTwo->subject]);
 
-    	$data = $response->getData()->data;
+        $data = $response->getData()->data;
         $this->assertEquals($emailTwo->subject, $data[0]->subject);
         $this->assertEquals($emailOne->subject, $data[1]->subject);
     }
@@ -41,19 +41,19 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_limited_emails_per_default()
     {
-    	define('MAX_LIMIT', 25);
-    	$emails = factory(\App\Email::class, 28)->create();
+        define('MAX_LIMIT', 25);
+        $emails = factory(\App\Email::class, 28)->create();
 
-    	$response = $this->json('GET', 'api/v1/emails');
+        $response = $this->json('GET', 'api/v1/emails');
 
         $response->assertStatus(200)->assertJsonFragment(['paginator' => [
-        	'total_count' => 28, 
-        	'total_pages' => 2, 
-        	'current_page' => 1, 
-        	'limit' => MAX_LIMIT
-        	]]);
+            'total_count' => 28,
+            'total_pages' => 2,
+            'current_page' => 1,
+            'limit' => MAX_LIMIT
+            ]]);
 
-    	$this->assertCount(MAX_LIMIT, $response->getData()->data);
+        $this->assertCount(MAX_LIMIT, $response->getData()->data);
     }
 
     /**
@@ -61,9 +61,9 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_a_single_email()
     {
-    	$email = factory(\App\Email::class)->create();
+        $email = factory(\App\Email::class)->create();
 
-    	$response = $this->json('GET', 'api/v1/emails/'.$email->id);
+        $response = $this->json('GET', 'api/v1/emails/'.$email->id);
 
         $response
             ->assertStatus(200)
@@ -75,8 +75,7 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_an_email_that_doesnt_exist()
     {
-
-    	$response = $this->json('GET', 'api/v1/emails/id-doesnt-exist');
+        $response = $this->json('GET', 'api/v1/emails/id-doesnt-exist');
 
         $response->assertStatus(404);
     }
@@ -88,16 +87,16 @@ class EmailsTest extends TestCase
     {
         $inbox = factory(\App\Inbox::class)->create(['email' => 'test@example.com']);
 
-    	$emails = factory(\App\Email::class, 3)->create();
-    	$emails = factory(\App\Email::class, 2)->create([
+        $emails = factory(\App\Email::class, 3)->create();
+        $emails = factory(\App\Email::class, 2)->create([
             'inbox_id' => $inbox->id
         ]);
 
-    	$response = $this->json('GET', 'api/v1/emails?inbox=test@example.com');
+        $response = $this->json('GET', 'api/v1/emails?inbox=test@example.com');
 
         $response->assertStatus(200);
 
-    	$this->assertCount(2, $response->getData()->data);
+        $this->assertCount(2, $response->getData()->data);
     }
 
     /**
@@ -122,21 +121,50 @@ class EmailsTest extends TestCase
     /**
      * @test
      */
-    public function it_fetches_all_emails_for_a_search()
+    public function it_fetches_all_emails_starting_with_the_query_term_for_a_search()
     {
-        $inbox = factory(\App\Inbox::class)->create(['email' => 'myyyyyto@example.com']);
-        $sender = factory(\App\Sender::class)->create(['email' => 'myyyyyfrom@example.com']);
+        $matchingInbox = factory(\App\Inbox::class)->create(['email' => 'matching-to@example.com']);
+        $matchingSender = factory(\App\Sender::class)->create(['email' => 'matching-from@example.com']);
 
-        $emails = factory(\App\Email::class, 3)->create();
-        $emails = factory(\App\Email::class)->create([
-            'sender_id' => $sender->id
-        ]);
-        $emails = factory(\App\Email::class)->create([
-            'inbox_id' => $inbox->id
-        ]);
-        $emails = factory(\App\Email::class)->create(['subject' => 'myyyyy subject']);
+        factory(\App\Email::class, 5)->create();
 
-        $response = $this->json('GET', 'api/v1/emails?search=myyyyy');
+        factory(\App\Email::class)->create([
+            'sender_id' => $matchingSender->id
+        ]);
+        factory(\App\Email::class)->create([
+            'inbox_id' => $matchingInbox->id
+        ]);
+        factory(\App\Email::class)->create([
+            'subject' => 'matching subject'
+        ]);
+
+        $response = $this->json('GET', 'api/v1/emails?search=matching');
+
+        $response->assertStatus(200);
+        $this->assertCount(3, $response->getData()->data);
+    }
+
+    /**
+     * @test
+     */
+    public function it_fetches_all_emails_with_the_query_term_inside_for_a_search()
+    {
+        $matchingInbox = factory(\App\Inbox::class)->create(['email' => 'email-matching-to@example.com']);
+        $matchingSender = factory(\App\Sender::class)->create(['email' => 'email-matching-from@example.com']);
+
+        factory(\App\Email::class, 5)->create();
+
+        factory(\App\Email::class)->create([
+            'sender_id' => $matchingSender->id
+        ]);
+        factory(\App\Email::class)->create([
+            'inbox_id' => $matchingInbox->id
+        ]);
+        factory(\App\Email::class)->create([
+            'subject' => 'a matching subject'
+        ]);
+
+        $response = $this->json('GET', 'api/v1/emails?search=matching');
 
         $response->assertStatus(200);
         $this->assertCount(3, $response->getData()->data);
@@ -147,7 +175,6 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_all_emails_unread()
     {
-
         $emails = factory(\App\Email::class)->create();
         $emails = factory(\App\Email::class, 2)->create(['read' => Carbon::now()]);
 
@@ -163,7 +190,6 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_all_emails_favorites()
     {
-
         $emails = factory(\App\Email::class)->create();
         $emails = factory(\App\Email::class, 2)->create(['favorite' => true]);
 
@@ -192,10 +218,10 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_html_part_of_specific_email()
     {
-    	$exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
+        $exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
 
-    	$response = $this->json('GET', 'api/v1/emails');
-    	$response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'text/html']);
+        $response = $this->json('GET', 'api/v1/emails');
+        $response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'text/html']);
         $response
             ->assertStatus(200)
             ->assertSee('this is html part')
@@ -207,10 +233,10 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_text_part_of_specific_email()
     {
-    	$exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
+        $exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
 
-    	$response = $this->json('GET', 'api/v1/emails');
-    	$response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'text/plain']);
+        $response = $this->json('GET', 'api/v1/emails');
+        $response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'text/plain']);
         $response
             ->assertStatus(200)
             ->assertSee('this is text part')
@@ -223,10 +249,10 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_raw_part_of_specific_email()
     {
-    	$exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
+        $exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
 
-    	$response = $this->json('GET', 'api/v1/emails');
-    	$response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'message/rfc2822']);
+        $response = $this->json('GET', 'api/v1/emails');
+        $response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'message/rfc2822']);
         $response
             ->assertStatus(200)
             ->assertSee('&lt;div&gt;this is html part&lt;/div&gt;')
@@ -348,5 +374,4 @@ class EmailsTest extends TestCase
                 'size_in_bytes' => '173',
                 ]);
     }
-
 }
