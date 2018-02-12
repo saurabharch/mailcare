@@ -9,6 +9,5 @@ unit_test:
     - composer install
     - cp .env.example .env
     - php artisan key:generate
-    - touch database/database_testing.sqlite
     - vendor/bin/phpunit
 
