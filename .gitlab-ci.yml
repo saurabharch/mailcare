@@ -11,3 +11,10 @@ unit_test:
     - php artisan key:generate
     - vendor/bin/phpunit
 
+test_coverage:
+  stage: test
+  script:
+    - composer install
+    - cp .env.example .env
+    - php artisan key:generate
+    - vendor/bin/phpunit --coverage-text --colors=never

@@ -1,4 +1,4 @@
-# MailCare [![pipeline status](https://gitlab.com/mailcare/mailcare/badges/master/pipeline.svg)](https://gitlab.com/mailcare/mailcare/commits/master)
+# MailCare [![pipeline status](https://gitlab.com/mailcare/mailcare/badges/master/pipeline.svg)](https://gitlab.com/mailcare/mailcare/commits/master) [![coverage report](https://gitlab.com/mailcare/mailcare/badges/master/coverage.svg)](https://gitlab.com/mailcare/mailcare/commits/master)
 
 This is an open source disposable email address service that was built and maintained at mailcare.io.
 
