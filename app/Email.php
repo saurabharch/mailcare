@@ -8,34 +8,34 @@ use Carbon\Carbon;
 
 class Email extends Model
 {
-	public $incrementing = false;
+    public $incrementing = false;
 
-	use Uuids;
+    use Uuids;
 
-	public function sender()
-	{
-		return $this->belongsTo('App\Sender');
-	}
+    public function sender()
+    {
+        return $this->belongsTo('App\Sender');
+    }
 
-	public function inbox()
-	{
-		return $this->belongsTo('App\Inbox');
-	}
+    public function inbox()
+    {
+        return $this->belongsTo('App\Inbox');
+    }
 
     public function attachments()
     {
-    	return $this->hasMany('App\Attachment');
+        return $this->hasMany('App\Attachment');
     }
 
-	public function path()
-	{
-		return 'emails/' . $this->created_at->format('Y/m/d/') . $this->id;
-	}
+    public function path()
+    {
+        return 'emails/' . $this->created_at->format('Y/m/d/') . $this->id;
+    }
 
-	public function fullPath()
-	{
-		return storage_path('app/'.$this->path());
-	}
+    public function fullPath()
+    {
+        return storage_path('app/'.$this->path());
+    }
 
     public function isUnread()
     {
@@ -50,6 +50,6 @@ class Email extends Model
 
     public function scopeFilter($query, $filters)
     {
-    	return $filters->apply($query);
+        return $filters->apply($query);
     }
 }

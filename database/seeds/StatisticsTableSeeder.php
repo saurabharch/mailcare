@@ -11,6 +11,6 @@ class StatisticsTableSeeder extends Seeder
      */
     public function run()
     {
-	    factory(App\Statistic::class, 50)->create();
+        factory(App\Statistic::class, 50)->create();
     }
 }

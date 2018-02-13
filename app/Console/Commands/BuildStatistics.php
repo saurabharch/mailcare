@@ -42,13 +42,11 @@ class BuildStatistics extends Command
     public function handle()
     {
 
-        if ($this->argument('date')) 
-        { 
-            $date = (new Carbon($this->argument('date')))->toDateString(); 
-        } 
-        else { 
-            $date = Carbon::now()->subDay()->toDateString();     
-        } 
+        if ($this->argument('date')) {
+            $date = (new Carbon($this->argument('date')))->toDateString();
+        } else {
+            $date = Carbon::now()->subDay()->toDateString();
+        }
 
         $emailsReceived = Email::whereDate('created_at', $date)->count();
         $inboxesCreated = Inbox::whereDate('created_at', $date)->count();

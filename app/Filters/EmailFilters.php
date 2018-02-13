@@ -31,9 +31,9 @@ class EmailFilters extends Filters
         return $this->builder
             ->where(function ($query) use ($inboxes, $senders, $keywords) {
                 $query
-            ->orWhereIn('inbox_id', $inboxes)
-            ->orWhereIn('sender_id', $senders)
-            ->orWhere('subject', 'like', "%$keywords%");
+                ->orWhereIn('inbox_id', $inboxes)
+                ->orWhereIn('sender_id', $senders)
+                ->orWhere('subject', 'like', "%$keywords%");
             });
     }
 

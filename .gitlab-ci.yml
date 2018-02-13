@@ -18,3 +18,9 @@ test_coverage:
     - cp .env.example .env
     - php artisan key:generate
     - vendor/bin/phpunit --coverage-text --colors=never
+
+test_coding_standard:
+  stage: test
+  script:
+    - composer install
+    - vendor/bin/phpcs . --ignore="*/vendor/*,*/node_modules/*,*/public/css/*,*/public/js/*,*/database/*,*/autoload.php,*/cache/*,*/*.blade.php,*/storage/*,*/tests/*" --standard=PSR2

@@ -8,94 +8,86 @@ use App\Transformers\EmailTransformer;
 
 class EmailResponse
 {
-	protected $request, $parser;
-	protected $acceptedHeaders = ['application/json', 'text/html', 'text/plain', 'message/rfc2822'];
+    protected $request;
+    protected $parser;
+    protected $acceptedHeaders = ['application/json', 'text/html', 'text/plain', 'message/rfc2822'];
 
-	public function __construct(Request $request, Parser $parser)
-	{
-		$this->request = $request;
-		$this->parser = $parser;
-	}
+    public function __construct(Request $request, Parser $parser)
+    {
+        $this->request = $request;
+        $this->parser = $parser;
+    }
 
-	public function make(Email $email)
-	{
-		$this->email = $email;
+    public function make(Email $email)
+    {
+        $this->email = $email;
 
-		if ($this->requestPrefer('text/html'))
-		{
-			return $this->makeHtml();
-		}
-		elseif ($this->requestPrefer('text/plain'))
-		{
-			return $this->makeText();
-		}
-		elseif ($this->requestPrefer('message/rfc2822'))
-		{
-			return $this->makeRaw();
-		}
-		elseif ($this->requestPrefer('application/json'))
-		{
-			return $this->makeJson();
-		}
-		else 
-		{
-			return $this->makeNotAcceptable();
-		}
-	}
+        if ($this->requestPrefer('text/html')) {
+            return $this->makeHtml();
+        } elseif ($this->requestPrefer('text/plain')) {
+            return $this->makeText();
+        } elseif ($this->requestPrefer('message/rfc2822')) {
+            return $this->makeRaw();
+        } elseif ($this->requestPrefer('application/json')) {
+            return $this->makeJson();
+        } else {
+            return $this->makeNotAcceptable();
+        }
+    }
 
-	protected function requestPrefer($contentType)
-	{
-		$acceptedHeaders = $this->acceptedHeaders;
+    protected function requestPrefer($contentType)
+    {
+        $acceptedHeaders = $this->acceptedHeaders;
 
-		if(!$this->email->has_html)
-		{
-			$acceptedHeaders = array_diff($acceptedHeaders, array('text/html'));
-		}
+        if (!$this->email->has_html) {
+            $acceptedHeaders = array_diff($acceptedHeaders, array('text/html'));
+        }
 
-		if(!$this->email->has_text)
-		{
-			$acceptedHeaders = array_diff($acceptedHeaders, array('text/plain'));
-		}
+        if (!$this->email->has_text) {
+            $acceptedHeaders = array_diff($acceptedHeaders, array('text/plain'));
+        }
 
-		return $contentType == $this->request->prefers($acceptedHeaders);
-	}
+        return $contentType == $this->request->prefers($acceptedHeaders);
+    }
 
-	protected function makeHtml()
-	{
+    protected function makeHtml()
+    {
         $this->parser->setPath($this->email->fullPath());
 
         return response($this->parser->getMessageBody('html'))->header('Content-Type', 'text/html; charset=UTF-8');
-	}
+    }
 
-	protected function makeText()
-	{
+    protected function makeText()
+    {
         $this->parser->setPath($this->email->fullPath());
 
         return response($this->parser->getMessageBody('text'))->header('Content-Type', 'text/plain; charset=UTF-8');
-	}
+    }
 
-	protected function makeRaw()
-	{
-        return response(e(file_get_contents($this->email->fullPath())))->header('Content-Type', 'message/rfc2822; charset=UTF-8');
-	}
+    protected function makeRaw()
+    {
+        return response(
+            e(file_get_contents($this->email->fullPath()))
+        )->header('Content-Type', 'message/rfc2822; charset=UTF-8');
+    }
 
-	protected function makeJson()
-	{
+    protected function makeJson()
+    {
         $data = (new EmailTransformer)->transform($this->email);
 
 
-        if ($this->email->isUnread())
-        {
+        if ($this->email->isUnread()) {
             $this->email->read();
         }
 
         return response()->json(['data' => $data]);
-	}
+    }
 
-	protected function makeNotAcceptable()
-	{
+    protected function makeNotAcceptable()
+    {
+        $acceptableList = implode(",", $this->acceptedHeaders);
         return response()->json([
-        	'error' => "Not acceptable 'Accept' header. Please use this list: " . implode(",", $this->acceptedHeaders) . "."
-        	], 406);
-	}
+            'error' => "Not acceptable 'Accept' header. Please use this list: $acceptableList."
+            ], 406);
+    }
 }

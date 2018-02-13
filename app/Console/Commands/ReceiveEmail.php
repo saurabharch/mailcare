@@ -49,8 +49,7 @@ class ReceiveEmail extends Command
 
         $file = $this->argument('file');
 
-        if ($file == 'stream')
-        {
+        if ($file == 'stream') {
             $this->info("from stream");
             //$parser->setStream(fopen("php://stdin", "r"));
             $fd = fopen("php://stdin", "r");
@@ -59,13 +58,10 @@ class ReceiveEmail extends Command
                 $rawEmail .= fread($fd, 1024);
             }
             fclose($fd);
-            $parser->setText($rawEmail); 
-
-        }
-        else
-        {
+            $parser->setText($rawEmail);
+        } else {
             $this->info("from path $file");
-            $parser->setPath($file); 
+            $parser->setPath($file);
         }
         
         $sender = Sender::updateOrCreate(
@@ -93,12 +89,10 @@ class ReceiveEmail extends Command
         $email = new Email;
         $email->subject = $parser->getHeader('subject');
 
-        if (!empty($parser->getMessageBody('html')))
-        {
+        if (!empty($parser->getMessageBody('html'))) {
             $email->has_html = true;
         }
-        if (!empty($parser->getMessageBody('text')))
-        {
+        if (!empty($parser->getMessageBody('text'))) {
             $email->has_text = true;
         }
 
@@ -106,13 +100,10 @@ class ReceiveEmail extends Command
 
         $inbox->emails()->save($email);
 
-        if ($file == 'stream')
-        {
+        if ($file == 'stream') {
             //Storage::putStream($email->path(), file_get_contents("php://stdin"));
             Storage::put($email->path(), $rawEmail);
-        }
-        else
-        {
+        } else {
             Storage::put($email->path(), file_get_contents($file));
         }
 
@@ -120,8 +111,7 @@ class ReceiveEmail extends Command
 
         $email->save();
 
-        foreach($parser->getAttachments() as $attachmentParsed)
-        {
+        foreach ($parser->getAttachments() as $attachmentParsed) {
             $attachment = new Attachment;
             $attachment->email_id = $email->id;
             $attachment->headers_hashed = $attachment->hashHeaders($attachmentParsed->getHeaders());
@@ -130,6 +120,5 @@ class ReceiveEmail extends Command
             $attachment->size_in_bytes = strlen($attachmentParsed->getMimePartStr());
             $attachment->save();
         }
-
     }
 }

@@ -15,10 +15,10 @@ class CreateStatisticsTable extends Migration
     {
         Schema::create('statistics', function (Blueprint $table) {
             $table->increments('id');
-            $table->date('created_at'); 
-            $table->integer('emails_received'); 
-            $table->integer('inboxes_created'); 
-            $table->integer('storage_used'); 
+            $table->date('created_at');
+            $table->integer('emails_received');
+            $table->integer('inboxes_created');
+            $table->integer('storage_used');
         });
     }
 

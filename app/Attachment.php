@@ -11,7 +11,7 @@ class Attachment extends Model
     use Uuids;
     use StorageForHuman;
     
-	public $incrementing = false;
+    public $incrementing = false;
     protected $appends = ['size_for_human'];
 
     public function hashHeaders($headers)
@@ -21,11 +21,11 @@ class Attachment extends Model
 
     public function email()
     {
-    	return $this->belongsTo(Email::class);
+        return $this->belongsTo(Email::class);
     }
 
     public function getSizeForHumanAttribute()
     {
-    	return $this->human_filesize($this->size_in_bytes);
+        return $this->human_filesize($this->size_in_bytes);
     }
 }

@@ -7,13 +7,13 @@ use App\Traits\Uuids;
 
 class Inbox extends Model
 {
-	use Uuids;
-	
-	public $incrementing = false;
-	protected $fillable = ['email', 'display_name', 'local_part', 'domain'];
-	
+    use Uuids;
+    
+    public $incrementing = false;
+    protected $fillable = ['email', 'display_name', 'local_part', 'domain'];
+    
     public function emails()
     {
-    	return $this->hasMany('App\Email');
+        return $this->hasMany('App\Email');
     }
 }

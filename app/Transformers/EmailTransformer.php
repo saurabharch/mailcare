@@ -1,8 +1,9 @@
-<?php 
+<?php
 
 namespace App\Transformers;
 
-class EmailTransformer extends Transformer {
+class EmailTransformer extends Transformer
+{
 
     public function transform($email)
     {

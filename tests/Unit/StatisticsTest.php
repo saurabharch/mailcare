@@ -16,18 +16,18 @@ class StatisticsTest extends TestCase
      */
     public function it_fetches_statistics()
     {
-    	factory(\App\Statistic::class)->create([
+        factory(\App\Statistic::class)->create([
             'emails_received' => 10,
             'inboxes_created' => 2,
-    		'storage_used' => 20,
-    		]);
+            'storage_used' => 20,
+            ]);
         factory(\App\Statistic::class)->create([
             'emails_received' => 5,
             'inboxes_created' => 4,
             'storage_used' => 30,
             ]);
 
-    	$response = $this->json('GET', 'api/v1/statistics');
+        $response = $this->json('GET', 'api/v1/statistics');
 
         $response
             ->assertStatus(200)
@@ -45,7 +45,6 @@ class StatisticsTest extends TestCase
 
         $this->assertEquals(0, $exitCode);
         $this->assertDatabaseHas('statistics', ['created_at' => Carbon::yesterday()->toDateString(),'emails_received' => 0, 'inboxes_created' => 0, 'storage_used' => 0]);
-        
     }
 
     /**
@@ -59,7 +58,5 @@ class StatisticsTest extends TestCase
 
         $this->assertEquals(0, $exitCode);
         $this->assertDatabaseHas('statistics', ['created_at' => Carbon::now()->toDateString(),'emails_received' => 1, 'inboxes_created' => 1, 'storage_used' => 2282]);
-        
     }
-
 }

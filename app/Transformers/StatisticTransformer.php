@@ -1,8 +1,9 @@
-<?php 
+<?php
 
 namespace App\Transformers;
 
-class StatisticTransformer extends Transformer {
+class StatisticTransformer extends Transformer
+{
 
     public function transform($statistic)
     {

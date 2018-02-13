@@ -20,14 +20,16 @@ class StatisticsController extends ApiController
 
     public function index()
     {
-    	return $this->respond([
+        return $this->respond([
                 'metadata' => [
-        			'emails_received' => (int) Statistic::emailsReceived(), 
-        			'inboxes_created' => (int) Statistic::inboxesCreated(),
+                    'emails_received' => (int) Statistic::emailsReceived(),
+                    'inboxes_created' => (int) Statistic::inboxesCreated(),
                     'storage_used_for_human' => $this->human_filesize((int) Statistic::storageUsed()),
-        			'storage_used' => (int) Statistic::storageUsed(),
-    			],
-                'data' => $this->statisticTransformer->transformCollection(Statistic::oldest()->simplePaginate(100)->all()),
+                    'storage_used' => (int) Statistic::storageUsed(),
+                ],
+                'data' => $this->statisticTransformer->transformCollection(
+                    Statistic::oldest()->simplePaginate(100)->all()
+                ),
                 ]);
     }
 }
