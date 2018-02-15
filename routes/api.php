@@ -14,11 +14,6 @@ use Illuminate\Http\Request;
 */
 
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-
 Route::group(['prefix' => 'v1'], function () {
     Route::resource('emails', 'EmailsController');
 
@@ -26,4 +21,6 @@ Route::group(['prefix' => 'v1'], function () {
     Route::delete('emails/{email}/favorite', 'EmailsController@unfavorite');
 
     Route::get('statistics', 'StatisticsController@index');
+
+    Route::get('emails/{emailId}/attachments/{attachmentId}', 'AttachmentsController@show');
 });
