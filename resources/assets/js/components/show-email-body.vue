@@ -23,7 +23,7 @@
           <p class="panel-heading">
             {{ this.email.attachments.length }} attachments
           </p>
-          <a v-for="attachment in this.email.attachments" class="panel-block" v-bind:href="'/emails/' + email.id + '/attachments/' + attachment.id">
+          <a v-for="attachment in this.email.attachments" class="panel-block" v-bind:href="'/api/v1/emails/' + email.id + '/attachments/' + attachment.id">
             <span class="panel-icon">
               <i :class="classesContentType(attachment.content_type)"></i>
             </span>

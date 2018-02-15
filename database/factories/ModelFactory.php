@@ -54,6 +54,19 @@ $factory->define(App\Email::class, function (Faker\Generator $faker) {
     ];
 });
 
+
+$factory->define(App\Attachment::class, function (Faker\Generator $faker) {
+    return [
+        'email_id' => function () {
+            return factory(App\Email::class)->create()->id;
+        },
+        'headers_hashed' => 'HASHXXXXXXX',
+        'file_name' => 'test.pdf',
+        'content_type' => 'application/pdf',
+        'size_in_bytes' => 100,
+    ];
+});
+
 $factory->define(App\Statistic::class, function (Faker\Generator $faker) {
     return [
         'created_at' => $faker->date(),

@@ -17,5 +17,4 @@ Begin by cloning this repository to your machine, and installing all Composer & 
 git clone git@gitlab.com:mailcare/mailcare.git
 cd mailcare && composer install && npm install
 php artisan mailcare:install
-npm run dev
 ```
