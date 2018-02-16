@@ -44,25 +44,10 @@ class ReceiveEmail extends Command
     public function handle()
     {
         $this->info("Receiving email ...");
-
-        $parser = new Parser;
-
         $file = $this->argument('file');
+        $this->info("from $file");
 
-        if ($file == 'stream') {
-            $this->info("from stream");
-            //$parser->setStream(fopen("php://stdin", "r"));
-            $fd = fopen("php://stdin", "r");
-            $rawEmail = "";
-            while (!feof($fd)) {
-                $rawEmail .= fread($fd, 1024);
-            }
-            fclose($fd);
-            $parser->setText($rawEmail);
-        } else {
-            $this->info("from path $file");
-            $parser->setPath($file);
-        }
+        $parser = $this->getParser($file);
         
         $sender = Sender::updateOrCreate(
             [
@@ -100,12 +85,7 @@ class ReceiveEmail extends Command
 
         $inbox->emails()->save($email);
 
-        if ($file == 'stream') {
-            //Storage::putStream($email->path(), file_get_contents("php://stdin"));
-            Storage::put($email->path(), $rawEmail);
-        } else {
-            Storage::put($email->path(), file_get_contents($file));
-        }
+        Storage::put($email->path(), ($file == 'stream') ? $this->rawEmail : file_get_contents($file));
 
         $email->size_in_bytes = Storage::size($email->path());
 
@@ -120,5 +100,28 @@ class ReceiveEmail extends Command
             $attachment->size_in_bytes = strlen($attachmentParsed->getMimePartStr());
             $attachment->save();
         }
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    protected function getParser($file)
+    {
+        $parser = new Parser;
+
+        if ($file == 'stream') {
+            $this->info("from stream");
+            $fd = fopen("php://stdin", "r");
+            $this->rawEmail = "";
+            while (!feof($fd)) {
+                $this->rawEmail .= fread($fd, 1024);
+            }
+            fclose($fd);
+            $parser->setText($this->rawEmail);
+        } else {
+            $this->info("from path $file");
+            $parser->setPath($file);
+        }
+        return $parser;
     }
 }

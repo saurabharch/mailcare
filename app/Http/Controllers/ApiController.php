@@ -22,12 +22,6 @@ class ApiController extends Controller
         return $this->setStatusCode(404)->respondWithError($message);
     }
 
-    public function respondInternalError($message = 'Internal Error!')
-    {
-        return $this->setStatusCode(500)->respondWithError($message);
-    }
-
-
     public function respond($data, $headers = [])
     {
         return response()->json($data, $this->getStatusCode(), $headers);

@@ -395,16 +395,6 @@ class EmailsTest extends TestCase
     /**
      * @test
      */
-    public function attachment_belongs_to_email()
-    {
-        $attachment = factory(\App\Attachment::class)->create();
-
-        $this->assertInstanceOf(\App\Email::class, $attachment->email);
-    }
-
-    /**
-     * @test
-     */
     public function it_download_attachments_of_email_that_doesnt_exist()
     {
         $response = $this->json('GET', 'api/v1/emails/id-doesnt-exist/attachments/id-doesnt-exist');
@@ -420,6 +410,24 @@ class EmailsTest extends TestCase
         $email = factory(\App\Email::class)->create();
 
         $response = $this->json('GET', 'api/v1/emails/'.$email->id.'/attachments/id-doesnt-exist');
+
+        $response->assertStatus(404);
+    }
+
+    /**
+     * @test
+     */
+    public function it_download_attachments_that_doesnt_exist_on_disk()
+    {
+        $this->withoutExceptionHandling();
+        $exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email_with_attachments.txt']);
+
+        $response = $this->json('GET', 'api/v1/emails');
+        $emailId = $response->getData()->data[0]->id;
+
+        $attachment = factory(\App\Attachment::class)->create(['email_id' => $emailId]);
+
+        $response = $this->json('GET', 'api/v1/emails/'.$attachment->email->id.'/attachments/'.$attachment->id);
 
         $response->assertStatus(404);
     }
