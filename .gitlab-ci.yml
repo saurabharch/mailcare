@@ -1,4 +1,4 @@
-image: registry.gitlab.com/mailcare/mailcare:latest
+image: chilio/laravel-dusk-ci:latest
 
 stages:
   - test
@@ -6,21 +6,40 @@ stages:
 unit_test:
   stage: test
   script:
-    - composer install
     - cp .env.example .env
+    - composer install
     - php artisan key:generate
     - vendor/bin/phpunit
 
 test_coverage:
   stage: test
   script:
-    - composer install
     - cp .env.example .env
+    - composer install
     - php artisan key:generate
     - vendor/bin/phpunit --coverage-text --colors=never
 
 test_coding_standard:
   stage: test
   script:
+    - cp .env.example .env
     - composer install
     - vendor/bin/phpcs . --ignore="*/vendor/*,*/node_modules/*,*/public/css/*,*/public/js/*,*/database/*,*/autoload.php,*/cache/*,*/*.blade.php,*/storage/*,*/tests/*" --standard=PSR2
+
+browser_test:
+  stage: test
+  variables:
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_USER: homestead
+    MYSQL_PASSWORD: secret
+    MYSQL_DATABASE: homestead
+    DB_HOST: mysql
+    DB_CONNECTION: mysql
+  services:
+    - mysql:5.7
+  script:
+    - cp .env.example .env
+    - composer install
+    - configure-laravel
+    - start-nginx-ci-project
+    - php artisan dusk --colors --debug
