@@ -17,13 +17,16 @@ class AttachmentsController extends ApiController
         $parser = new Parser;
         $parser->setPath($email->fullPath());
 
-        foreach ($parser->getAttachments() as $attachmentParsed) {
-            if ($attachment->headers_hashed === $attachment->hashHeaders($attachmentParsed->getHeaders())) {
-                $data = stream_get_contents($attachmentParsed->getStream());
-                return response($data)->header('Content-Type', $attachmentParsed->getContentType());
-            }
+        $attachmentParsed = collect($parser->getAttachments())
+            ->first(function ($attachmentParsed) use ($attachment) {
+                return $attachment->headers_hashed === $attachment->hashHeaders($attachmentParsed->getHeaders());
+            });
+
+        if (! $attachmentParsed) {
+            return $this->respondNotFound('Attachment not found.');
         }
 
-        return $this->respondNotFound('Attachment not found.');
+        $data = stream_get_contents($attachmentParsed->getStream());
+        return response($data)->header('Content-Type', $attachmentParsed->getContentType());
     }
 }
