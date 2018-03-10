@@ -11,13 +11,6 @@ class StatisticsController extends ApiController
 {
     use StorageForHuman;
 
-    protected $statisticTransformer;
-
-    public function __construct(StatisticTransformer $statisticTransformer)
-    {
-        $this->statisticTransformer = $statisticTransformer;
-    }
-
     public function index()
     {
         return $this->respond([
@@ -27,9 +20,7 @@ class StatisticsController extends ApiController
                 'storage_used_for_human' => $this->human_filesize(Statistic::storageUsed()),
                 'storage_used' => Statistic::storageUsed(),
             ],
-            'data' => $this->statisticTransformer->transformCollection(
-                Statistic::oldest()->simplePaginate(100)->all()
-            ),
+            'data' => Statistic::oldest()->simplePaginate(100)->all()
         ]);
     }
 }

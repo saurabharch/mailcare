@@ -13,6 +13,7 @@ class Statistic extends Model
         'inboxes_created' => 'int',
         'storage_used' => 'int',
     ];
+    protected $hidden = ['id'];
 
     public static function emailsReceived(): int
     {
