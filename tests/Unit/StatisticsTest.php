@@ -2,10 +2,10 @@
 
 namespace Tests\Unit;
 
+use Artisan;
+use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use \Carbon\Carbon;
-use Artisan;
 
 class StatisticsTest extends TestCase
 {
@@ -20,20 +20,38 @@ class StatisticsTest extends TestCase
             'emails_received' => 10,
             'inboxes_created' => 2,
             'storage_used' => 20,
-            ]);
+            'created_at' => Carbon::parse('20 august 2017')->toDateString(),
+        ]);
         factory(\App\Statistic::class)->create([
             'emails_received' => 5,
             'inboxes_created' => 4,
             'storage_used' => 30,
-            ]);
+            'created_at' => Carbon::parse('11 february 2017')->toDateString(),
+        ]);
 
         $response = $this->json('GET', 'api/v1/statistics');
 
         $response
             ->assertStatus(200)
-            ->assertJsonFragment(['emails_received' => 15])
-            ->assertJsonFragment(['inboxes_created' => 6])
-            ->assertJsonFragment(['storage_used' => 50]);
+
+            ->assertJsonFragment([
+                'emails_received' => 10,
+                'inboxes_created' => 2,
+                'storage_used' => 20,
+                'created_at' => '2017-08-20',
+            ])
+            ->assertJsonFragment([
+                'emails_received' => 5,
+                'inboxes_created' => 4,
+                'storage_used' => 30,
+                'created_at' => '2017-02-11',
+            ])
+            ->assertJsonFragment([
+                'emails_received' => 10 + 5,
+                'inboxes_created' => 2 + 4,
+                'storage_used' => 20 + 30,
+                'storage_used_for_human' => 20 + 30 . '.00B',
+            ]);
     }
 
     /**
