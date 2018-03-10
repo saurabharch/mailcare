@@ -22,5 +22,5 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::get('statistics', 'StatisticsController@index');
 
-    Route::get('emails/{emailId}/attachments/{attachmentId}', 'AttachmentsController@show');
+    Route::get('emails/{email}/attachments/{attachmentId}', 'AttachmentsController@show');
 });

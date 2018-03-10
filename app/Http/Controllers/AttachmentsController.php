@@ -10,20 +10,9 @@ use App\Attachment;
 class AttachmentsController extends ApiController
 {
 
-    public function show($emailId, $attachmentId)
+    public function show(Email $email, $attachmentId)
     {
-
-        $email = Email::find($emailId);
-
-        if (! $email) {
-            return $this->respondNotFound('Email does not exist.');
-        }
-
-        $attachment = $email->attachments->find($attachmentId);
-
-        if (! $attachment) {
-            return $this->respondNotFound('Attachment does not exist.');
-        }
+        $attachment = $email->attachments()->findOrFail($attachmentId);
 
         $parser = new Parser;
         $parser->setPath($email->fullPath());

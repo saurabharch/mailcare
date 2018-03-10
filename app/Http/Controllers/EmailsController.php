@@ -41,11 +41,8 @@ class EmailsController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id, EmailResponse $emailResponse)
+    public function show(Email $email, EmailResponse $emailResponse)
     {
-
-        $email = Email::findOrFail($id);
-
         return $emailResponse->make($email);
     }
 
