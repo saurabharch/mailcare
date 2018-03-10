@@ -8,6 +8,11 @@ class Statistic extends Model
 {
     public $timestamps = false;
     public $fillable = ['created_at', 'emails_received', 'inboxes_created', 'storage_used'];
+    protected $casts = [
+        'emails_received' => 'int',
+        'inboxes_created' => 'int',
+        'storage_used' => 'int',
+    ];
 
     public static function emailsReceived(): int
     {

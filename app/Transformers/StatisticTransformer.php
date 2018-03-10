@@ -8,10 +8,10 @@ class StatisticTransformer extends Transformer
     public function transform($statistic)
     {
         return [
-            'created_at' => $statistic['created_at'],
-            'emails_received' => (int) $statistic['emails_received'],
-            'inboxes_created' => (int) $statistic['inboxes_created'],
-            'storage_used' => (int) $statistic['storage_used'],
+            'created_at' => $statistic->created_at,
+            'emails_received' => $statistic->emails_received,
+            'inboxes_created' => $statistic->inboxes_created,
+            'storage_used' => $statistic->storage_used,
         ];
     }
 }
