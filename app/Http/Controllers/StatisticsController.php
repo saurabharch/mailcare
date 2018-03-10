@@ -10,7 +10,7 @@ use App\Traits\StorageForHuman;
 class StatisticsController extends ApiController
 {
     use StorageForHuman;
-    
+
     protected $statisticTransformer;
 
     public function __construct(StatisticTransformer $statisticTransformer)
@@ -22,10 +22,10 @@ class StatisticsController extends ApiController
     {
         return $this->respond([
                 'metadata' => [
-                    'emails_received' => (int) Statistic::emailsReceived(),
-                    'inboxes_created' => (int) Statistic::inboxesCreated(),
-                    'storage_used_for_human' => $this->human_filesize((int) Statistic::storageUsed()),
-                    'storage_used' => (int) Statistic::storageUsed(),
+                    'emails_received' => Statistic::emailsReceived(),
+                    'inboxes_created' => Statistic::inboxesCreated(),
+                    'storage_used_for_human' => $this->human_filesize(Statistic::storageUsed()),
+                    'storage_used' => Statistic::storageUsed(),
                 ],
                 'data' => $this->statisticTransformer->transformCollection(
                     Statistic::oldest()->simplePaginate(100)->all()
