@@ -15,7 +15,7 @@ class BuildStatistics extends Command
      *
      * @var string
      */
-    protected $signature = 'build:statistics {date? : The date of the statistics to build (AAAA-MM-JJ)}';
+    protected $signature = 'mailcare:build-statistics {date? : The date of the statistics to build (AAAA-MM-JJ)}';
 
     /**
      * The console command description.
