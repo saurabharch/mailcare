@@ -8,7 +8,8 @@ class ConfigurePostfix extends Command
 {
     protected $signature = 'mailcare:configure-postfix
                             {configDirectory : path to your Postfix\'s configuration}
-                            {domain : email addresses\' domain}';
+                            {domain : email addresses\' domain}
+                            {user=forge}';
 
     protected $description = 'Configure Postfix with your domain.';
 
@@ -78,7 +79,7 @@ class ConfigurePostfix extends Command
         $artisan = base_path('artisan');
         $command = "php $artisan mailcare:email-receive";
 
-        $user = $this->getRunningUser();
+        $user = $this->argument('user');
         $newLine = "mailcare unix - n n - - pipe flags=F user=$user argv={$command}";
         file_put_contents($masterConfigPath, "\n$newLine\n", FILE_APPEND);
 
@@ -139,10 +140,5 @@ class ConfigurePostfix extends Command
     {
         $returnCode = shell_exec("command -v $command >/dev/null 2>&1; printf $?");
         return $returnCode === '0';
-    }
-
-    private function getRunningUser()
-    {
-        return posix_getpwuid(posix_geteuid())['name'];
     }
 }
