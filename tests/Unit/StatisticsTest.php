@@ -59,7 +59,7 @@ class StatisticsTest extends TestCase
      */
     public function it_build_statistics()
     {
-        $exitCode = Artisan::call('build:statistics');
+        $exitCode = Artisan::call('mailcare:build-statistics');
 
         $this->assertEquals(0, $exitCode);
         $this->assertDatabaseHas('statistics', ['created_at' => Carbon::yesterday()->toDateString(),'emails_received' => 0, 'inboxes_created' => 0, 'storage_used' => 0]);
@@ -70,11 +70,11 @@ class StatisticsTest extends TestCase
      */
     public function it_build_statistics_for_specific_date()
     {
-        $exitCode = Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
+        $exitCode = Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
 
-        $exitCode = Artisan::call('build:statistics', ['date' => Carbon::now()->toDateString()]);
+        $exitCode = Artisan::call('mailcare:build-statistics', ['date' => Carbon::now()->toDateString()]);
 
         $this->assertEquals(0, $exitCode);
-        $this->assertDatabaseHas('statistics', ['created_at' => Carbon::now()->toDateString(),'emails_received' => 1, 'inboxes_created' => 1, 'storage_used' => 2282]);
+        $this->assertDatabaseHas('statistics', ['created_at' => Carbon::now()->toDateString(),'emails_received' => 1, 'inboxes_created' => 1, 'storage_used' => 684]);
     }
 }

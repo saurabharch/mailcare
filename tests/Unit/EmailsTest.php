@@ -204,13 +204,13 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_whitch_body_type_is_available()
     {
-        $exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
+        $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
 
         $response = $this->json('GET', 'api/v1/emails');
         $response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id);
         $response
             ->assertStatus(200)
-            ->assertJsonFragment(['subject' => 'Mail avec fichier attaché de 1ko', 'has_html' => true, 'has_text' => true]);
+            ->assertJsonFragment(['subject' => 'My first email', 'has_html' => true, 'has_text' => true]);
     }
 
     /**
@@ -218,13 +218,13 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_html_part_of_specific_email()
     {
-        $exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
+        $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
 
         $response = $this->json('GET', 'api/v1/emails');
         $response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'text/html']);
         $response
             ->assertStatus(200)
-            ->assertSee('this is html part')
+            ->assertSee('<a href="https://mailcare.io">mailcare.io</a>')
             ->assertHeader('Content-Type', 'text/html; charset=UTF-8');
     }
 
@@ -233,13 +233,13 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_text_part_of_specific_email()
     {
-        $exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
+        $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
 
         $response = $this->json('GET', 'api/v1/emails');
         $response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'text/plain']);
         $response
             ->assertStatus(200)
-            ->assertSee('this is text part')
+            ->assertSee('sorry no link in plain text.')
             ->assertHeader('Content-Type', 'text/plain; charset=UTF-8');
     }
 
@@ -249,14 +249,14 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_raw_part_of_specific_email()
     {
-        $exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
+        $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
 
         $response = $this->json('GET', 'api/v1/emails');
         $response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'message/rfc2822']);
         $response
             ->assertStatus(200)
-            ->assertSee('&lt;div&gt;this is html part&lt;/div&gt;')
-            ->assertSee('this is text part')
+            ->assertSee('Welcome to &lt;a href=&quot;https://mailcare.io&quot;&gt;mailcare.io&lt;/a&gt;')
+            ->assertSee('Welcome to mailcare.io, sorry no link in plain text.')
             ->assertHeader('Content-Type', 'message/rfc2822; charset=UTF-8');
     }
 
@@ -266,14 +266,14 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_html_part_when_i_prefer_it()
     {
-        $exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
+        $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
 
         $response = $this->json('GET', 'api/v1/emails');
         $response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'text/plain; q=0.5, text/html']);
         $response
             ->assertStatus(200)
-            ->assertSee('<div>this is html part</div>')
-            ->assertDontSee('this is text part')
+            ->assertSee('<a href="https://mailcare.io">mailcare.io</a>')
+            ->assertDontSee('sorry no link in plain text.')
             ->assertHeader('Content-Type', 'text/html; charset=UTF-8');
     }
 
@@ -283,14 +283,14 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_text_part_when_i_prefer_it()
     {
-        $exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
+        $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
 
         $response = $this->json('GET', 'api/v1/emails');
         $response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'text/html; q=0.5, text/plain']);
         $response
             ->assertStatus(200)
-            ->assertSee('this is text part')
-            ->assertDontSee('this is html part');
+            ->assertSee('sorry no link in plain text.')
+            ->assertDontSee('<a href="https://mailcare.io">mailcare.io</a>');
     }
 
     /**
@@ -298,7 +298,7 @@ class EmailsTest extends TestCase
      */
     public function it_return_not_acceptable_when_i_fetches_unsupported_accept()
     {
-        $exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email.txt']);
+        $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
 
         $response = $this->json('GET', 'api/v1/emails');
         $response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'message/rfc822']);
@@ -361,7 +361,7 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_attachments_of_email()
     {
-        $exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email_with_attachments.txt']);
+        $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_with_attachment.eml']);
 
         $response = $this->json('GET', 'api/v1/emails');
         $response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id);
@@ -369,9 +369,9 @@ class EmailsTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJsonFragment([
-                'file_name' => 'attach01',
-                'content_type' => 'application/octet-stream',
-                'size_in_bytes' => '173',
+                'file_name' => 'logo-mailcare-renard.png',
+                'content_type' => 'image/png',
+                'size_in_bytes' => '111766',
                 ]);
     }
 
@@ -380,7 +380,7 @@ class EmailsTest extends TestCase
      */
     public function it_download_attachments_of_email()
     {
-        $exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email_with_attachments.txt']);
+        $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_with_attachment.eml']);
 
         $response = $this->json('GET', 'api/v1/emails');
         $emailId = $response->getData()->data[0]->id;
@@ -389,7 +389,7 @@ class EmailsTest extends TestCase
         $response = $this->json('GET', 'api/v1/emails/'.$emailId.'/attachments/'.$attachmentId);
 
         $response->assertStatus(200)
-                ->assertHeader('Content-Type', 'application/octet-stream');
+                ->assertHeader('Content-Type', 'image/png');
     }
 
     /**
@@ -420,7 +420,7 @@ class EmailsTest extends TestCase
     public function it_download_attachments_that_doesnt_exist_on_disk()
     {
         $this->withoutExceptionHandling();
-        $exitCode = \Artisan::call('email:receive', ['file' => 'tests/storage/email_with_attachments.txt']);
+        $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_with_attachment.eml']);
 
         $response = $this->json('GET', 'api/v1/emails');
         $emailId = $response->getData()->data[0]->id;
