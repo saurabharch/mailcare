@@ -7,8 +7,8 @@ use Illuminate\Console\Command;
 class ConfigurePostfix extends Command
 {
     protected $signature = 'mailcare:configure-postfix
-                            {configDirectory : path to your Postfix\'s configuration}
-                            {domain : email addresses\' domain}
+                            {configDirectory? : path to your Postfix\'s configuration}
+                            {domain? : email addresses\' domain}
                             {user=forge}';
 
     protected $description = 'Configure Postfix with your domain.';
@@ -22,8 +22,8 @@ class ConfigurePostfix extends Command
             return;
         }
 
-        $configDirectory = $this->argument('configDirectory');
-        $newDomain = $this->argument('domain');
+        $configDirectory = $this->argument('configDirectory') ?? '/etc/postfix';
+        $newDomain = $this->argument('domain') ?? basename(base_path());
 
         $this->configureMainConfigFile($configDirectory, $newDomain);
         $this->configureMasterConfigFile($configDirectory);
