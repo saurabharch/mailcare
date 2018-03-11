@@ -25,8 +25,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('build:statistics')->daily();
-        $schedule->command('build:statistics '.Carbon::now()->toDateString())->everyFiveMinutes();
+        $schedule->command('mailcare:build-statistics')->daily();
+        $schedule->command('mailcare:build-statistics '.Carbon::now()->toDateString())->everyFiveMinutes();
     }
 
     /**

@@ -40,8 +40,6 @@ class Install extends Command
     {
         $this->welcome();
 
-        $this->createEnvFile();
-
         $this->generateAppKey();
 
         $credentials = $this->requestDatabaseCredentials();
@@ -56,15 +54,6 @@ class Install extends Command
     protected function welcome()
     {
         $this->info('>> Welcome to the MailCare installation process! <<');
-    }
-
-    protected function createEnvFile()
-    {
-        if (! file_exists('.env')) {
-            copy('.env.example', '.env');
-
-            $this->line('~ .env file successfully created.');
-        }
     }
 
     protected function generateAppKey()
