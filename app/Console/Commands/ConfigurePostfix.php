@@ -17,7 +17,7 @@ class ConfigurePostfix extends Command
     {
         $confirmation = $this->confirm('This script can be dangerous for your server, do you want to continue?');
 
-        if ($this->input->isInteractive() AND ! $confirmation) {
+        if ($this->input->isInteractive() and ! $confirmation) {
             $this->error('Aborting!');
             return;
         }
