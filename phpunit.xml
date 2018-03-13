@@ -24,6 +24,7 @@
               <directory suffix=".php">./app/Http/Middleware</directory>
               <directory suffix=".php">./app/Http/Controllers/Auth</directory>
               <file>./app/Console/Commands/Install.php</file>
+              <file>./app/Console/Commands/ConfigurePostfix.php</file>
               <file>./app/Providers/BroadcastServiceProvider.php</file>
               <file>./app/Exceptions/Handler.php</file>
             </exclude>
