@@ -50,14 +50,14 @@
     <p v-if="this.inbox">
     Filtered by inbox:
     <span class="tag is-primary">
-      name@company2.com
+      {{ inbox }}
       <button @click="removeFilter()" class="delete is-small"></button>
     </span>
     </p>
     <p v-if="this.sender">
     Filtered by sender:
     <span class="tag is-primary">
-      name@company2.com
+      {{ sender }}
       <button @click="removeFilter()" class="delete is-small"></button>
     </span>
     </p>
