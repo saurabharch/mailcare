@@ -6,7 +6,7 @@
       <div class="level-left">
         <div class="tabs is-toggle">
           <ul>
-            <li v-for="bodyType in bodyTypes" :class="classesLink(bodyType)" @click="getContent(bodyType.accept)">
+            <li v-for="bodyType in bodyTypes" :class="classesLink(bodyType)" @click="getContent(bodyType.accept)" :data-label="bodyType.label">
               <a>
                 <span class="icon is-small">
                   <i :class="classes(bodyType)"></i>
@@ -35,7 +35,7 @@
     </nav>
 
     <div>
-      <i-frame class="my-frame">
+      <i-frame class="my-frame" name="iframe-body">
         <div v-html="body"></div>
       </i-frame>
     </div>
