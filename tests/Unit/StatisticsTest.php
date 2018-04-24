@@ -29,7 +29,7 @@ class StatisticsTest extends TestCase
             'created_at' => Carbon::parse('11 february 2017')->toDateString(),
         ]);
 
-        $response = $this->json('GET', 'api/v1/statistics');
+        $response = $this->json('GET', 'api/statistics');
 
         $response
             ->assertStatus(200)

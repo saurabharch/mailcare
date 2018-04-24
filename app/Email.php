@@ -10,6 +10,20 @@ class Email extends Model
 {
     public $incrementing = false;
 
+    protected $casts = [
+        'favorite' => 'boolean',
+        'has_html' => 'boolean',
+        'has_text' => 'boolean',
+        'size_in_bytes' => 'integer',
+    ];
+
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'read'
+    ];
+
     use Uuids;
 
     public function sender()

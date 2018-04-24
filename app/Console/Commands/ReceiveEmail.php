@@ -48,15 +48,13 @@ class ReceiveEmail extends Command
         $this->info("from $file");
 
         $parser = $this->getParser($file);
-        
+
         $sender = Sender::updateOrCreate(
             [
                 'email' => $parser->getAddresses('from')[0]["address"]
             ],
             [
                 'display_name' => $parser->getAddresses('from')[0]["display"],
-                'local_part' => '',
-                'domain' => '',
             ]
         );
         
@@ -66,8 +64,6 @@ class ReceiveEmail extends Command
             ],
             [
                 'display_name' => $parser->getAddresses('to')[0]["display"],
-                'local_part' => '',
-                'domain' => '',
             ]
         );
 

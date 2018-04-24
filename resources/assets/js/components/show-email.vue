@@ -58,7 +58,7 @@
         mounted() {
           axios({
             method:'get',
-            url:'/api/v1/emails/' + this.id,
+            url:'/api/emails/' + this.id,
             headers: {'Accept': 'application/json'}
           })
           .then(response => this.email = response.data.data);
@@ -67,10 +67,10 @@
         methods: {
           toggle() {
             if (this.email.favorite) {
-              axios.delete('/api/v1/emails/' + this.id + '/favorite')
+              axios.delete('/api/emails/' + this.id + '/favorite')
               this.email.favorite = false;
             } else {
-              axios.post('/api/v1/emails/' + this.id + '/favorite')
+              axios.post('/api/emails/' + this.id + '/favorite')
               this.email.favorite = true;
 
             }

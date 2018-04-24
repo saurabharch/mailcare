@@ -14,13 +14,11 @@ use Illuminate\Http\Request;
 */
 
 
-Route::group(['prefix' => 'v1'], function () {
-    Route::resource('emails', 'EmailsController');
+Route::resource('emails', 'EmailsController');
 
-    Route::post('emails/{email}/favorite', 'EmailsController@favorite');
-    Route::delete('emails/{email}/favorite', 'EmailsController@unfavorite');
+Route::post('emails/{email}/favorite', 'EmailsController@favorite');
+Route::delete('emails/{email}/favorite', 'EmailsController@unfavorite');
 
-    Route::get('statistics', 'StatisticsController@index');
+Route::get('statistics', 'StatisticsController@index');
 
-    Route::get('emails/{email}/attachments/{attachmentId}', 'AttachmentsController@show');
-});
+Route::get('emails/{email}/attachments/{attachmentId}', 'AttachmentsController@show');
