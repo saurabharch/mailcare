@@ -17,8 +17,8 @@ class CreateInboxesTable extends Migration
             $table->uuid('id');
             $table->string('display_name');
             $table->string('email')->unique();
-            $table->string('local_part');
-            $table->string('domain');
+            $table->string('local_part')->nullable()->default(null);
+            $table->string('domain')->nullable()->default(null);
             $table->timestamps();
         });
     }

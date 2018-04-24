@@ -24,12 +24,13 @@ class EmailsTest extends TestCase
             'created_at' => Carbon::now()
             ]);
 
-        $response = $this->json('GET', 'api/v1/emails');
+        $response = $this->json('GET', 'api/emails');
 
         $response
             ->assertStatus(200)
             ->assertJsonFragment(['subject' => $emailOne->subject])
             ->assertJsonFragment(['subject' => $emailTwo->subject]);
+
 
         $data = $response->getData()->data;
         $this->assertEquals($emailTwo->subject, $data[0]->subject);
@@ -44,13 +45,13 @@ class EmailsTest extends TestCase
         define('MAX_LIMIT', 25);
         $emails = factory(\App\Email::class, 28)->create();
 
-        $response = $this->json('GET', 'api/v1/emails');
+        $response = $this->json('GET', 'api/emails');
 
-        $response->assertStatus(200)->assertJsonFragment(['paginator' => [
-            'total_count' => 28,
-            'total_pages' => 2,
+        $response->assertStatus(200)->assertJson(['meta' => [
+            'total' => 28,
+            'last_page' => 2,
             'current_page' => 1,
-            'limit' => MAX_LIMIT
+            'per_page' => MAX_LIMIT
             ]]);
 
         $this->assertCount(MAX_LIMIT, $response->getData()->data);
@@ -63,7 +64,7 @@ class EmailsTest extends TestCase
     {
         $email = factory(\App\Email::class)->create();
 
-        $response = $this->json('GET', 'api/v1/emails/'.$email->id);
+        $response = $this->json('GET', 'api/emails/'.$email->id);
 
         $response
             ->assertStatus(200)
@@ -75,7 +76,7 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_an_email_that_doesnt_exist()
     {
-        $response = $this->json('GET', 'api/v1/emails/id-doesnt-exist');
+        $response = $this->json('GET', 'api/emails/id-doesnt-exist');
 
         $response->assertStatus(404);
     }
@@ -92,7 +93,7 @@ class EmailsTest extends TestCase
             'inbox_id' => $inbox->id
         ]);
 
-        $response = $this->json('GET', 'api/v1/emails?inbox=test@example.com');
+        $response = $this->json('GET', 'api/emails?inbox=test@example.com');
 
         $response->assertStatus(200);
 
@@ -111,7 +112,7 @@ class EmailsTest extends TestCase
             'sender_id' => $sender->id
         ]);
 
-        $response = $this->json('GET', 'api/v1/emails?sender=test@example.com');
+        $response = $this->json('GET', 'api/emails?sender=test@example.com');
 
         $response->assertStatus(200);
 
@@ -138,7 +139,7 @@ class EmailsTest extends TestCase
             'subject' => 'matching subject'
         ]);
 
-        $response = $this->json('GET', 'api/v1/emails?search=matching');
+        $response = $this->json('GET', 'api/emails?search=matching');
 
         $response->assertStatus(200);
         $this->assertCount(3, $response->getData()->data);
@@ -164,7 +165,7 @@ class EmailsTest extends TestCase
             'subject' => 'a matching subject'
         ]);
 
-        $response = $this->json('GET', 'api/v1/emails?search=matching');
+        $response = $this->json('GET', 'api/emails?search=matching');
 
         $response->assertStatus(200);
         $this->assertCount(3, $response->getData()->data);
@@ -178,7 +179,7 @@ class EmailsTest extends TestCase
         $emails = factory(\App\Email::class)->create();
         $emails = factory(\App\Email::class, 2)->create(['read' => Carbon::now()]);
 
-        $response = $this->json('GET', 'api/v1/emails?unread=1');
+        $response = $this->json('GET', 'api/emails?unread=1');
 
         $response->assertStatus(200);
         $this->assertCount(1, $response->getData()->data);
@@ -193,7 +194,7 @@ class EmailsTest extends TestCase
         $emails = factory(\App\Email::class)->create();
         $emails = factory(\App\Email::class, 2)->create(['favorite' => true]);
 
-        $response = $this->json('GET', 'api/v1/emails?favorite=1');
+        $response = $this->json('GET', 'api/emails?favorite=1');
 
         $response->assertStatus(200);
         $this->assertCount(2, $response->getData()->data);
@@ -206,11 +207,27 @@ class EmailsTest extends TestCase
     {
         $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
 
-        $response = $this->json('GET', 'api/v1/emails');
-        $response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id);
+        $response = $this->json('GET', 'api/emails');
+        $response = $this->json('GET', 'api/emails/'.$response->getData()->data[0]->id);
         $response
             ->assertStatus(200)
-            ->assertJsonFragment(['subject' => 'My first email', 'has_html' => true, 'has_text' => true]);
+            ->assertJsonFragment(['subject' => 'My first email', 'has_html' => true, 'has_text' => true])
+            ->assertHeader('Content-Type', 'application/json');
+    }
+
+    /**
+     * @test
+     */
+    public function it_fetches_the_good_version()
+    {
+        $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
+
+        $response = $this->json('GET', 'api/emails');
+        $response = $this->json('GET', 'api/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'application/vnd.mailcare.v1+json']);
+        $response
+            ->assertStatus(200)
+            ->assertJsonFragment(['subject' => 'My first email', 'has_html' => true, 'has_text' => true])
+            ->assertHeader('Content-Type', 'application/vnd.mailcare.v1+json; charset=UTF-8');
     }
 
     /**
@@ -220,8 +237,8 @@ class EmailsTest extends TestCase
     {
         $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
 
-        $response = $this->json('GET', 'api/v1/emails');
-        $response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'text/html']);
+        $response = $this->json('GET', 'api/emails');
+        $response = $this->json('GET', 'api/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'text/html']);
         $response
             ->assertStatus(200)
             ->assertSee('<a href="https://mailcare.io">mailcare.io</a>')
@@ -235,8 +252,8 @@ class EmailsTest extends TestCase
     {
         $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
 
-        $response = $this->json('GET', 'api/v1/emails');
-        $response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'text/plain']);
+        $response = $this->json('GET', 'api/emails');
+        $response = $this->json('GET', 'api/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'text/plain']);
         $response
             ->assertStatus(200)
             ->assertSee('sorry no link in plain text.')
@@ -251,8 +268,8 @@ class EmailsTest extends TestCase
     {
         $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
 
-        $response = $this->json('GET', 'api/v1/emails');
-        $response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'message/rfc2822']);
+        $response = $this->json('GET', 'api/emails');
+        $response = $this->json('GET', 'api/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'message/rfc2822']);
         $response
             ->assertStatus(200)
             ->assertSee('Welcome to &lt;a href=&quot;https://mailcare.io&quot;&gt;mailcare.io&lt;/a&gt;')
@@ -268,8 +285,8 @@ class EmailsTest extends TestCase
     {
         $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
 
-        $response = $this->json('GET', 'api/v1/emails');
-        $response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'text/plain; q=0.5, text/html']);
+        $response = $this->json('GET', 'api/emails');
+        $response = $this->json('GET', 'api/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'text/plain; q=0.5, text/html']);
         $response
             ->assertStatus(200)
             ->assertSee('<a href="https://mailcare.io">mailcare.io</a>')
@@ -285,8 +302,8 @@ class EmailsTest extends TestCase
     {
         $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
 
-        $response = $this->json('GET', 'api/v1/emails');
-        $response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'text/html; q=0.5, text/plain']);
+        $response = $this->json('GET', 'api/emails');
+        $response = $this->json('GET', 'api/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'text/html; q=0.5, text/plain']);
         $response
             ->assertStatus(200)
             ->assertSee('sorry no link in plain text.')
@@ -300,8 +317,8 @@ class EmailsTest extends TestCase
     {
         $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
 
-        $response = $this->json('GET', 'api/v1/emails');
-        $response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'message/rfc822']);
+        $response = $this->json('GET', 'api/emails');
+        $response = $this->json('GET', 'api/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'message/rfc822']);
         $response
             ->assertStatus(406)
             ->assertDontSee('this is text part')
@@ -315,17 +332,23 @@ class EmailsTest extends TestCase
     {
         $email = factory(\App\Email::class)->create();
 
-        $response = $this->json('GET', 'api/v1/emails/'.$email->id);
+        $response = $this->json('GET', 'api/emails');
 
         $response
             ->assertStatus(200)
-            ->assertJsonFragment(['read' => null]);
+            ->assertJsonFragment(['id' => $email->id, 'read' => null]);
 
-        $response = $this->json('GET', 'api/v1/emails/'.$email->id);
+        $response = $this->json('GET', 'api/emails/'.$email->id);
 
         $response
             ->assertStatus(200)
             ->assertJsonMissing(['read' => null]);
+
+        $response = $this->json('GET', 'api/emails');
+
+        $response
+            ->assertStatus(200)
+            ->assertJsonMissingExact(['id' => $email->id, 'read' => null]);
     }
 
     /**
@@ -335,22 +358,22 @@ class EmailsTest extends TestCase
     {
         $email = factory(\App\Email::class)->create();
 
-        $response = $this->json('GET', 'api/v1/emails/'.$email->id);
+        $response = $this->json('GET', 'api/emails/'.$email->id);
         $response
             ->assertStatus(200)
             ->assertJsonFragment(['favorite' => false]);
 
-        $response = $this->json('POST', 'api/v1/emails/'.$email->id.'/favorite');
+        $response = $this->json('POST', 'api/emails/'.$email->id.'/favorite');
 
-        $response = $this->json('GET', 'api/v1/emails/'.$email->id);
+        $response = $this->json('GET', 'api/emails/'.$email->id);
         $response
             ->assertStatus(200)
             ->assertJsonFragment(['favorite' => true]);
 
-        $response = $this->json('DELETE', 'api/v1/emails/'.$email->id.'/favorite');
+        $response = $this->json('DELETE', 'api/emails/'.$email->id.'/favorite');
 
 
-        $response = $this->json('GET', 'api/v1/emails/'.$email->id);
+        $response = $this->json('GET', 'api/emails/'.$email->id);
         $response
             ->assertStatus(200)
             ->assertJsonFragment(['favorite' => false]);
@@ -363,8 +386,8 @@ class EmailsTest extends TestCase
     {
         $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_with_attachment.eml']);
 
-        $response = $this->json('GET', 'api/v1/emails');
-        $response = $this->json('GET', 'api/v1/emails/'.$response->getData()->data[0]->id);
+        $response = $this->json('GET', 'api/emails');
+        $response = $this->json('GET', 'api/emails/'.$response->getData()->data[0]->id);
 
         $response
             ->assertStatus(200)
@@ -382,11 +405,11 @@ class EmailsTest extends TestCase
     {
         $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_with_attachment.eml']);
 
-        $response = $this->json('GET', 'api/v1/emails');
+        $response = $this->json('GET', 'api/emails');
         $emailId = $response->getData()->data[0]->id;
-        $response = $this->json('GET', 'api/v1/emails/'.$emailId);
+        $response = $this->json('GET', 'api/emails/'.$emailId);
         $attachmentId = $response->getData()->data->attachments[0]->id;
-        $response = $this->json('GET', 'api/v1/emails/'.$emailId.'/attachments/'.$attachmentId);
+        $response = $this->json('GET', 'api/emails/'.$emailId.'/attachments/'.$attachmentId);
 
         $response->assertStatus(200)
                 ->assertHeader('Content-Type', 'image/png');
@@ -397,7 +420,7 @@ class EmailsTest extends TestCase
      */
     public function it_download_attachments_of_email_that_doesnt_exist()
     {
-        $response = $this->json('GET', 'api/v1/emails/id-doesnt-exist/attachments/id-doesnt-exist');
+        $response = $this->json('GET', 'api/emails/id-doesnt-exist/attachments/id-doesnt-exist');
 
         $response->assertStatus(404);
     }
@@ -409,7 +432,7 @@ class EmailsTest extends TestCase
     {
         $email = factory(\App\Email::class)->create();
 
-        $response = $this->json('GET', 'api/v1/emails/'.$email->id.'/attachments/id-doesnt-exist');
+        $response = $this->json('GET', 'api/emails/'.$email->id.'/attachments/id-doesnt-exist');
 
         $response->assertStatus(404);
     }
@@ -419,15 +442,14 @@ class EmailsTest extends TestCase
      */
     public function it_download_attachments_that_doesnt_exist_on_disk()
     {
-        $this->withoutExceptionHandling();
         $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_with_attachment.eml']);
 
-        $response = $this->json('GET', 'api/v1/emails');
+        $response = $this->json('GET', 'api/emails');
         $emailId = $response->getData()->data[0]->id;
 
         $attachment = factory(\App\Attachment::class)->create(['email_id' => $emailId]);
 
-        $response = $this->json('GET', 'api/v1/emails/'.$attachment->email->id.'/attachments/'.$attachment->id);
+        $response = $this->json('GET', 'api/emails/'.$attachment->email->id.'/attachments/'.$attachment->id);
 
         $response->assertStatus(404);
     }

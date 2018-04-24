@@ -4,13 +4,19 @@ namespace App\Responses;
 use Illuminate\Http\Request;
 use PhpMimeMailParser\Parser;
 use App\Email;
-use App\Transformers\EmailTransformer;
+use App\Http\Resources\EmailResource;
 
 class EmailResponse
 {
     protected $request;
     protected $parser;
-    protected $acceptedHeaders = ['application/json', 'text/html', 'text/plain', 'message/rfc2822'];
+    protected $acceptedHeaders = [
+        'application/vnd.mailcare.v1+json',
+        'application/json',
+        'text/html',
+        'text/plain',
+        'message/rfc2822'
+    ];
 
     public function __construct(Request $request, Parser $parser)
     {
@@ -30,6 +36,8 @@ class EmailResponse
             return $this->makeRaw();
         } elseif ($this->requestPrefer('application/json')) {
             return $this->makeJson();
+        } elseif ($this->requestPrefer('application/vnd.mailcare.v1+json')) {
+            return $this->makeVersionedJson();
         } else {
             return $this->makeNotAcceptable();
         }
@@ -73,14 +81,24 @@ class EmailResponse
 
     protected function makeJson()
     {
-        $data = (new EmailTransformer)->transform($this->email);
-
-
         if ($this->email->isUnread()) {
             $this->email->read();
         }
 
-        return response()->json(['data' => $data]);
+        return new EmailResource($this->email);
+    }
+
+    protected function makeVersionedJson()
+    {
+        if ($this->email->isUnread()) {
+            $this->email->read();
+        }
+
+
+        return (new EmailResource($this->email))->response()->header(
+            'Content-Type',
+            'application/vnd.mailcare.v1+json; charset=UTF-8'
+        );
     }
 
     protected function makeNotAcceptable()

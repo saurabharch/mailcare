@@ -4,23 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Email;
-use App\Transformers\EmailTransformer;
 use App\Filters\EmailFilters;
 use App\Responses\EmailResponse;
+use App\Http\Resources\EmailResource;
 
 class EmailsController extends ApiController
 {
-    protected $emailTransformer;
-
-    public function __construct(EmailTransformer $emailTransformer)
-    {
-        $this->emailTransformer = $emailTransformer;
-    }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(EmailFilters $filters)
     {
         $limit = request()->input('limit') ?: 25;
@@ -30,17 +19,9 @@ class EmailsController extends ApiController
                         ->filter($filters)
                         ->paginate($limit);
 
-        return $this->respondWithPagination($emails, [
-            'data' => $this->emailTransformer->transformCollection($emails->all()),
-            ]);
+        return EmailResource::collection($emails);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show(Email $email, EmailResponse $emailResponse)
     {
         return $emailResponse->make($email);

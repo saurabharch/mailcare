@@ -98,7 +98,7 @@
       <ul class="pagination-list">
         <li v-for="page in getPages()">
 
-          <a v-if="page == paginator.current_page"
+          <a v-if="page == meta.current_page"
             class="pagination-link is-current"
             aria-current="page" @click="goToPage(page)">{{ page }}</a>
           <span v-else-if="page == '...'"
@@ -162,19 +162,19 @@
         methods: {
 
           hasPreviousPage() {
-            return this.paginator.current_page > 1;
+            return this.meta.current_page > 1;
           },
 
           loadPreviousPage() {
-            this.goToPage(this.paginator.current_page - 1)
+            this.goToPage(this.meta.current_page - 1)
           },
 
           hasNextPage() {
-            return this.paginator.current_page < this.paginator.total_pages;
+            return this.meta.current_page < this.meta.last_page;
           },
 
           loadNextPage() {
-            this.goToPage(this.paginator.current_page + 1)
+            this.goToPage(this.meta.current_page + 1)
           },
 
           goToPage(page)
@@ -188,28 +188,28 @@
             var pages = []
             var i
 
-            if (this.paginator.current_page - 3 > 1)
+            if (this.meta.current_page - 3 > 1)
             {
               pages.push(1)
             }
-            if (this.paginator.current_page - 3 > 2)
+            if (this.meta.current_page - 3 > 2)
             {
               pages.push('...')
             }
 
-            for (i = this.paginator.current_page - 3; i <= this.paginator.current_page + 3; i++) {
-                if (i > 0 && i <= this.paginator.total_pages) {
+            for (i = this.meta.current_page - 3; i <= this.meta.current_page + 3; i++) {
+                if (i > 0 && i <= this.meta.last_page) {
                   pages.push(i)
                 }
             }
-            if (this.paginator.total_pages > this.paginator.current_page + 3 + 1)
+            if (this.meta.last_page > this.meta.current_page + 3 + 1)
             {
               pages.push('...')
             }
 
-            if (this.paginator.total_pages > this.paginator.current_page + 3)
+            if (this.meta.last_page > this.meta.current_page + 3)
             {
-              pages.push(this.paginator.total_pages)
+              pages.push(this.meta.last_page)
             }
 
             return pages
@@ -245,7 +245,7 @@
           },
 
           getEmails() {
-            axios.get('/api/v1/emails', { params: {
+            axios.get('/api/emails', { params: {
               'inbox': (this.inbox ? this.inbox : null),
               'sender': (this.sender ? this.sender : null),
               'search': (this.keywords ? this.keywords : null),
@@ -254,8 +254,8 @@
               'page': (this.pageRequested ? this.pageRequested : null),
             }}).then(function(response) {
               this.emails = response.data.data
-              this.paginator = response.data.paginator
-              this.totalCount = response.data.paginator.total_count
+              this.meta = response.data.meta
+              this.totalCount = response.data.meta.total
             }.bind(this));
 
           },
