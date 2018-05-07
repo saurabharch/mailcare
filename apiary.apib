@@ -86,10 +86,10 @@ Accept: application/vnd.mailcare.v1+json
 
 ## MetaStatistic (object)
 
-+ emails_received: 10 (number)
-+ inboxes_created: 3 (number)
-+ storage_used_for_human: `34.00kB` (string)
-+ storage_used: 33996 (number)
++ emails_received: 786 (number)
++ inboxes_created: 68 (number)
++ storage_used_for_human: `48.08MB` (string)
++ storage_used: 48083603 (number)
 
 
 ## Emails Resource [/emails]
@@ -97,6 +97,8 @@ Accept: application/vnd.mailcare.v1+json
 ### List of emails [GET /emails{?limit}{?inbox}{?sender}{?search}{?unread}{?favorite}]
 
 + Parameters
+    + page: `2` (number, optional) - Page requested
+        + Default: `1`
     + limit: `100` (number, optional) - Maximum number of emails to retrieve
         + Default: `25`
     + inbox: `test@example.com` (string, optional) - Filter by inbox
