@@ -17,7 +17,7 @@ class StatisticCollection extends ResourceCollection
             'meta' => [
                 'emails_received' => Statistic::emailsReceived(),
                 'inboxes_created' => Statistic::inboxesCreated(),
-                'storage_used_for_human' => $this->human_filesize(Statistic::storageUsed()),
+                'storage_used_for_human' => $this->humanFileSize(Statistic::storageUsed()),
                 'storage_used' => Statistic::storageUsed(),
             ],
         ];
