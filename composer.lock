@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "07ef4ab2fb939e328bc89f7674e9e409",
+    "content-hash": "0996e8fcf1c5cc8e2eca3a59110f8f30",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -2406,16 +2406,16 @@
         },
         {
             "name": "laravel/dusk",
-            "version": "v3.0.10",
+            "version": "v4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/dusk.git",
-                "reference": "8bfb9f01ae09d1d9ca3ce53e36b1f020c0f8dc8f"
+                "reference": "5facdb15f5952ed28c711e89b30adce74fa388c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/dusk/zipball/8bfb9f01ae09d1d9ca3ce53e36b1f020c0f8dc8f",
-                "reference": "8bfb9f01ae09d1d9ca3ce53e36b1f020c0f8dc8f",
+                "url": "https://api.github.com/repos/laravel/dusk/zipball/5facdb15f5952ed28c711e89b30adce74fa388c7",
+                "reference": "5facdb15f5952ed28c711e89b30adce74fa388c7",
                 "shasum": ""
             },
             "require": {
@@ -2463,7 +2463,7 @@
                 "testing",
                 "webdriver"
             ],
-            "time": "2018-08-06T20:22:46+00:00"
+            "time": "2018-08-12T01:53:48+00:00"
         },
         {
             "name": "laravel/tinker",
