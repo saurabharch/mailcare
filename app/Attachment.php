@@ -26,6 +26,6 @@ class Attachment extends Model
 
     public function getSizeForHumanAttribute()
     {
-        return $this->human_filesize($this->size_in_bytes);
+        return $this->humanFileSize($this->size_in_bytes);
     }
 }
