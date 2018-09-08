@@ -151,7 +151,7 @@
 
         filters: {
           ago(date) {
-            return moment(date.date).fromNow();
+            return moment(date).fromNow();
           }
         },
 
