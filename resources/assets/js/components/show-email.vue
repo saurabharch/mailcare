@@ -50,7 +50,7 @@
 
         filters: {
           ago(value) {
-            return moment(value.date).fromNow();
+            return moment(value).fromNow();
           }
 
         },
