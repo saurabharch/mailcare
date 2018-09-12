@@ -363,14 +363,14 @@ class EmailsTest extends TestCase
             ->assertStatus(200)
             ->assertJsonFragment(['favorite' => false]);
 
-        $response = $this->json('POST', 'api/emails/'.$email->id.'/favorite');
+        $response = $this->json('POST', 'api/emails/'.$email->id.'/favorites');
 
         $response = $this->json('GET', 'api/emails/'.$email->id);
         $response
             ->assertStatus(200)
             ->assertJsonFragment(['favorite' => true]);
 
-        $response = $this->json('DELETE', 'api/emails/'.$email->id.'/favorite');
+        $response = $this->json('DELETE', 'api/emails/'.$email->id.'/favorites');
 
 
         $response = $this->json('GET', 'api/emails/'.$email->id);

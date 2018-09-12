@@ -26,20 +26,4 @@ class EmailsController extends ApiController
     {
         return $emailResponse->make($email);
     }
-
-    public function favorite(Email $email)
-    {
-        if (!$email->favorite) {
-            $email->favorite = true;
-            $email->save();
-        }
-    }
-
-    public function unfavorite(Email $email)
-    {
-        if ($email->favorite) {
-            $email->favorite = false;
-            $email->save();
-        }
-    }
 }

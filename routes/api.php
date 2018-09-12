@@ -16,8 +16,8 @@ use Illuminate\Http\Request;
 
 Route::resource('emails', 'EmailsController');
 
-Route::post('emails/{email}/favorite', 'EmailsController@favorite');
-Route::delete('emails/{email}/favorite', 'EmailsController@unfavorite');
+Route::post('emails/{email}/favorites', 'FavoritesController@store');
+Route::delete('emails/{email}/favorites', 'FavoritesController@destroy');
 
 Route::get('statistics', 'StatisticsController@index');
 

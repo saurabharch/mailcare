@@ -67,10 +67,10 @@
         methods: {
           toggle() {
             if (this.email.favorite) {
-              axios.delete('/api/emails/' + this.id + '/favorite')
+              axios.delete('/api/emails/' + this.id + '/favorites')
               this.email.favorite = false;
             } else {
-              axios.post('/api/emails/' + this.id + '/favorite')
+              axios.post('/api/emails/' + this.id + '/favorites')
               this.email.favorite = true;
 
             }
