@@ -106,7 +106,9 @@ Accept: application/vnd.mailcare.v1+json
     + search: `matching` (string, optional) - Search by inbox or sender or subject
     + unread: `true` (boolean, optional) - Filter only by unread
     + favorite: `true` (boolean, optional) - Filter only by favorite
-+ Request (application/vnd.mailcare.v1+json)
++ Request
++ Headers
+    Accept: application/vnd.mailcare.v1+json
 + Response 200 (application/vnd.mailcare.v1+json)
     + Attributes
         + data (array[Email])
@@ -121,18 +123,24 @@ Accept: application/vnd.mailcare.v1+json
     + id: `9bf63f3b-4e4e-46a0-8c7d-2d6d32576a1d` (string, required) - ID of the email
 
 ### Get an email [GET]
-+ Request (application/vnd.mailcare.v1+json)
++ Request
++ Headers
+    Accept: application/vnd.mailcare.v1+json
 + Response 200 (application/vnd.mailcare.v1+json)
     + Attributes
         + data (Email)
 
-+ Request (text/plain)
++ Request
++ Headers
+    Accept: text/plain
 + Response 200 (text/plain)
 
         Welcome to mailcare.io
         Follow this link to continue: https://mailcare.io
         
-+ Request (text/html)
++ Request
++ Headers
+    Accept: text/html
 + Response 200 (text/html)
 
         <div>
@@ -142,7 +150,9 @@ Accept: application/vnd.mailcare.v1+json
             </p>
         </div>
 
-+ Request (message/rfc2822)
++ Request
++ Headers
+    Accept: message/rfc2822
 + Response 200 (message/rfc2822)
 
         From test@example.com  Sun Jun 16 17:50:14 2013
@@ -186,11 +196,15 @@ Accept: application/vnd.mailcare.v1+json
 
 
 ### Favorite an email [POST /emails/{id}/favorites]
-+ Request (application/vnd.mailcare.v1+json)
++ Request
++ Headers
+    Accept: application/vnd.mailcare.v1+json
 + Response 200 (application/vnd.mailcare.v1+json)
 
 ### Unfavorite an email [DELETE /emails/{id}/favorites]
-+ Request (application/vnd.mailcare.v1+json)
++ Request
++ Headers
+    Accept: application/vnd.mailcare.v1+json
 + Response 200 (application/vnd.mailcare.v1+json)
 
 
@@ -198,7 +212,9 @@ Accept: application/vnd.mailcare.v1+json
 ## Statistics Resource [/statistics]
 
 ### List of statistics [GET]
-+ Request (application/vnd.mailcare.v1+json)
++ Request
++ Headers
+    Accept: application/vnd.mailcare.v1+json
 + Response 200 (application/vnd.mailcare.v1+json)
     + Attributes
         + data (array[Statistic])
