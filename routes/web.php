@@ -13,23 +13,23 @@
 
 Route::middleware('auth.toggle')->group(function () {
 
-	Route::get('/', function () {
-	    return view('emails.index');
-	});
-	Route::get('/inboxes/{email}', function ($email) {
-	    return view('inboxes.index')->withEmail($email);
-	});
-	Route::get('/senders/{email}', function ($email) {
-	    return view('senders.index')->withEmail($email);
-	});
+    Route::get('/', function () {
+        return view('emails.index');
+    });
+    Route::get('/inboxes/{email}', function ($email) {
+        return view('inboxes.index')->withEmail($email);
+    });
+    Route::get('/senders/{email}', function ($email) {
+        return view('senders.index')->withEmail($email);
+    });
 
-	Route::get('/emails/{id}', function ($id) {
-	    return view('emails.show')->withId($id);
-	});
+    Route::get('/emails/{id}', function ($id) {
+        return view('emails.show')->withId($id);
+    });
 
-	Auth::routes();
+    Auth::routes();
 
-	Route::get('/statistics', function () {
-	    return view('statistics.index');
-	});
+    Route::get('/statistics', function () {
+        return view('statistics.index');
+    });
 });

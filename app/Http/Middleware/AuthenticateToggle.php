@@ -36,8 +36,7 @@ class AuthenticateToggle
      */
     public function handle($request, Closure $next, $guard = null, $field = null)
     {
-        if (config('mailcare.auth'))
-        {
+        if (config('mailcare.auth')) {
             return $this->auth->guard($guard)->basic($field ?: 'email') ?: $next($request);
         }
 

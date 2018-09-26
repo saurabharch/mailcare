@@ -15,13 +15,12 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth.toggle')->group(function () {
 
-	Route::resource('emails', 'EmailsController');
+    Route::resource('emails', 'EmailsController');
 
-	Route::post('emails/{email}/favorites', 'FavoritesController@store');
-	Route::delete('emails/{email}/favorites', 'FavoritesController@destroy');
+    Route::post('emails/{email}/favorites', 'FavoritesController@store');
+    Route::delete('emails/{email}/favorites', 'FavoritesController@destroy');
 
-	Route::get('statistics', 'StatisticsController@index');
+    Route::get('statistics', 'StatisticsController@index');
 
-	Route::get('emails/{email}/attachments/{attachmentId}', 'AttachmentsController@show');
+    Route::get('emails/{email}/attachments/{attachmentId}', 'AttachmentsController@show');
 });
-
