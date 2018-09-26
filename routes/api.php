@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth.toggle')->group(function () {
+Route::middleware('mailcare.auth')->group(function () {
 
     Route::resource('emails', 'EmailsController');
 

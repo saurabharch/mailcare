@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 
-class AuthenticateToggle
+class AuthenticateByMailCare
 {
     /**
      * The guard factory instance.

@@ -11,7 +11,7 @@
 |
 */
 
-Route::middleware('auth.toggle')->group(function () {
+Route::middleware('mailcare.auth')->group(function () {
 
     Route::get('/', function () {
         return view('emails.index');
