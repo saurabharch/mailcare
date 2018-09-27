@@ -61,12 +61,18 @@
       <div class="container">
         <div class="content has-text-centered">
           <p>
-            <strong>MailCare.io</strong> by <a href="http://vincent.dauce.fr/">Vincent Dauce</a>. The source code is licensed
+            <strong>MailCare.io</strong> by <a href="https://vincent.dauce.fr/">Vincent Dauce</a>. The source code is licensed
             <a href="http://opensource.org/licenses/mit-license.php">MIT</a>.
           </p>
           <p>
+            <a class="icon" href="https://mailcare.io">
+              <i class="fa fa-home"></i>
+            </a>
             <a class="icon" href="https://github.com/mailcare/mailcare">
               <i class="fa fa-github"></i>
+            </a>
+            <a class="icon" href="https://gitlab.com/mailcare/mailcare">
+              <i class="fa fa-gitlab"></i>
             </a>
           </p>
         </div>
