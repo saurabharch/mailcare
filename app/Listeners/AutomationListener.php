@@ -36,7 +36,6 @@ class AutomationListener
         $automations = Automation::all();
 
         foreach ($automations as $automation) {
-
             if (!empty($automation->subject)) {
                 if ($automation->subject != $event->email->subject) {
                     continue;
@@ -63,8 +62,7 @@ class AutomationListener
             if ($automation->action_secret_token) {
                 $headers = ['headers' => ['X-Mailcare-Token' => $automation->action_secret_token]];
                 $res = $this->client->request('GET', $automation->action_url, $headers);
-            }
-            else {
+            } else {
                 $res = $this->client->request('GET', $automation->action_url);
             }
         }
