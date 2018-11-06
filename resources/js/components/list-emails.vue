@@ -28,19 +28,19 @@
         <ul>
           <li :class="classes(!this.filteredBy)">
             <a @click="filterBy()">
-              <span class="icon is-small"><i class="fa fa-asterisk"></i></span>
+              <span class="icon is-small"><i class="fas fa-asterisk"></i></span>
               <span>All</span>
             </a>
           </li>
           <li :class="classes(this.filteredByUnread())">
             <a @click="filterBy('unread')">
-              <span class="icon is-small"><i class="fa fa-circle"></i></span>
+              <span class="icon is-small"><i class="fas fa-circle"></i></span>
               <span>Unread</span>
             </a>
           </li>
           <li :class="classes(this.filteredByFavorite())">
             <a @click="filterBy('favorite')">
-              <span class="icon is-small"><i class="fa fa-heart"></i></span>
+              <span class="icon is-small"><i class="fas fa-heart"></i></span>
               <span>Favorite</span>
             </a>
           </li>
@@ -111,7 +111,7 @@
 
     <article class="message" v-else-if="totalCount == 0">
       <div class="message-header" style="justify-content: flex-start;">
-        <span class="icon is-medium"><i class="fa fa-meh-o"></i></span>
+        <span class="icon is-medium"><i class="far fa-meh"></i></span>
         <span>Oops! No emails matched your query.</span>
       </div>
       <div class="message-body">

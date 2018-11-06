@@ -3,7 +3,7 @@
 @import url(https://fonts.googleapis.com/css?family=Exo+2:500|Roboto);
 
 // Icons
-@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css);
+@import url(https://use.fontawesome.com/releases/v5.4.1/css/all.css);
 
 // Bulma
 
@@ -57,6 +57,8 @@ $navbar-item-img-max-height: 4rem;
 
 @import "~bulma/sass/layout/section.sass";
 @import "~bulma/sass/layout/footer.sass";
+
+@import "~bulma/sass/grid/columns.sass";
 
 
 .navbar-item {
