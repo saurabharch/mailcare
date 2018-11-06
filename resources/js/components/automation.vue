@@ -1,7 +1,6 @@
 
 <template>
 	<div>
-
 		<div class="card">
       <header class="card-header">
         <p class="card-header-title" v-text="automation.title">
@@ -22,8 +21,8 @@
                   <label class="label">Title</label>
                   <div class="control">
                     <input class="input" type="text" placeholder="Text input" required 
-                      v-model="automation.title" 
-                      :disabled="!editable">
+                    v-model="automation.title" 
+                    :disabled="!editable">
                   </div>
                 </div>
 
@@ -31,8 +30,8 @@
                   <label class="label">Sender</label>
                   <div class="control has-icons-left has-icons-right">
                     <input class="input" placeholder="Email input" 
-                      v-model="automation.sender" 
-                      :disabled="!editable">
+                    v-model="automation.sender" 
+                    :disabled="!editable">
                     <span class="icon is-small is-left">
                       <i class="fas fa-envelope"></i>
                     </span>
@@ -43,8 +42,8 @@
                   <label class="label">Inbox</label>
                   <div class="control has-icons-left has-icons-right">
                     <input class="input" placeholder="Email input" 
-                      v-model="automation.inbox" 
-                      :disabled="!editable">
+                    v-model="automation.inbox" 
+                    :disabled="!editable">
                     <span class="icon is-small is-left">
                       <i class="fas fa-envelope"></i>
                     </span>
@@ -55,8 +54,8 @@
                   <label class="label">Subject</label>
                   <div class="control">
                     <input class="input" type="text" placeholder="Text input" 
-                      v-model="automation.subject" 
-                      :disabled="!editable">
+                    v-model="automation.subject" 
+                    :disabled="!editable">
                   </div>
                 </div>
 
@@ -64,8 +63,8 @@
                   <div class="control">
                     <label class="checkbox">
                       <input type="checkbox" 
-                        v-model="automation.has_attachments" 
-                        :disabled="!editable">
+                      v-model="automation.has_attachments" 
+                      :disabled="!editable">
                       Has attachments
                     </label>
                   </div>
@@ -77,10 +76,10 @@
                 <label class="label">Url</label>
                 <div class="control">
                   <input class="input" type="text" 
-                    placeholder="https://example.com/trigger-email-received" 
-                    required 
-                    v-model="automation.action_url" 
-                    :disabled="!editable">
+                  placeholder="https://example.com/trigger-email-received" 
+                  required 
+                  v-model="automation.action_url" 
+                  :disabled="!editable">
                 </div>
               </div>
 
@@ -88,14 +87,13 @@
                 <label class="label">Secret Token</label>
                 <div class="control">
                   <input class="input" type="text" placeholder="Text input" 
-                    v-model="automation.action_secret_token" 
-                    :disabled="!editable">
+                  v-model="automation.action_secret_token" 
+                  :disabled="!editable">
                 </div>
                 <p class="help">Use this token to validate received payloads. It will be sent with the request in the X-Mailcare-Token HTTP header.</p>
               </div>
             </div>
           </div>
-
 
           <div class="field is-grouped is-grouped-right" v-if="open && !automation.id">
             <p class="control">
