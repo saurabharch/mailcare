@@ -13,6 +13,7 @@ use App\Listeners\AutomationListener;
 use App\Events\EmailReceived;
 use Mockery;
 use GuzzleHttp\Client;
+use App\Http\Resources\EmailResource;
 
 class AutomationsTest extends TestCase
 {
@@ -39,20 +40,26 @@ class AutomationsTest extends TestCase
         $this->client->shouldNotHaveReceived('request');
     }
 
-    private function assertAutomationTriggered($automation)
+    private function assertAutomationTriggered($automation, $hits = [], $email)
     {
-    	$this->assertEquals(1, $automation->fresh()->emails_received);
-        $this->client->shouldHaveReceived('request')->with('GET', $automation->action_url);
-    }
+        $headers = [];
+        $headers['X-MailCare-Title'] = $automation->title;
+        if ($automation->action_secret_token) {
+            $headers['X-MailCare-Secret-Token'] = $automation->action_secret_token;
+        }
+        foreach ($hits as $hit) {
+            $headers['X-MailCare-'.$hit] = 'HIT';
+        }
 
-    private function assertAutomationTriggeredWithHeaderSecretToken($automation) 
-    {
     	$this->assertEquals(1, $automation->fresh()->emails_received);
-        $this->client->shouldHaveReceived('request')->with('GET', $automation->action_url, [
-        	'headers' => [
-        		'X-Mailcare-Token' => $automation->action_secret_token,
-        	]
-        ]);
+        $this->client->shouldHaveReceived('request')->with(
+            'POST', 
+            $automation->action_url,
+            [
+                'headers' => $headers,
+                'form_params' => (new EmailResource($email))->response()->getData(),
+            ]
+        );
     }
 
     public function testSubjectDoesMatch()
@@ -67,7 +74,7 @@ class AutomationsTest extends TestCase
     	$this->handleAutomationListener($email);
 
 
-		$this->assertAutomationTriggered($automation);
+		$this->assertAutomationTriggered($automation, ['Subject'], $email);
     }
 
     public function testSenderDoesMatch()
@@ -85,7 +92,7 @@ class AutomationsTest extends TestCase
     	$this->handleAutomationListener($email);
 
 
-		$this->assertAutomationTriggered($automation);
+		$this->assertAutomationTriggered($automation, ['Sender'], $email);
     }
 
     public function testInboxDoesMatch()
@@ -103,7 +110,7 @@ class AutomationsTest extends TestCase
     	$this->handleAutomationListener($email);
 
 
-		$this->assertAutomationTriggered($automation);
+		$this->assertAutomationTriggered($automation, ['Inbox'], $email);
     }
 
     public function testHasAttachmentDoesMatch()
@@ -120,7 +127,7 @@ class AutomationsTest extends TestCase
     	$this->handleAutomationListener($email);
 
 
-		$this->assertAutomationTriggered($automation);
+		$this->assertAutomationTriggered($automation, ['Has-Attachments'], $email);
     }
 
     public function testSubjectDoesMatchButSenderNot()
@@ -150,7 +157,7 @@ class AutomationsTest extends TestCase
     	$this->handleAutomationListener($email);
 
 
-		$this->assertAutomationTriggered($automation);
+		$this->assertAutomationTriggered($automation, [], $email);
     }
 
     public function testSecretTokenSendedWhenAsked()
@@ -162,7 +169,7 @@ class AutomationsTest extends TestCase
 
     	$this->handleAutomationListener($email);
 
-		$this->assertAutomationTriggeredWithHeaderSecretToken($automation);
+		$this->assertAutomationTriggered($automation, [], $email);
     }
 
     public function testSubjectDoesntMatch()

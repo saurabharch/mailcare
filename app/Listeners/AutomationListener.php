@@ -7,6 +7,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Automation;
 use GuzzleHttp\Client;
+use App\Http\Resources\EmailResource;
 
 class AutomationListener
 {
@@ -33,38 +34,49 @@ class AutomationListener
         if (!config('mailcare.automations')) {
             return;
         }
+
         $automations = Automation::all();
 
         foreach ($automations as $automation) {
+
+            $headers = [];
+            $headers['X-MailCare-Title'] = $automation->title;
+
             if (!empty($automation->subject)) {
                 if ($automation->subject != $event->email->subject) {
                     continue;
                 }
+                $headers['X-MailCare-Subject'] = 'HIT';
             }
             if (!empty($automation->sender)) {
                 if ($automation->sender != $event->email->sender->email) {
                     continue;
                 }
+                $headers['X-MailCare-Sender'] = 'HIT';
             }
             if (!empty($automation->inbox)) {
                 if ($automation->inbox != $event->email->inbox->email) {
                     continue;
                 }
+                $headers['X-MailCare-Inbox'] = 'HIT';
             }
             if ($automation->has_attachments) {
                 if ($event->email->attachments->count() == 0) {
                     continue;
                 }
+                $headers['X-MailCare-Has-Attachments'] = 'HIT';
+            }
+
+            if ($automation->action_secret_token) {
+                $headers['X-MailCare-Secret-Token'] = $automation->action_secret_token;
             }
 
             $automation->increment('emails_received');
 
-            if ($automation->action_secret_token) {
-                $headers = ['headers' => ['X-Mailcare-Token' => $automation->action_secret_token]];
-                $res = $this->client->request('GET', $automation->action_url, $headers);
-            } else {
-                $res = $this->client->request('GET', $automation->action_url);
-            }
+            $this->client->request('POST', $automation->action_url, [
+                'headers' => $headers,
+                'form_params' => (new EmailResource($event->email))->response()->getData(),
+            ]);
         }
     }
 }
