@@ -38,7 +38,6 @@ class AutomationListener
         $automations = Automation::all();
 
         foreach ($automations as $automation) {
-
             $headers = [];
             $headers['X-MailCare-Title'] = $automation->title;
 
