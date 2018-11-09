@@ -13,9 +13,8 @@
 
 Route::middleware('mailcare.auth')->group(function () {
 
-    Route::get('/', function () {
-        return view('emails.index');
-    });
+    Route::view('/', 'emails.index');
+
     Route::get('/inboxes/{email}', function ($email) {
         return view('inboxes.index')->withEmail($email);
     });
@@ -29,7 +28,6 @@ Route::middleware('mailcare.auth')->group(function () {
 
     Auth::routes();
 
-    Route::get('/statistics', function () {
-        return view('statistics.index');
-    });
+    Route::view('/statistics', 'statistics.index');
+    Route::view('/automations', 'automations.index')->middleware('can:automations.view');
 });

@@ -41,6 +41,9 @@
     <div class="navbar-end">
       <div class="navbar-tabs">
           <a class="navbar-item is-tab {{ Request::is('/', 'emails*') ? 'is-active' : '' }}" href="{{ url('/') }}">Emails</a>
+          @can('automations.view')
+            <a class="navbar-item is-tab {{ Request::is('automation') ? 'is-active' : '' }}" href="{{ url('/automations') }}">Automations</a>
+          @endcan
           <a class="navbar-item is-tab {{ Request::is('statistics') ? 'is-active' : '' }}" href="{{ url('/statistics') }}">Statistics</a>
       </div>
     </div>
@@ -66,13 +69,13 @@
           </p>
           <p>
             <a class="icon" href="https://mailcare.io">
-              <i class="fa fa-home"></i>
+              <i class="fas fa-home"></i>
             </a>
             <a class="icon" href="https://github.com/mailcare/mailcare">
-              <i class="fa fa-github"></i>
+              <i class="fab fa-github"></i>
             </a>
             <a class="icon" href="https://gitlab.com/mailcare/mailcare">
-              <i class="fa fa-gitlab"></i>
+              <i class="fab fa-gitlab"></i>
             </a>
           </p>
         </div>

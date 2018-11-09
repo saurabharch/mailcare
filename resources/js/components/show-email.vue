@@ -16,7 +16,7 @@
             <p class="heading">{{ email.created_at | ago }}</p>
             <p class="title">
               <button :class="classes" @click='toggle'>
-                <span class="icon is-small"><i class="fa fa-heart"></i></span>
+                <span class="icon is-small"><i class="fas fa-heart"></i></span>
               </button>
             </p>
           </div>

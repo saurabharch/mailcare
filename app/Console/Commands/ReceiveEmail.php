@@ -9,6 +9,7 @@ use App\Attachment;
 use App\Sender;
 use \PhpMimeMailParser\Parser;
 use Illuminate\Support\Facades\Storage;
+use App\Events\EmailReceived;
 
 class ReceiveEmail extends Command
 {
@@ -96,6 +97,8 @@ class ReceiveEmail extends Command
             $attachment->size_in_bytes = strlen($attachmentParsed->getMimePartStr());
             $attachment->save();
         }
+
+        event(new EmailReceived($email->fresh()));
     }
 
     /**

@@ -51,6 +51,7 @@ $factory->define(App\Email::class, function (Faker\Generator $faker) {
             return factory(App\Inbox::class)->create()->id;
         },
         'subject' => $faker->sentence(5),
+        'read' => null,
     ];
 });
 
@@ -73,5 +74,14 @@ $factory->define(App\Statistic::class, function (Faker\Generator $faker) {
         'emails_received' => $faker->numberBetween(10, 50),
         'inboxes_created' => $faker->numberBetween(2, 20),
         'storage_used' => $faker->numberBetween(10000000, 50000000),
+    ];
+});
+
+
+$factory->define(App\Automation::class, function (Faker\Generator $faker) {
+    return [
+        'id' => $faker->uuid(),
+        'title' => $faker->sentence(3),
+        'action_url' => $faker->url
     ];
 });
