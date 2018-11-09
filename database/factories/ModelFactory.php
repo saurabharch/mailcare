@@ -51,6 +51,7 @@ $factory->define(App\Email::class, function (Faker\Generator $faker) {
             return factory(App\Inbox::class)->create()->id;
         },
         'subject' => $faker->sentence(5),
+        'read' => null,
     ];
 });
 

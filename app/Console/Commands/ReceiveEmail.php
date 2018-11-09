@@ -98,7 +98,7 @@ class ReceiveEmail extends Command
             $attachment->save();
         }
 
-        event(new EmailReceived($email));
+        event(new EmailReceived($email->fresh()));
     }
 
     /**
