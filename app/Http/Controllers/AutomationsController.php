@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Automation;
 use Illuminate\Support\Str;
+use App\Http\Resources\AutomationResource;
 
 class AutomationsController extends Controller
 {
@@ -15,7 +16,7 @@ class AutomationsController extends Controller
      */
     public function index()
     {
-        return Automation::all();
+        return AutomationResource::collection(Automation::all());
     }
 
     /**

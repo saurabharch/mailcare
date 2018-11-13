@@ -3,7 +3,11 @@
 	<div>
 		<div class="card">
       <header class="card-header">
-        <p class="card-header-title" v-text="automation.title">
+        <p class="card-header-title">
+          {{ automation.title }}&#8239;
+          <span class="has-text-grey has-text-weight-normal is-size-7">
+            ({{ automation.emails_received }} emails received)
+          </span>
         </p>
         <a href="#" class="card-header-icon" aria-label="more options" @click.prevent='toggleOpen'>
           <span class="icon">
@@ -150,6 +154,7 @@
           has_attachments: false,
           action_url: '',
           action_secret_token: '',
+          emails_received: 0,
         }
       },
       dataOpen: {

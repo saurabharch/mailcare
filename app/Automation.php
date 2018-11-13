@@ -17,7 +17,10 @@ class Automation extends Model
         'action_secret_token',
         'emails_received',
     ];
-    protected $casts = ['has_attachments' => 'boolean'];
+    protected $casts = [
+        'emails_received' => 'int',
+        'has_attachments' => 'boolean',
+    ];
     public $incrementing = false;
     protected $keyType = 'string';
 }
