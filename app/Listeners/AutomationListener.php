@@ -44,24 +44,21 @@ class AutomationListener
             if (!empty($automation->subject)) {
                 if (preg_match('#'.$automation->subject.'#i', $event->email->subject)) {
                     $headers['X-MailCare-Subject'] = 'HIT';
-                }
-                else {
+                } else {
                     continue;
                 }
             }
             if (!empty($automation->sender)) {
                 if (preg_match('#'.$automation->sender.'#i', $event->email->sender->email)) {
                     $headers['X-MailCare-Sender'] = 'HIT';
-                }
-                else {
+                } else {
                     continue;
                 }
             }
             if (!empty($automation->inbox)) {
                 if (preg_match('#'.$automation->inbox.'#i', $event->email->inbox->email)) {
                     $headers['X-MailCare-Inbox'] = 'HIT';
-                }
-                else {
+                } else {
                     continue;
                 }
             }
