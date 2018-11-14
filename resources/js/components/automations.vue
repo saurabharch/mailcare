@@ -70,7 +70,7 @@
 
 			getAutomations() {
 				axios.get('/api/automations').then(function(response) {
-					this.automations = response.data
+					this.automations = response.data.data
 				}.bind(this));
 			}
 		}

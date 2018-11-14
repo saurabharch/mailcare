@@ -19,7 +19,7 @@ class AutomationPolicy
      */
     public function view(User $user)
     {
-        return config('mailcare.automations');
+        return config('mailcare.auth') && config('mailcare.automations');
     }
 
     /**
@@ -30,7 +30,7 @@ class AutomationPolicy
      */
     public function create(User $user)
     {
-        return config('mailcare.automations');
+        return config('mailcare.auth') && config('mailcare.automations');
     }
 
     /**
@@ -42,7 +42,7 @@ class AutomationPolicy
      */
     public function update(User $user)
     {
-        return config('mailcare.automations');
+        return config('mailcare.auth') && config('mailcare.automations');
     }
 
     /**
@@ -54,7 +54,7 @@ class AutomationPolicy
      */
     public function delete(User $user)
     {
-        return config('mailcare.automations');
+        return config('mailcare.auth') && config('mailcare.automations');
     }
 
     /**
@@ -66,7 +66,7 @@ class AutomationPolicy
      */
     public function restore(User $user)
     {
-        return config('mailcare.automations');
+        return config('mailcare.auth') && config('mailcare.automations');
     }
 
     /**
@@ -78,6 +78,6 @@ class AutomationPolicy
      */
     public function forceDelete(User $user)
     {
-        return config('mailcare.automations');
+        return config('mailcare.auth') && config('mailcare.automations');
     }
 }

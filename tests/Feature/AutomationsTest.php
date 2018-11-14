@@ -62,10 +62,23 @@ class AutomationsTest extends TestCase
         );
     }
 
-    public function testSubjectDoesMatch()
+    public function subjectProvider()
+    {
+        return [
+            ['My first email'],
+            ['my First Email'],
+            ['first'],
+            ['my.*email'],
+        ];
+    }
+
+    /**
+     * @dataProvider subjectProvider
+     */
+    public function testSubjectDoesMatch($subjectFilter)
     {
     	$automation = factory(Automation::class)->create([
-            'subject' => 'My first email',
+            'subject' => $subjectFilter,
     	]);
     	$email = factory(Email::class)->create([
             'subject' => 'My first email',
@@ -77,7 +90,20 @@ class AutomationsTest extends TestCase
 		$this->assertAutomationTriggered($automation, ['Subject'], $email);
     }
 
-    public function testSenderDoesMatch()
+    public function senderProvider()
+    {
+        return [
+            ['test@example\.com'],
+            ['TEST@example\.com'],
+            ['@example'],
+            ['test@.*\.com'],
+        ];
+    }
+
+    /**
+     * @dataProvider senderProvider
+     */
+    public function testSenderDoesMatch($senderFilter)
     {
         $sender = factory(Sender::class)->create(['email' => 'test@example.com']);
         $email = factory(Email::class)->create([
@@ -85,7 +111,7 @@ class AutomationsTest extends TestCase
         ]);
 
     	$automation = factory(Automation::class)->create([
-            'sender' => 'test@example.com',
+            'sender' => $senderFilter,
     	]);
 
 
@@ -95,7 +121,22 @@ class AutomationsTest extends TestCase
 		$this->assertAutomationTriggered($automation, ['Sender'], $email);
     }
 
-    public function testInboxDoesMatch()
+
+
+    public function inboxProvider()
+    {
+        return [
+            ['test@example\.com'],
+            ['TEST@example\.com'],
+            ['@example'],
+            ['test@.*\.com'],
+        ];
+    }
+
+    /**
+     * @dataProvider inboxProvider
+     */
+    public function testInboxDoesMatch($inboxFilter)
     {
         $inbox = factory(Inbox::class)->create(['email' => 'test@example.com']);
         $email = factory(Email::class)->create([
@@ -103,7 +144,7 @@ class AutomationsTest extends TestCase
         ]);
 
     	$automation = factory(Automation::class)->create([
-            'inbox' => 'test@example.com',
+            'inbox' => $inboxFilter,
     	]);
 
 
@@ -136,7 +177,7 @@ class AutomationsTest extends TestCase
 
     	$automation = factory(Automation::class)->create([
             'subject' => 'My first email',
-            'sender' => 'othertest@example.com',
+            'sender' => 'othertest@example\.com',
     	]);
     	$email = factory(Email::class)->create([
             'subject' => 'My first email',
@@ -172,10 +213,22 @@ class AutomationsTest extends TestCase
 		$this->assertAutomationTriggered($automation, [], $email);
     }
 
-    public function testSubjectDoesntMatch()
+    public function wrongSubjectProvider()
+    {
+        return [
+            ['My test email'],
+            ['test$'],
+            ['^My email$'],
+        ];
+    }
+
+    /**
+     * @dataProvider wrongSubjectProvider
+     */
+    public function testSubjectDoesntMatch($subjectFilter)
     {
     	$automation = factory(Automation::class)->create([
-            'subject' => 'My test email',
+            'subject' => $subjectFilter,
     	]);
     	$email = factory(Email::class)->create([
             'subject' => 'My first email',
@@ -187,7 +240,19 @@ class AutomationsTest extends TestCase
     	$this->assertAutomationNotTriggered($automation);
     }
 
-    public function testSenderDoesntMatch()
+    public function wrongSenderProvider()
+    {
+        return [
+            ['othertest@example\.com'],
+            ['example\.net$'],
+            ['mytest.*'],
+        ];
+    }
+
+    /**
+     * @dataProvider wrongSenderProvider
+     */
+    public function testSenderDoesntMatch($senderFilter)
     {
         $sender = factory(Sender::class)->create(['email' => 'test@example.com']);
         $email = factory(Email::class)->create([
@@ -195,7 +260,7 @@ class AutomationsTest extends TestCase
         ]);
 
     	$automation = factory(Automation::class)->create([
-            'sender' => 'othertest@example.com',
+            'sender' => $senderFilter,
     	]);
 
 
@@ -205,7 +270,19 @@ class AutomationsTest extends TestCase
     	$this->assertAutomationNotTriggered($automation);
     }
 
-    public function testInboxDoesntMatch()
+    public function wrongInboxProvider()
+    {
+        return [
+            ['othertest@example\.com'],
+            ['example\.net$'],
+            ['mytest.*'],
+        ];
+    }
+
+    /**
+     * @dataProvider wrongInboxProvider
+     */
+    public function testInboxDoesntMatch($inboxFilter)
     {
         $inbox = factory(Inbox::class)->create(['email' => 'test@example.com']);
         $email = factory(Email::class)->create([
@@ -213,7 +290,7 @@ class AutomationsTest extends TestCase
         ]);
 
     	$automation = factory(Automation::class)->create([
-            'inbox' => 'othertest@example.com',
+            'inbox' => $inboxFilter,
     	]);
 
 
