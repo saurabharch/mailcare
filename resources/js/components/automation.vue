@@ -96,6 +96,20 @@
                 </div>
                 <p class="help">Use this token to validate received payloads. It will be sent with the request in the X-Mailcare-Token HTTP header.</p>
               </div>
+
+                <div class="field">
+                  <p class="help">
+                    <strong>Filter rules:</strong>
+                    <ul>
+                      <li>- Each filter are case insensitive</li>
+                      <li>- An empty filter match all values</li>
+                      <li>- By default, "keyword" will match any values that contains keyword</li>
+                      <li>- You can use regex, like "^keyword$" will only match "keyword"</li>
+                      <li>- or "^Your .* invoice$" will match "Your October invoice"</li>
+                      <li>- As we use regex, all these characters ^ $ \ | { } [ ] ( ) ? # ! + * . should be escaped with \</li>
+                    </ul>
+                  </p>
+                </div>
             </div>
           </div>
 

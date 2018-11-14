@@ -42,22 +42,28 @@ class AutomationListener
             $headers['X-MailCare-Title'] = $automation->title;
 
             if (!empty($automation->subject)) {
-                if ($automation->subject != $event->email->subject) {
+                if (preg_match('#'.$automation->subject.'#i', $event->email->subject)) {
+                    $headers['X-MailCare-Subject'] = 'HIT';
+                }
+                else {
                     continue;
                 }
-                $headers['X-MailCare-Subject'] = 'HIT';
             }
             if (!empty($automation->sender)) {
-                if ($automation->sender != $event->email->sender->email) {
+                if (preg_match('#'.$automation->sender.'#i', $event->email->sender->email)) {
+                    $headers['X-MailCare-Sender'] = 'HIT';
+                }
+                else {
                     continue;
                 }
-                $headers['X-MailCare-Sender'] = 'HIT';
             }
             if (!empty($automation->inbox)) {
-                if ($automation->inbox != $event->email->inbox->email) {
+                if (preg_match('#'.$automation->inbox.'#i', $event->email->inbox->email)) {
+                    $headers['X-MailCare-Inbox'] = 'HIT';
+                }
+                else {
                     continue;
                 }
-                $headers['X-MailCare-Inbox'] = 'HIT';
             }
             if ($automation->has_attachments) {
                 if ($event->email->attachments->count() == 0) {
