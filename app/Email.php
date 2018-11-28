@@ -5,9 +5,12 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Uuids;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Email extends Model
 {
+    use SoftDeletes;
+
     public $incrementing = false;
 
     protected $casts = [

@@ -26,4 +26,9 @@ class EmailsController extends ApiController
     {
         return $emailResponse->make($email);
     }
+
+    public function destroy(Email $email)
+    {
+        $email->delete();
+    }
 }
