@@ -113,7 +113,7 @@ For example, to authorize as demo@torm.xyz / p@55w0rd the client would send: Aut
 
 ## Emails Resource [/emails]
 
-### List of emails [GET /emails{?limit}{?inbox}{?sender}{?search}{?unread}{?favorite}]
+### List of emails [GET /emails{?page}{?limit}{?inbox}{?sender}{?search}{?unread}{?favorite}]
 
 + Parameters
     + page: `2` (number, optional) - Page requested
@@ -126,8 +126,10 @@ For example, to authorize as demo@torm.xyz / p@55w0rd the client would send: Aut
     + unread: `true` (boolean, optional) - Filter only by unread
     + favorite: `true` (boolean, optional) - Filter only by favorite
 + Request
+
     + Headers
-        Accept: application/vnd.mailcare.v1+json
+
+            Accept: application/vnd.mailcare.v1+json
 
 + Response 200 (application/vnd.mailcare.v1+json)
     + Attributes
@@ -144,16 +146,20 @@ For example, to authorize as demo@torm.xyz / p@55w0rd the client would send: Aut
 
 ### Get an email [GET]
 + Request
+
     + Headers
-        Accept: application/vnd.mailcare.v1+json
+
+            Accept: application/vnd.mailcare.v1+json
 
 + Response 200 (application/vnd.mailcare.v1+json)
     + Attributes
         + data (Email)
 
 + Request
+
     + Headers
-        Accept: text/plain
+
+            Accept: text/plain
 
 + Response 200 (text/plain)
 
@@ -161,8 +167,10 @@ For example, to authorize as demo@torm.xyz / p@55w0rd the client would send: Aut
         Follow this link to continue: https://mailcare.io
         
 + Request
+
     + Headers
-        Accept: text/html
+
+            Accept: text/html
 
 + Response 200 (text/html)
 
@@ -174,8 +182,10 @@ For example, to authorize as demo@torm.xyz / p@55w0rd the client would send: Aut
         </div>
 
 + Request
+
     + Headers
-        Accept: message/rfc2822
+
+            Accept: message/rfc2822
 
 + Response 200 (message/rfc2822)
 
@@ -218,18 +228,31 @@ For example, to authorize as demo@torm.xyz / p@55w0rd the client would send: Aut
         }
 
 
+### Delete an email [DELETE /emails/{id}]
++ Request
+
+    + Headers
+
+            Accept: application/vnd.mailcare.v1+json
+
++ Response 200 (application/vnd.mailcare.v1+json)
+
 
 ### Favorite an email [POST /emails/{id}/favorites]
 + Request
+
     + Headers
-        Accept: application/vnd.mailcare.v1+json
+
+            Accept: application/vnd.mailcare.v1+json
 
 + Response 200 (application/vnd.mailcare.v1+json)
 
 ### Unfavorite an email [DELETE /emails/{id}/favorites]
 + Request
+
     + Headers
-        Accept: application/vnd.mailcare.v1+json
+
+            Accept: application/vnd.mailcare.v1+json
 
 + Response 200 (application/vnd.mailcare.v1+json)
 
@@ -239,8 +262,10 @@ For example, to authorize as demo@torm.xyz / p@55w0rd the client would send: Aut
 
 ### List of statistics [GET]
 + Request
+
     + Headers
-        Accept: application/vnd.mailcare.v1+json
+
+            Accept: application/vnd.mailcare.v1+json
 
 + Response 200 (application/vnd.mailcare.v1+json)
     + Attributes
@@ -255,15 +280,17 @@ Contact the support to activate the automation feature.
 
 ### List of automations [GET]
 + Request
+
     + Headers
-        Accept: application/vnd.mailcare.v1+json
+
+            Accept: application/vnd.mailcare.v1+json
 
 + Response 200 (application/vnd.mailcare.v1+json)
     + Attributes
         + data (array[Automation])
 
 ### Create an automation [POST /automations]
-+ Parameters
++ Attributes
     + title: `Save pdf invoices` (string) - Title of the automation
     + action_url: `https://example.com/webhooks/save-pdf-invoices` (string) - URL that will be called
     + sender: `shop@example.com` (string, optional) - Sender that should match
@@ -272,13 +299,15 @@ Contact the support to activate the automation feature.
     + has_attachments: `true` (boolean, optional) - Email should have at least one attachment
     + action_secret_token: `SECRET12345$` (string) - Use this token to validate received payloads
 + Request
+
     + Headers
-        Accept: application/vnd.mailcare.v1+json
+
+            Accept: application/vnd.mailcare.v1+json
 
 + Response 200 (application/vnd.mailcare.v1+json)
 
 ### Update an automation [PUT /automations/{id}]
-+ Parameters
++ Attributes
     + title: `Save pdf invoices` (string) - Title of the automation
     + action_url: `https://example.com/webhooks/save-pdf-invoices` (string) - URL that will be called
     + sender: `shop@example.com` (string, optional) - Sender that should match
@@ -287,15 +316,19 @@ Contact the support to activate the automation feature.
     + has_attachments: `true` (boolean, optional) - Email should have at least one attachment
     + action_secret_token: `SECRET12345$` (string) - Use this token to validate received payloads
 + Request
+
     + Headers
-        Accept: application/vnd.mailcare.v1+json
+
+            Accept: application/vnd.mailcare.v1+json
 
 + Response 200 (application/vnd.mailcare.v1+json)
 
 ### Delete an automation [DELETE /automations/{id}]
 + Request
+
     + Headers
-        Accept: application/vnd.mailcare.v1+json
+
+            Accept: application/vnd.mailcare.v1+json
 
 + Response 200 (application/vnd.mailcare.v1+json)
 
@@ -305,14 +338,16 @@ This webhook will be called only if the automation defined above match all the f
 
 ### Automation Webhook [POST]
 + Request
+
     + Headers
-        Accept: application/vnd.mailcare.v1+json
-        X-MailCare-Title: Save pdf invoices
-        X-MailCare-Subject: HIT
-        X-MailCare-Sender: HIT
-        X-MailCare-Inbox: HIT
-        X-MailCare-Has-Attachments: HIT
-        X-MailCare-Secret-Token: SECRET12345$
+    
+            Accept: application/vnd.mailcare.v1+json
+            X-MailCare-Title: Save pdf invoices
+            X-MailCare-Subject: HIT
+            X-MailCare-Sender: HIT
+            X-MailCare-Inbox: HIT
+            X-MailCare-Has-Attachments: HIT
+            X-MailCare-Secret-Token: SECRET12345$
 
 + Response 200 (application/vnd.mailcare.v1+json)
     + Attributes
