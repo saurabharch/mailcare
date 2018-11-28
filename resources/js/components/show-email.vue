@@ -15,7 +15,7 @@
           <div>
             <p class="heading">{{ email.created_at | ago }}</p>
             <p class="title">
-              <button :class="classes" @click='toggle'>
+              <button dusk="favorite-button" :class="classes" @click='toggle'>
                 <span class="icon is-small"><i class="fas fa-heart"></i></span>
               </button>
             </p>
@@ -24,6 +24,14 @@
       </nav>
       <hr>
       <show-email-body :id="id" :email="email"></show-email-body>
+      <div class="buttons has-addons is-right">
+        <a dusk="delete-button" class="button is-danger is-outlined" :class="classesDeleting" @click="deleteEmail">
+          <span class="icon is-small">
+            <i class="fas fa-times"></i>
+          </span>
+          <span>Delete</span>
+        </a>
+      </div>
     </div>
   </div>
 </template>
@@ -39,12 +47,16 @@
         data() {
           return {
             email: null,
+            isDeleting: false,
           }
         },
 
         computed: {
           classes() {
             return ['button', this.email.favorite ? 'is-primary' : '']
+          },
+          classesDeleting() {
+            return [this.isDeleting ? 'is-loading' : '']
           }
         },
 
@@ -74,6 +86,11 @@
               this.email.favorite = true;
 
             }
+          },
+          deleteEmail() {
+              this.isDeleting = true
+              axios.delete('/api/emails/' + this.id)
+              window.location = "/"
           }
         }
     }

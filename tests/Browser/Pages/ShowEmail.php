@@ -67,7 +67,12 @@ class ShowEmail extends BasePage
 
     public function favorite(Browser $browser)
     {
-        $browser->click('button');
+        $browser->click('@favorite-button');
+    }
+
+    public function delete(Browser $browser)
+    {
+        $browser->click('@delete-button');
     }
 
     public function elements()

@@ -54,7 +54,7 @@
           return {
             bodyTypes: [
                 {label: 'Html', icon: 'fa-image', accept: 'text/html', br: false},
-                {label: 'Text', icon: 'fa-file-text-o', accept: 'text/plain', br: true},
+                {label: 'Text', icon: 'fa-align-left', accept: 'text/plain', br: true},
                 {label: 'Raw', icon: 'fa-sticky-note', accept: 'message/rfc2822', br: true}
                 ],
             body: null,
@@ -71,43 +71,43 @@
           {
             if (contentType.startsWith("image"))
             {
-              return ['fa', 'fa-image-o']
+              return ['fa', 'fa-file-image']
             }
             else if (contentType.startsWith("audio"))
             {
-              return ['fa', 'fa-audio-o']
+              return ['fa', 'fa-file-audio']
             }
             else if (contentType.startsWith("text"))
             {
-              return ['fa', 'fa-text-o']
+              return ['fa', 'fa-file-alt']
             }
             else if (contentType.startsWith("video"))
             {
-              return ['fa', 'fa-video-o']
+              return ['fa', 'fa-file-video']
             }
             else if (contentType.includes("excel") || contentType.includes("spreadsheet"))
             {
-              return ['fa', 'fa-excel-o']
+              return ['fa', 'fa-file-excel']
             }
             else if (contentType.includes("powerpoint") || contentType.includes("presentation"))
             {
-              return ['fa', 'fa-powerpoint-o']
+              return ['fa', 'fa-file-powerpoint']
             }
             else if (contentType.includes("zip"))
             {
-              return ['fa', 'fa-archive-o']
+              return ['fa', 'fa-file-archive']
             }
             else if (contentType.includes("pdf"))
             {
-              return ['fa', 'fa-pdf-o']
+              return ['fa', 'fa-file-pdf']
             }
             else if (contentType.includes("word"))
             {
-              return ['fa', 'fa-word-o']
+              return ['fa', 'fa-file-word']
             }
             else
             {
-              return ['fa', 'fa-file-o']
+              return ['fa', 'fa-file']
             }
           },
 
