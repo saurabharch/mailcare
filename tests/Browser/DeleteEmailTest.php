@@ -17,6 +17,7 @@ class DeleteEmailTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($email) {
             $browser->visit(new ShowEmail($email))
+            		->assertSeeEmail()
                     ->delete()
                     ->assertPathIs('/');;
         });
