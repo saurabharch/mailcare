@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\Uuids;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Email extends Model
 {
@@ -28,6 +29,19 @@ class Email extends Model
     ];
 
     use Uuids;
+
+    public static function boot()
+    {
+        parent::boot();
+        static::deleting(function($email){
+            if ($email->isForceDeleting())
+            {
+                Storage::delete($email->path());
+                $email->attachments()->delete();
+            }
+        });
+
+    }
 
     public function sender()
     {
