@@ -21,10 +21,10 @@ class CleanEmailsTest extends TestCase
     {
         $email = factory(Email::class)->create();
         $emailSoftDeleted2MonthsAgo = factory(Email::class)->create([
-            'deleted_at' => Carbon::now()->subMonths(2)->toDateString()
+            'deleted_at' => Carbon::now()->subMonths(2)
         ]);
         $emailSoftDeleted10DaysAgo = factory(Email::class)->create([
-            'deleted_at' => Carbon::now()->subDays(10)->toDateString()
+            'deleted_at' => Carbon::now()->subDays(10)
         ]);
 
         $this->assertTrue($email->exists);
@@ -50,7 +50,7 @@ class CleanEmailsTest extends TestCase
             ['file' => 'tests/storage/email_with_attachment.eml']
         )->assertExitCode(0);
         $email = Email::first();
-        $email->deleted_at = Carbon::now()->subMonths(2)->toDateString();
+        $email->deleted_at = Carbon::now()->subMonths(2);
         $email->save();
 
         $this->assertCount(1, Email::withTrashed()->get());
@@ -73,7 +73,7 @@ class CleanEmailsTest extends TestCase
             ['file' => 'tests/storage/email_with_attachment.eml']
         )->assertExitCode(0);
         $email = Email::first();
-        $email->deleted_at = Carbon::now()->subMonths(2)->toDateString();
+        $email->deleted_at = Carbon::now()->subMonths(2);
         $email->save();
 
         $this->assertCount(1, Email::withTrashed()->get());
