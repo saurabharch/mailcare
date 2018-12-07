@@ -18,7 +18,7 @@ class DeleteEmailTest extends TestCase
         $this->artisan('mailcare:email-receive', ['file' => 'tests/storage/email_with_attachment.eml']);
 
         $this->assertCount(1, Email::all());
-        $this->assertCount(1, Email::first()->attachments());
+        $this->assertCount(1, Email::first()->attachments()->get());
 
         $email = Email::first();
         $response = $this->json('DELETE', 'api/emails/'.$email->id);
@@ -26,6 +26,6 @@ class DeleteEmailTest extends TestCase
         $response->assertStatus(200);
         $this->assertCount(0, Email::all());
         $this->assertCount(1, Email::withTrashed()->get());
-        $this->assertCount(1, Email::withTrashed()->first()->attachments());
+        $this->assertCount(1, Email::withTrashed()->first()->attachments()->get());
     }
 }
