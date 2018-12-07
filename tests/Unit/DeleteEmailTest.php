@@ -16,13 +16,16 @@ class DeleteEmailTest extends TestCase
     public function it_can_soft_delete_email()
     {
         $email = factory(Email::class)->create();
+        $this->artisan('mailcare:email-receive', ['file' => 'tests/storage/email_with_attachment.eml']);
 
         $this->assertCount(1, Email::all());
+        $this->assertCount(1, Email::first()->attachments());
 
         $response = $this->json('DELETE', 'api/emails/'.$email->id);
 
         $response->assertStatus(200);
         $this->assertCount(0, Email::all());
         $this->assertCount(1, Email::withTrashed()->get());
+        $this->assertCount(1, Email::withTrashed()->first()->attachments());
     }
 }
