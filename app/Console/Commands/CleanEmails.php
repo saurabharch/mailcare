@@ -41,7 +41,7 @@ class CleanEmails extends Command
     {
         $date = Carbon::now()->subMonth();
 
-        $emails = Email::onlyTrashed()->where('deleted_at', '<',  $date)->get();
+        $emails = Email::onlyTrashed()->where('deleted_at', '<', $date)->get();
         $emails->each->forceDelete();
     }
 }
