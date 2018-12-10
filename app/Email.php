@@ -33,14 +33,12 @@ class Email extends Model
     public static function boot()
     {
         parent::boot();
-        static::deleting(function($email){
-            if ($email->isForceDeleting())
-            {
+        static::deleting(function ($email) {
+            if ($email->isForceDeleting()) {
                 Storage::delete($email->path());
                 $email->attachments()->delete();
             }
         });
-
     }
 
     public function sender()

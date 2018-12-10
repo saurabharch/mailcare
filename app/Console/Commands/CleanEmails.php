@@ -20,7 +20,7 @@ class CleanEmails extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Clean emails soft deleted';
 
     /**
      * Create a new command instance.
@@ -39,9 +39,9 @@ class CleanEmails extends Command
      */
     public function handle()
     {
-        $date = Carbon::now()->subMonth()->toDateString();
+        $date = Carbon::now()->subMonth();
 
-        $emails = Email::onlyTrashed()->where('deleted_at', '<',  $date)->get();
+        $emails = Email::onlyTrashed()->where('deleted_at', '<', $date)->get();
         $emails->each->forceDelete();
     }
 }
