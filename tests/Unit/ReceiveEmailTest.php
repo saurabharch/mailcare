@@ -12,9 +12,10 @@ class ReceiveEmailTest extends TestCase
 
     public function test_system_can_receive_email_from_file()
     {
-        $exitCode = Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
-
-        $this->assertEquals(0, $exitCode);
+        $this->artisan(
+        	'mailcare:email-receive',
+        	['file' => 'tests/storage/email_without_attachment.eml']
+        )->assertExitCode(0);
         $this->assertDatabaseHas('emails', ['subject' => 'My first email']);
     }
 }
