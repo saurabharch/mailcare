@@ -29,4 +29,9 @@ class Statistic extends Model
     {
         return self::sum('storage_used');
     }
+
+    public static function storageUsedBetween($date1, $date2): int
+    {
+        return self::whereBetween('created_at', [$date1, $date2])->sum('storage_used');
+    }
 }

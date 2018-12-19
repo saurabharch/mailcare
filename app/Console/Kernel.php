@@ -28,6 +28,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('mailcare:build-statistics')->daily();
         $schedule->command('mailcare:build-statistics '.Carbon::now()->toDateString())->everyFiveMinutes();
         $schedule->command('mailcare:clean-emails')->hourly();
+        $schedule->command('mailcare:auto-soft-delete-emails')->daily();
     }
 
     /**
