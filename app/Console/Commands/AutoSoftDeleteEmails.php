@@ -45,8 +45,8 @@ class AutoSoftDeleteEmails extends Command
 
         Email::where('favorite', false)->oldest()->chunkById(100, function ($emails) use ($size) {
 
-            foreach ($emails as $email) {
-
+            foreach ($emails as $email)
+            {
                 if ($size <= 0) {
                     return false;
                 }
@@ -71,7 +71,7 @@ class AutoSoftDeleteEmails extends Command
 
         if (empty($storageUsedPeriod1) || empty($storageUsedPeriod2)) {
             return 0;
-        } 
+        }
 
         $pourcentage = (($storageUsedPeriod2 - $storageUsedPeriod1) / $storageUsedPeriod1);
         $calculatedStorage = $storageUsedPeriod2 + ($pourcentage * $storageUsedPeriod2);
