@@ -8,21 +8,21 @@ use App\Statistic;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
-class AutoSoftDeleteEmails extends Command
+class AutoDelete extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'mailcare:auto-soft-delete-emails';
+    protected $signature = 'mailcare:delete';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Automatically soft delete emails according the previous usage';
 
     /**
      * Create a new command instance.
@@ -41,7 +41,7 @@ class AutoSoftDeleteEmails extends Command
      */
     public function handle()
     {
-        $size = $this->getSizeToDelete();
+        $size = $this->getCalculatedSize();
 
         Email::where('favorite', false)->oldest()->chunkById(100, function ($emails) use ($size) {
 
@@ -57,7 +57,7 @@ class AutoSoftDeleteEmails extends Command
         });
     }
 
-    public function getSizeToDelete()
+    public function getCalculatedSize()
     {
         $storageUsedPeriod1 = Statistic::storageUsedBetween(
             Carbon::now()->subMonths(2),
@@ -76,11 +76,15 @@ class AutoSoftDeleteEmails extends Command
         $pourcentage = (($storageUsedPeriod2 - $storageUsedPeriod1) / $storageUsedPeriod1);
         $calculatedStorage = $storageUsedPeriod2 + ($pourcentage * $storageUsedPeriod2);
 
-        if ($this->getDiskFreeSpace() > $calculatedStorage) {
+        $storageToDelete = $calculatedStorage - Email::onlyTrashed()->sum('size_in_bytes');
+
+        $delete = $this->getDiskFreeSpace() - $storageToDelete;
+
+        if ($delete > 0) {
             return 0;
         }
 
-        return $calculatedStorage;
+        return (int) $delete * -1;
     }
 
     public function getDiskFreeSpace()
