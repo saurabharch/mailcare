@@ -7,10 +7,12 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use App\Statistic;
 use App\Email;
+use App\Traits\StorageForHuman;
 
 class StatisticsTest extends TestCase
 {
     use DatabaseMigrations;
+    use StorageForHuman;
 
     /**
      * @test
@@ -34,9 +36,9 @@ class StatisticsTest extends TestCase
 
         $response = $this->json('GET', 'api/statistics');
 
+        $storageUsed = disk_total_space(storage_path()) - disk_free_space(storage_path());
         $response
             ->assertStatus(200)
-
             ->assertJsonFragment([
                 'emails_received' => 10,
                 'inboxes_created' => 2,
@@ -54,9 +56,9 @@ class StatisticsTest extends TestCase
             ->assertJsonFragment([
                 'emails_received' => 10 + 5,
                 'inboxes_created' => 2 + 4,
-                'storage_used' => 20 + 30,
+                'storage_used' => $storageUsed,
                 'emails_deleted' => 3,
-                'storage_used_for_human' => 20 + 30 . '.00B',
+                'storage_used_for_human' => $this->humanFileSize($storageUsed),
             ]);
     }
 

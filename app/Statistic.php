@@ -34,7 +34,7 @@ class Statistic extends Model
 
     public static function storageUsed(): int
     {
-        return self::sum('storage_used');
+        return disk_total_space(storage_path()) - disk_free_space(storage_path());
     }
 
     public static function emailsDeleted(): int
