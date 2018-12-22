@@ -50,7 +50,7 @@ class BuildStatistics extends Command
 
         $emailsReceived = Email::whereDate('created_at', $date)->count();
         $inboxesCreated = Inbox::whereDate('created_at', $date)->count();
-        $storageUsed = Email::whereDate('created_at', $date)->sum('size_in_bytes');
+        $storageUsed = disk_total_space(storage_path()) - disk_free_space(storage_path());
         $emailsDeleted = Email::onlyTrashed()->whereDate('deleted_at', $date)->count();
 
         $statistic = Statistic::updateOrCreate(

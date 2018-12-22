@@ -14,6 +14,11 @@ class StatisticsTest extends TestCase
     use DatabaseMigrations;
     use StorageForHuman;
 
+    public function getStorageUsed()
+    {
+        return disk_total_space(storage_path()) - disk_free_space(storage_path());
+    }
+
     /**
      * @test
      */
@@ -36,7 +41,6 @@ class StatisticsTest extends TestCase
 
         $response = $this->json('GET', 'api/statistics');
 
-        $storageUsed = disk_total_space(storage_path()) - disk_free_space(storage_path());
         $response
             ->assertStatus(200)
             ->assertJsonFragment([
@@ -56,9 +60,9 @@ class StatisticsTest extends TestCase
             ->assertJsonFragment([
                 'emails_received' => 10 + 5,
                 'inboxes_created' => 2 + 4,
-                'storage_used' => $storageUsed,
+                'storage_used' => $this->getStorageUsed(),
                 'emails_deleted' => 3,
-                'storage_used_for_human' => $this->humanFileSize($storageUsed),
+                'storage_used_for_human' => $this->humanFileSize($this->getStorageUsed()),
             ]);
     }
 
@@ -73,7 +77,7 @@ class StatisticsTest extends TestCase
             'created_at' => Carbon::yesterday()->toDateString(),
             'emails_received' => 0,
             'inboxes_created' => 0,
-            'storage_used' => 0,
+            'storage_used' => $this->getStorageUsed(),
             'emails_deleted' => 0,
         ]);
     }
@@ -101,7 +105,7 @@ class StatisticsTest extends TestCase
             'created_at' => Carbon::now()->toDateString(),
             'emails_received' => 1,
             'inboxes_created' => 2,
-            'storage_used' => 684,
+            'storage_used' => $this->getStorageUsed(),
             'emails_deleted' => 1,
         ]);
     }
