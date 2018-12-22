@@ -45,8 +45,7 @@ class AutoDelete extends Command
 
         Email::where('favorite', false)->oldest()->chunkById(100, function ($emails) use ($size) {
 
-            foreach ($emails as $email)
-            {
+            foreach ($emails as $email) {
                 if ($size <= 0) {
                     return false;
                 }
