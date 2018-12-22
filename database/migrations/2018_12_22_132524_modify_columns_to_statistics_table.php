@@ -14,10 +14,10 @@ class ModifyColumnsToStatisticsTable extends Migration
     public function up()
     {
         Schema::table('statistics', function (Blueprint $table) {
-            $table->unsignedInteger('emails_received')->change();
-            $table->unsignedInteger('inboxes_created')->change();
-            $table->unsignedBigInteger('storage_used')->change();
-            $table->unsignedInteger('emails_deleted')->change();
+            $table->integer('emails_received')->unsigned()->change();
+            $table->integer('inboxes_created')->unsigned()->change();
+            $table->bigInteger('storage_used')->unsigned()->change();
+            $table->integer('emails_deleted')->unsigned()->change();
         });
     }
 
@@ -29,10 +29,7 @@ class ModifyColumnsToStatisticsTable extends Migration
     public function down()
     {
         Schema::table('statistics', function (Blueprint $table) {
-            $table->integer('emails_received')->change();
-            $table->integer('inboxes_created')->change();
-            $table->integer('storage_used')->change();
-            $table->integer('emails_deleted')->change();
+            //
         });
     }
 }
