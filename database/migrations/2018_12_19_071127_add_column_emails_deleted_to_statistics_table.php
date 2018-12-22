@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnDeleteAtToEmailsTable extends Migration
+class AddColumnEmailsDeletedToStatisticsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddColumnDeleteAtToEmailsTable extends Migration
      */
     public function up()
     {
-        Schema::table('emails', function (Blueprint $table) {
-            $table->softDeletes();
+        Schema::table('statistics', function (Blueprint $table) {
+            $table->integer('emails_deleted')->default(0);
         });
     }
 
@@ -25,8 +25,8 @@ class AddColumnDeleteAtToEmailsTable extends Migration
      */
     public function down()
     {
-        Schema::table('emails', function (Blueprint $table) {
-            $table->dropSoftDeletes();
+        Schema::table('statistics', function (Blueprint $table) {
+             $table->dropColumn('emails_deleted');
         });
     }
 }

@@ -51,6 +51,7 @@ class BuildStatistics extends Command
         $emailsReceived = Email::whereDate('created_at', $date)->count();
         $inboxesCreated = Inbox::whereDate('created_at', $date)->count();
         $storageUsed = Email::whereDate('created_at', $date)->sum('size_in_bytes');
+        $emailsDeleted = Email::onlyTrashed()->whereDate('deleted_at', $date)->count();
 
         $statistic = Statistic::updateOrCreate(
             ['created_at' => $date],
@@ -58,6 +59,7 @@ class BuildStatistics extends Command
                 'emails_received' => $emailsReceived,
                 'inboxes_created' => $inboxesCreated,
                 'storage_used' => $storageUsed,
+                'emails_deleted' => $emailsDeleted,
             ]
         );
 
