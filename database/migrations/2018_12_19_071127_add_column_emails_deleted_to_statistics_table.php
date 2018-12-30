@@ -14,7 +14,8 @@ class AddColumnEmailsDeletedToStatisticsTable extends Migration
     public function up()
     {
         Schema::table('statistics', function (Blueprint $table) {
-            $table->integer('emails_deleted')->default(0);
+            $table->bigInteger('cumulative_storage_used')->unsigned()->default(0);
+            $table->integer('emails_deleted')->unsigned()->default(0);
         });
     }
 

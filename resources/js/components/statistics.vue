@@ -79,7 +79,7 @@
                   labels: _.map(this.data, 'created_at'),
                   datasets: [{
                     label: 'Storage used by date',
-                    data: _.map(this.data, 'storage_used'),
+                    data: _.map(this.data, 'cumulative_storage_used'),
                     borderColor: '#1f77b4',
                     backgroundColor: '#7693eb'
                   }]

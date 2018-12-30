@@ -28,6 +28,7 @@ class StatisticsTest extends TestCase
             'emails_received' => 10,
             'inboxes_created' => 2,
             'storage_used' => 20,
+            'cumulative_storage_used' => 50,
             'emails_deleted' => 0,
             'created_at' => Carbon::parse('20 august 2017')->toDateString(),
         ]);
@@ -35,6 +36,7 @@ class StatisticsTest extends TestCase
             'emails_received' => 5,
             'inboxes_created' => 4,
             'storage_used' => 30,
+            'cumulative_storage_used' => 30,
             'emails_deleted' => 3,
             'created_at' => Carbon::parse('11 february 2017')->toDateString(),
         ]);
@@ -47,6 +49,7 @@ class StatisticsTest extends TestCase
                 'emails_received' => 10,
                 'inboxes_created' => 2,
                 'storage_used' => 20,
+                'cumulative_storage_used' => 50,
                 'emails_deleted' => 0,
                 'created_at' => '2017-08-20',
             ])
@@ -54,6 +57,7 @@ class StatisticsTest extends TestCase
                 'emails_received' => 5,
                 'inboxes_created' => 4,
                 'storage_used' => 30,
+                'cumulative_storage_used' => 30,
                 'emails_deleted' => 3,
                 'created_at' => '2017-02-11',
             ])
@@ -77,7 +81,8 @@ class StatisticsTest extends TestCase
             'created_at' => Carbon::yesterday()->toDateString(),
             'emails_received' => 0,
             'inboxes_created' => 0,
-            'storage_used' => $this->getStorageUsed(),
+            'storage_used' => 0,
+            'cumulative_storage_used' => $this->getStorageUsed(),
             'emails_deleted' => 0,
         ]);
     }
@@ -105,7 +110,8 @@ class StatisticsTest extends TestCase
             'created_at' => Carbon::now()->toDateString(),
             'emails_received' => 1,
             'inboxes_created' => 2,
-            'storage_used' => $this->getStorageUsed(),
+            'storage_used' => 684,
+            'cumulative_storage_used' => $this->getStorageUsed(),
             'emails_deleted' => 1,
         ]);
     }

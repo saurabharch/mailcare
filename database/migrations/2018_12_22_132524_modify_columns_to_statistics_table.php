@@ -17,7 +17,6 @@ class ModifyColumnsToStatisticsTable extends Migration
             $table->integer('emails_received')->unsigned()->change();
             $table->integer('inboxes_created')->unsigned()->change();
             $table->bigInteger('storage_used')->unsigned()->change();
-            $table->integer('emails_deleted')->unsigned()->change();
         });
     }
 

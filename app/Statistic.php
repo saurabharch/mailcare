@@ -12,32 +12,34 @@ class Statistic extends Model
         'emails_received',
         'inboxes_created',
         'storage_used',
+        'cumulative_storage_used',
         'emails_deleted',
     ];
     protected $casts = [
         'emails_received' => 'int',
         'inboxes_created' => 'int',
         'storage_used' => 'int',
+        'cumulative_storage_used' => 'int',
         'emails_deleted' => 'int',
     ];
     protected $hidden = ['id'];
 
-    public static function emailsReceived(): int
+    public static function metaEmailsReceived(): int
     {
         return self::sum('emails_received');
     }
 
-    public static function inboxesCreated(): int
+    public static function metaInboxesCreated(): int
     {
         return self::sum('inboxes_created');
     }
 
-    public static function storageUsed(): int
+    public static function metaStorageUsed(): int
     {
         return disk_total_space(storage_path()) - disk_free_space(storage_path());
     }
 
-    public static function emailsDeleted(): int
+    public static function metaEmailsDeleted(): int
     {
         return self::sum('emails_deleted');
     }
