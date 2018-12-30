@@ -6,21 +6,21 @@ use Illuminate\Console\Command;
 use App\Email;
 use Carbon\Carbon;
 
-class CleanEmails extends Command
+class AutoClean extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'mailcare:clean-emails';
+    protected $signature = 'mailcare:clean';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Clean emails soft deleted';
+    protected $description = 'Clean emails soft deleted (emails and attachments in the database and files)';
 
     /**
      * Create a new command instance.

@@ -24,7 +24,8 @@
 
 
 <div class="container">
-  <canvas id="myChart"></canvas>
+  <canvas id="emails-chart"></canvas>
+  <canvas id="storage-chart"></canvas>
 </div>
 
   </div>
@@ -50,17 +51,37 @@
             this.meta = response.data.meta
             this.data = response.data.data
 
-            var ctx = document.getElementById("myChart").getContext('2d');
+            var ctxEmails = document.getElementById("emails-chart").getContext('2d');
 
-            var myChart = new Chart(ctx, {
+            var emailsChart = new Chart(ctxEmails, {
                 type: 'line',
                 data: {
                   labels: _.map(this.data, 'created_at'),
                   datasets: [{
+                    label: 'Emails deleted by date',
+                    data: _.map(this.data, 'emails_deleted'),
+                    borderColor: '#ff0000',
+                    backgroundColor: '#ff4d4d'
+                  },{
                     label: 'Emails received by date',
                     data: _.map(this.data, 'emails_received'),
                     borderColor: '#e65722',
-                    backgroundColor: '#FDBCB4'
+                    backgroundColor: '#ee8b67'
+                  }]
+                },
+            });
+
+            var ctxStorage = document.getElementById("storage-chart").getContext('2d');
+
+            var storageChart = new Chart(ctxStorage, {
+                type: 'bar',
+                data: {
+                  labels: _.map(this.data, 'created_at'),
+                  datasets: [{
+                    label: 'Storage used by date',
+                    data: _.map(this.data, 'cumulative_storage_used'),
+                    borderColor: '#1f77b4',
+                    backgroundColor: '#7693eb'
                   }]
                 },
             });

@@ -26,7 +26,7 @@ class AddColumnDeleteAtToEmailsTable extends Migration
     public function down()
     {
         Schema::table('emails', function (Blueprint $table) {
-            //
+            $table->dropSoftDeletes();
         });
     }
 }

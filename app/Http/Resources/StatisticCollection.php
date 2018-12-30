@@ -15,10 +15,11 @@ class StatisticCollection extends ResourceCollection
         return [
             'data' => $this->collection,
             'meta' => [
-                'emails_received' => Statistic::emailsReceived(),
-                'inboxes_created' => Statistic::inboxesCreated(),
-                'storage_used_for_human' => $this->humanFileSize(Statistic::storageUsed()),
-                'storage_used' => Statistic::storageUsed(),
+                'emails_received' => Statistic::metaEmailsReceived(),
+                'inboxes_created' => Statistic::metaInboxesCreated(),
+                'storage_used_for_human' => $this->humanFileSize(Statistic::metaStorageUsed()),
+                'storage_used' => Statistic::metaStorageUsed(),
+                'emails_deleted' => Statistic::metaEmailsDeleted(),
             ],
         ];
     }

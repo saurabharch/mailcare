@@ -1,54 +1,54 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Command;
 
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Email;
 use App\Attachment;
-use App\Jobs\CleanEmails;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
-class CleanEmailsTest extends TestCase
+class AutoCleanTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     /**
      * @test
      */
-    public function it_can_clean_emails()
+    public function cmd_clean_emails()
     {
         $email = factory(Email::class)->create();
-        $emailSoftDeleted2MonthsAgo = factory(Email::class)->create([
+        $emailDeleted2MonthsAgo = factory(Email::class)->create([
             'deleted_at' => Carbon::now()->subMonths(2)
         ]);
-        $emailSoftDeleted10DaysAgo = factory(Email::class)->create([
+        $emailDeleted10DaysAgo = factory(Email::class)->create([
             'deleted_at' => Carbon::now()->subDays(10)
         ]);
 
         $this->assertTrue($email->exists);
-        $this->assertTrue($emailSoftDeleted2MonthsAgo->exists);
-        $this->assertTrue($emailSoftDeleted10DaysAgo->exists);
+        $this->assertTrue($emailDeleted2MonthsAgo->exists);
+        $this->assertTrue($emailDeleted10DaysAgo->exists);
         $this->assertCount(3, Email::withTrashed()->get());
 
-        $this->artisan('mailcare:clean-emails');
+        $this->artisan('mailcare:clean')->assertExitCode(0);
 
         $this->assertTrue($email->fresh()->exists);
-        $this->assertNull($emailSoftDeleted2MonthsAgo->fresh());
-        $this->assertTrue($emailSoftDeleted10DaysAgo->fresh()->exists);
+        $this->assertNull($emailDeleted2MonthsAgo->fresh());
+        $this->assertTrue($emailDeleted10DaysAgo->fresh()->exists);
         $this->assertCount(2, Email::withTrashed()->get());
     }
 
     /**
      * @test
      */
-    public function it_can_clean_attachments()
+    public function cmd_clean_attachments_in_database()
     {
         $this->artisan(
             'mailcare:email-receive',
             ['file' => 'tests/storage/email_with_attachment.eml']
         )->assertExitCode(0);
+
         $email = Email::first();
         $email->deleted_at = Carbon::now()->subMonths(2);
         $email->save();
@@ -56,7 +56,7 @@ class CleanEmailsTest extends TestCase
         $this->assertCount(1, Email::withTrashed()->get());
         $this->assertCount(1, Attachment::all());
 
-        $this->artisan('mailcare:clean-emails');
+        $this->artisan('mailcare:clean')->assertExitCode(0);
 
         $this->assertNull($email->fresh());
         $this->assertCount(0, Email::withTrashed()->get());
@@ -66,12 +66,13 @@ class CleanEmailsTest extends TestCase
     /**
      * @test
      */
-    public function it_can_clean_files()
+    public function cmd_clean_files()
     {
         $this->artisan(
             'mailcare:email-receive',
             ['file' => 'tests/storage/email_with_attachment.eml']
         )->assertExitCode(0);
+
         $email = Email::first();
         $email->deleted_at = Carbon::now()->subMonths(2);
         $email->save();
@@ -79,7 +80,7 @@ class CleanEmailsTest extends TestCase
         $this->assertCount(1, Email::withTrashed()->get());
         $this->assertTrue(Storage::exists($email->path()));
 
-        $this->artisan('mailcare:clean-emails');
+        $this->artisan('mailcare:clean')->assertExitCode(0);
 
         $this->assertNull($email->fresh());
         $this->assertCount(0, Email::withTrashed()->get());
