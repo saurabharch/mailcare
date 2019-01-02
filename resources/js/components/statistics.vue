@@ -75,11 +75,21 @@
 
             var storageChart = new Chart(ctxStorage, {
                 type: 'bar',
+                options: {
+                  scales: {
+                    yAxes: [{
+                      ticks: {
+                          min: 0,
+                          max: 100,
+                        }
+                    }]
+                  }
+                },
                 data: {
                   labels: _.map(this.data, 'created_at'),
                   datasets: [{
-                    label: 'Storage used by date',
-                    data: _.map(this.data, 'cumulative_storage_used'),
+                    label: '% Storage used by date',
+                    data: _.map(this.data, 'cumulative_storage_used').map(x => x / this.meta.total_space * 100),
                     borderColor: '#1f77b4',
                     backgroundColor: '#7693eb'
                   }]

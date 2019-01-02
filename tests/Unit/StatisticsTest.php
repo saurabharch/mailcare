@@ -65,6 +65,7 @@ class StatisticsTest extends TestCase
                 'emails_received' => 10 + 5,
                 'inboxes_created' => 2 + 4,
                 'storage_used' => $this->getStorageUsed(),
+                'total_space' => disk_total_space(storage_path()),
                 'emails_deleted' => 3,
                 'storage_used_for_human' => $this->humanFileSize($this->getStorageUsed()),
             ]);
