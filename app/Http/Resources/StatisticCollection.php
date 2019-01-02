@@ -19,6 +19,7 @@ class StatisticCollection extends ResourceCollection
                 'inboxes_created' => Statistic::metaInboxesCreated(),
                 'storage_used_for_human' => $this->humanFileSize(Statistic::metaStorageUsed()),
                 'storage_used' => Statistic::metaStorageUsed(),
+                'total_space' => disk_total_space(storage_path()),
                 'emails_deleted' => Statistic::metaEmailsDeleted(),
             ],
         ];
