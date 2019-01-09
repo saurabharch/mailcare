@@ -26,9 +26,17 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('mailcare:build-statistics')->daily();
-        $schedule->command('mailcare:build-statistics '.Carbon::now()->toDateString())->everyFiveMinutes();
-        $schedule->command('mailcare:clean')->hourly();
-        $schedule->command('mailcare:delete')->daily();
+
+        $schedule->command('mailcare:build-statistics '.Carbon::now()->toDateString())
+                 ->everyFiveMinutes();
+
+        $schedule->command('mailcare:clean')
+                 ->hourly()
+                 ->appendOutputTo(storage_path('logs/auto-clean.log'));
+
+        $schedule->command('mailcare:delete')
+                 ->daily()
+                 ->appendOutputTo(storage_path('logs/auto-delete.log'));
     }
 
     /**

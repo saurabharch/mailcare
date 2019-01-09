@@ -17,6 +17,9 @@ class AutoDeleteTest extends TestCase
     {
         parent::setUp();
         $this->delete = $this->mock(AutoDelete::class)->makePartial();
+        $this->delete->shouldReceive('line')->andReturn(null);
+        $this->delete->shouldReceive('comment')->andReturn(null);
+        $this->delete->shouldReceive('info')->andReturn(null);
     }
 
     private function hasDiskFreeSpace($value)
