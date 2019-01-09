@@ -10,37 +10,14 @@ use Illuminate\Support\Facades\Storage;
 
 class AutoDelete extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'mailcare:delete';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Automatically soft delete emails according the previous usage';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
     public function handle()
     {
+        $this->line("--------------------------------------------------");
+        $this->line("AutoDelete command executed at ".Carbon::now());
         $size = $this->getCalculatedSize();
 
         Email::where('favorite', false)->oldest()->chunkById(100, function ($emails) use ($size) {
@@ -52,6 +29,7 @@ class AutoDelete extends Command
 
                 $size = $size - $email->size_in_bytes;
                 $email->delete();
+                $this->line("$size deleted");
             }
         });
     }
@@ -69,25 +47,33 @@ class AutoDelete extends Command
         );
 
         if (empty($storageUsedPeriod1) || empty($storageUsedPeriod2)) {
+            $this->comment("Not enough periods to calculate");
             return 0;
         }
+        $this->line("Storage used for period 1 ($storageUsedPeriod1) and for period 2 ($storageUsedPeriod2)");
 
-        $pourcentage = (($storageUsedPeriod2 - $storageUsedPeriod1) / $storageUsedPeriod1);
-        $calculatedStorage = $storageUsedPeriod2 + ($pourcentage * $storageUsedPeriod2);
+        $percentage = (($storageUsedPeriod2 - $storageUsedPeriod1) / $storageUsedPeriod1);
+        $calculatedStorage = $storageUsedPeriod2 + ($percentage * $storageUsedPeriod2);
+        $this->line("Calculated size for the next period: $calculatedStorage");
 
         $storageToDelete = $calculatedStorage - Email::onlyTrashed()->sum('size_in_bytes');
+        $this->line("Calculated size to delete without emails trashed: $storageToDelete");
 
         $delete = $this->getDiskFreeSpace() - $storageToDelete;
 
         if ($delete > 0) {
+            $this->comment("Final calculated size to delete: 0");
             return 0;
         }
 
+        $this->info("Final calculated size to delete: $delete");
         return (int) $delete * -1;
     }
 
     public function getDiskFreeSpace()
     {
-        return disk_free_space(storage_path());
+        $diskFreeSpace = disk_free_space(storage_path());
+        $this->line("Disk free space: $diskFreeSpace");
+        return $diskFreeSpace;
     }
 }
