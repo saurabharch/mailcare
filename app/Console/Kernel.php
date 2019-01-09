@@ -32,11 +32,11 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('mailcare:clean')
                  ->hourly()
-                 ->sendOutputTo(storage_path('logs/auto-clean.log'));
+                 ->appendOutputTo(storage_path('logs/auto-clean.log'));
 
         $schedule->command('mailcare:delete')
                  ->daily()
-                 ->sendOutputTo(storage_path('logs/auto-delete.log'));
+                 ->appendOutputTo(storage_path('logs/auto-delete.log'));
     }
 
     /**
