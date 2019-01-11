@@ -83,7 +83,6 @@ class AutomationListener
                 'headers' => $headers,
                 'form_params' => (new EmailResource($event->email))->response()->getData(),
             ]);
-
         }
 
         if ($actionDeleteEmail) {
