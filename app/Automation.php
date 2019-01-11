@@ -22,6 +22,7 @@ class Automation extends Model
         'emails_received' => 'int',
         'has_attachments' => 'boolean',
         'action_delete_email' => 'boolean',
+        'in_error' => 'boolean',
     ];
     public $incrementing = false;
     protected $keyType = 'string';
