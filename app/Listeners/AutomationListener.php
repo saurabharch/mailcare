@@ -85,7 +85,6 @@ class AutomationListener
                     'form_params' => (new EmailResource($event->email))->response()->getData(),
                 ]);
                 $automation->in_error = false;
-
             } catch (\Exception $e) {
                 $automation->in_error = true;
             }
