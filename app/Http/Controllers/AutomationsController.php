@@ -20,6 +20,7 @@ class AutomationsController extends Controller
             'title' => ['required'],
             'has_attachment' => ['boolean'],
             'action_url' => ['required', 'url'],
+            'action_delete_email' => ['boolean'],
         ]);
 
         Automation::create([
@@ -31,6 +32,7 @@ class AutomationsController extends Controller
             'has_attachments' => $request->input('has_attachments'),
             'action_url' => $request->input('action_url'),
             'action_secret_token' => $request->input('action_secret_token'),
+            'action_delete_email' => $request->input('action_delete_email'),
         ]);
     }
 
@@ -40,6 +42,7 @@ class AutomationsController extends Controller
             'title' => ['required'],
             'has_attachment' => ['boolean'],
             'action_url' => ['required', 'url'],
+            'action_delete_email' => ['boolean'],
         ]);
 
         $automation->update([
@@ -50,6 +53,7 @@ class AutomationsController extends Controller
             'has_attachments' => $request->input('has_attachments'),
             'action_url' => $request->input('action_url'),
             'action_secret_token' => $request->input('action_secret_token'),
+            'action_delete_email' => $request->input('action_delete_email'),
         ]);
     }
 
