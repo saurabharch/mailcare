@@ -48,6 +48,7 @@ class AutomationsTest extends TestCase
             'title' => 'My new automation',
             'has_attachments' => false,
             'action_url' => 'https://localhost/webhooks',
+            'action_delete_email' => false,
         ]);
 
         $response->assertStatus(200);
@@ -82,6 +83,7 @@ class AutomationsTest extends TestCase
             'title' => 'My title has changed',
             'has_attachments' => true,
             'action_url' => 'https://localhost/webhooks-changed',
+            'action_delete_email' => false,
         ]);
 
         $response->assertStatus(200);
