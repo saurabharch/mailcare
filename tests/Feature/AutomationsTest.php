@@ -371,4 +371,36 @@ class AutomationsTest extends TestCase
         $this->assertAutomationTriggered($automation, ['Subject'], $email);
         $this->assertCount(1, Email::all());
     }
+
+    public function testFailed()
+    {
+        $this->client->shouldReceive('request')
+            ->once()->andThrow(\Exception::class);
+        $this->client->shouldReceive('request')
+            ->once()->andReturn(true);
+        $this->client->shouldReceive('request')
+            ->once()->andThrow(\Exception::class);
+
+        $automation = factory(Automation::class)->create([
+            'subject' => 'Order completed',
+        ]);
+
+        $email = factory(Email::class)->create([
+            'subject' => 'Order completed',
+        ]);
+        $this->handleAutomationListener($email);
+        $this->assertTrue($automation->fresh()->in_error);
+
+        $email = factory(Email::class)->create([
+            'subject' => 'Order completed',
+        ]);
+        $this->handleAutomationListener($email);
+        $this->assertFalse($automation->fresh()->in_error);
+
+        $email = factory(Email::class)->create([
+            'subject' => 'Order completed',
+        ]);
+        $this->handleAutomationListener($email);
+        $this->assertTrue($automation->fresh()->in_error);
+    }
 }

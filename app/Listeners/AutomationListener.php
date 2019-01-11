@@ -79,10 +79,17 @@ class AutomationListener
                 $actionDeleteEmail = true;
             }
 
-            $this->client->request('POST', $automation->action_url, [
-                'headers' => $headers,
-                'form_params' => (new EmailResource($event->email))->response()->getData(),
-            ]);
+            try {
+                $this->client->request('POST', $automation->action_url, [
+                    'headers' => $headers,
+                    'form_params' => (new EmailResource($event->email))->response()->getData(),
+                ]);
+                $automation->in_error = false;
+
+            } catch (\Exception $e) {
+                $automation->in_error = true;
+            }
+            $automation->save();
         }
 
         if ($actionDeleteEmail) {

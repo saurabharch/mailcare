@@ -5,10 +5,22 @@
       <header class="card-header">
         <p class="card-header-title">
           {{ automation.title }}&#8239;
-          <span class="has-text-grey has-text-weight-normal is-size-7">
-            ({{ automation.emails_received }} emails received)
-          </span>
         </p>
+        <span v-if="automation.in_error" class="card-header-icon">
+          <span class="tag is-danger">
+            Last run in error
+          </span>
+        </span>
+        <span v-if="automation.emails_received" class="card-header-icon">
+          <span class="tag is-success">
+            {{ automation.emails_received }} emails received
+          </span>
+        </span>
+        <span v-else="automation.emails_received" class="card-header-icon">
+          <span class="tag is-light">
+            0 email received
+          </span>
+        </span>
         <a href="#" class="card-header-icon" aria-label="more options" @click.prevent='toggleOpen'>
           <span class="icon">
             <i class="fas fa-angle-down" aria-hidden="true" v-if="!open"></i>
