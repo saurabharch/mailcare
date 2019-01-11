@@ -314,4 +314,61 @@ class AutomationsTest extends TestCase
 
     	$this->assertAutomationNotTriggered($automation);
     }
+
+    public function testDeleteEmailAfterProcessingAutomation()
+    {
+        $automation = factory(Automation::class)->create([
+            'subject' => 'Order completed',
+            'action_delete_email' => true,
+        ]);
+        $email = factory(Email::class)->create([
+            'subject' => 'Order completed',
+        ]);
+
+        $this->assertCount(1, Email::all());
+        $this->handleAutomationListener($email);
+
+
+        $this->assertAutomationTriggered($automation, ['Subject'], $email);
+        $this->assertCount(0, Email::all());
+    }
+
+    public function testDontDeleteEmailIfAutomationDoesntMatch()
+    {
+        $automation = factory(Automation::class)->create([
+            'subject' => 'Order cancelled',
+            'action_delete_email' => false,
+        ]);
+        $automation = factory(Automation::class)->create([
+            'subject' => 'Order completed',
+        ]);
+        $email = factory(Email::class)->create([
+            'subject' => 'Order completed',
+        ]);
+
+        $this->assertCount(1, Email::all());
+        $this->handleAutomationListener($email);
+
+
+        $this->assertAutomationTriggered($automation, ['Subject'], $email);
+        $this->assertCount(1, Email::all());
+    }
+
+    public function testDontDeleteEmailAfterProcessingAutomation()
+    {
+        $automation = factory(Automation::class)->create([
+            'subject' => 'Order completed',
+            'action_delete_email' => false,
+        ]);
+        $email = factory(Email::class)->create([
+            'subject' => 'Order completed',
+        ]);
+
+        $this->handleAutomationListener($email);
+
+
+        $this->assertCount(1, Email::all());
+        $this->assertAutomationTriggered($automation, ['Subject'], $email);
+        $this->assertCount(1, Email::all());
+    }
 }

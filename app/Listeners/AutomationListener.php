@@ -37,6 +37,7 @@ class AutomationListener
 
         $automations = Automation::all();
 
+        $actionDeleteEmail = false;
         foreach ($automations as $automation) {
             $headers = [];
             $headers['X-MailCare-Title'] = $automation->title;
@@ -74,11 +75,18 @@ class AutomationListener
             }
 
             $automation->increment('emails_received');
+            if ($automation->action_delete_email && $actionDeleteEmail == false) {
+                $actionDeleteEmail = true;
+            }
 
             $this->client->request('POST', $automation->action_url, [
                 'headers' => $headers,
                 'form_params' => (new EmailResource($event->email))->response()->getData(),
             ]);
+        }
+
+        if ($actionDeleteEmail) {
+            $event->email->delete();
         }
     }
 }

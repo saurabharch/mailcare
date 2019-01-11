@@ -97,6 +97,17 @@
                 <p class="help">Use this token to validate received payloads. It will be sent with the request in the X-Mailcare-Token HTTP header.</p>
               </div>
 
+              <div class="field">
+                <div class="control">
+                  <label class="checkbox">
+                    <input type="checkbox"
+                    v-model="automation.action_delete_email"
+                    :disabled="!editable">
+                    Delete email after running this automation
+                  </label>
+                </div>
+              </div>
+
                 <div class="field">
                   <p class="help">
                     <strong>Filter rules:</strong>
@@ -168,6 +179,7 @@
           has_attachments: false,
           action_url: '',
           action_secret_token: '',
+          action_delete_email: false,
           emails_received: 0,
         }
       },
