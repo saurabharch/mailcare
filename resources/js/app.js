@@ -12,14 +12,19 @@ require('./bootstrap');
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+import ListEmails from './components/list-emails.vue';
+import ShowEmail from './components/show-email.vue';
+import ShowEmailBody from './components/show-email-body.vue';
+import IFrame from './components/i-frame.vue';
+import Automations from './components/automations.vue';
+import Statistics from './components/statistics.vue';
 
-Vue.component('list-emails', require('./components/list-emails.vue'));
-Vue.component('show-email', require('./components/show-email.vue'));
-Vue.component('show-email-body', require('./components/show-email-body.vue'));
-Vue.component('i-frame', require('./components/i-frame.vue'));
-Vue.component('automations', require('./components/automations.vue'));
-Vue.component('statistics', require('./components/statistics.vue'));
-
+Vue.component('list-emails', ListEmails);
+Vue.component('show-email', ShowEmail);
+Vue.component('show-email-body', ShowEmailBody);
+Vue.component('i-frame', IFrame);
+Vue.component('automations', Automations);
+Vue.component('statistics', Statistics);
 
 const app = new Vue({
     el: '#app'
