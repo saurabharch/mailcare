@@ -16,12 +16,14 @@ class Automation extends Model
         'action_url',
         'action_secret_token',
         'action_delete_email',
+        'post_raw',
         'emails_received',
     ];
     protected $casts = [
         'emails_received' => 'int',
         'has_attachments' => 'boolean',
         'action_delete_email' => 'boolean',
+        'post_raw' => 'boolean',
         'in_error' => 'boolean',
     ];
     public $incrementing = false;

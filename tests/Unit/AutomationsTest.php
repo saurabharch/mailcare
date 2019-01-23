@@ -49,6 +49,7 @@ class AutomationsTest extends TestCase
             'has_attachments' => false,
             'action_url' => 'https://localhost/webhooks',
             'action_delete_email' => false,
+            'post_raw' => false,
         ]);
 
         $response->assertStatus(200);
@@ -84,6 +85,7 @@ class AutomationsTest extends TestCase
             'has_attachments' => true,
             'action_url' => 'https://localhost/webhooks-changed',
             'action_delete_email' => false,
+            'post_raw' => false,
         ]);
 
         $response->assertStatus(200);
