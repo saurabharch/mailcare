@@ -85,8 +85,7 @@ class AutomationListener
                         'headers' => $headers,
                         'form_params' => file_get_contents($event->email->fullPath()),
                     ]);
-                }
-                else {
+                } else {
                     $this->client->request('POST', $automation->action_url, [
                         'headers' => $headers,
                         'form_params' => (new EmailResource($event->email))->response()->getData(),
