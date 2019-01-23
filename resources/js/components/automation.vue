@@ -120,6 +120,17 @@
                 </div>
               </div>
 
+              <div class="field">
+                <div class="control">
+                  <label class="checkbox">
+                    <input type="checkbox"
+                    v-model="automation.post_raw"
+                    :disabled="!editable">
+                    Post the raw, full MIME message
+                  </label>
+                </div>
+              </div>
+
                 <div class="field">
                   <p class="help">
                     <strong>Filter rules:</strong>
@@ -192,6 +203,7 @@
           action_url: '',
           action_secret_token: '',
           action_delete_email: false,
+          post_raw: false,
           emails_received: 0,
         }
       },

@@ -80,10 +80,17 @@ class AutomationListener
             }
 
             try {
-                $this->client->request('POST', $automation->action_url, [
-                    'headers' => $headers,
-                    'form_params' => (new EmailResource($event->email))->response()->getData(),
-                ]);
+                if ($automation->post_raw) {
+                    $this->client->request('POST', $automation->action_url, [
+                        'headers' => $headers,
+                        'form_params' => file_get_contents($event->email->fullPath()),
+                    ]);
+                } else {
+                    $this->client->request('POST', $automation->action_url, [
+                        'headers' => $headers,
+                        'form_params' => (new EmailResource($event->email))->response()->getData(),
+                    ]);
+                }
                 $automation->in_error = false;
             } catch (\Exception $e) {
                 $automation->in_error = true;
