@@ -8,6 +8,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Automation;
 use GuzzleHttp\Client;
 use App\Http\Resources\EmailResource;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ForwardEmail;
 
 class AutomationListener
 {
@@ -95,6 +97,11 @@ class AutomationListener
             } catch (\Exception $e) {
                 $automation->in_error = true;
             }
+
+            if (config('mailcare.forward') && !empty($automation->action_email)) {
+                Mail::to($automation->action_email)->send(new ForwardEmail($event->email));
+            }
+
             $automation->save();
         }
 

@@ -7,16 +7,22 @@ use Laravel\Dusk\Browser;
 use Artisan;
 use App\Email;
 use Tests\Browser\Pages\ShowEmail;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use App\User;
 
 class DeleteEmailTest extends DuskTestCase
 {
+    use DatabaseMigrations;
+
     public function testDeleteEmail()
     {
-        Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
-        $email = Email::first();
+        $email = factory(Email::class)->create();
 
         $this->browse(function (Browser $browser) use ($email) {
-            $browser->visit(new ShowEmail($email))
+            $browser->visit('/')
+                    ->waitForText('1 emails')
+                    ->assertSee($email->subject)
+                    ->visit(new ShowEmail($email))
             		->assertSeeEmail()
                     ->delete()
                     ->assertPathIs('/');;

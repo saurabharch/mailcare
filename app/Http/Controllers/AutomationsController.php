@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Automation;
 use Illuminate\Support\Str;
 use App\Http\Resources\AutomationResource;
+use App\Rules\Forward;
 
 class AutomationsController extends Controller
 {
@@ -19,7 +20,8 @@ class AutomationsController extends Controller
         $request->validate([
             'title' => ['required'],
             'has_attachment' => ['boolean'],
-            'action_url' => ['required', 'url'],
+            'action_url' => ['required_without:action_email', 'url', 'nullable'],
+            'action_email' => ['required_without:action_url', 'email', 'nullable', new Forward],
             'action_delete_email' => ['boolean'],
             'post_raw' => ['boolean'],
         ]);
@@ -32,6 +34,7 @@ class AutomationsController extends Controller
             'subject' => $request->input('subject'),
             'has_attachments' => $request->input('has_attachments'),
             'action_url' => $request->input('action_url'),
+            'action_email' => $request->input('action_email'),
             'action_secret_token' => $request->input('action_secret_token'),
             'action_delete_email' => $request->input('action_delete_email'),
             'post_raw' => $request->input('post_raw'),
@@ -43,7 +46,8 @@ class AutomationsController extends Controller
         $request->validate([
             'title' => ['required'],
             'has_attachment' => ['boolean'],
-            'action_url' => ['required', 'url'],
+            'action_url' => ['required_without:action_email', 'url', 'nullable'],
+            'action_email' => ['required_without:action_url', 'email', 'nullable', new Forward],
             'action_delete_email' => ['boolean'],
             'post_raw' => ['boolean'],
         ]);
@@ -55,6 +59,7 @@ class AutomationsController extends Controller
             'subject' => $request->input('subject'),
             'has_attachments' => $request->input('has_attachments'),
             'action_url' => $request->input('action_url'),
+            'action_email' => $request->input('action_email'),
             'action_secret_token' => $request->input('action_secret_token'),
             'action_delete_email' => $request->input('action_delete_email'),
             'post_raw' => $request->input('post_raw'),

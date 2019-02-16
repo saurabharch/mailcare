@@ -8,22 +8,26 @@
 			</div>
 			<div class="level-right">
 				<a class="level-item button is-primary" 
-				@click='toggleCreateForm' 
-				v-if="showCreateForm">Close</a>
+					dusk="close-create-button" 
+					@click='toggleCreateForm' 
+					v-if="showCreateForm">Close</a>
 				<a class="level-item button is-primary" 
-				@click='toggleCreateForm' 
-				v-else>Create</a>
+					dusk="open-create-button" 
+					@click='toggleCreateForm' 
+					v-else>Create</a>
 			</div>
 		</nav>
 
 		<automation 
-			v-on:automation-created="automationCreated()"
+			v-on:automation-created="created()"
 			v-if="showCreateForm" 
+			:data-type-of-action="getTypeOfAction"
 			:data-open='true' 
 			:data-editable='true'>
 		</automation>
 		<automation v-for="automation in automations" 
 			v-on:automation-deleted="automationDeleted()"
+			:data-type-of-action="getTypeOfAction"
 			:key="automation.id" 
 			:data-automation="automation"
 			>
@@ -40,6 +44,14 @@
 			automation,
 		},
 
+		props: {
+
+	      forward: {
+	        type: Boolean,
+	        default: false,
+	      },
+		},
+
 		data() {
 			return {
 				automations: [],
@@ -52,12 +64,28 @@
 			this.getAutomations()
 		},
 
+		computed: {
+			getTypeOfAction() {
+				if(this.forward) {
+					return [
+						{'value': 'webhook', 'label': 'Webhook'},
+						{'value': 'forwarding', 'label': 'Forwarding'}
+						]
+
+				} else {
+					return [
+						{'value': 'webhook', 'label': 'Webhook'},
+						]
+				}
+			}
+		},
+
 		methods: {
 			toggleCreateForm() {
 				this.showCreateForm = !this.showCreateForm
 			},
 
-			automationCreated() {
+			created() {
 				this.toggleCreateForm()
 				this.getAutomations()
 
