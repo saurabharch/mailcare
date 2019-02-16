@@ -300,14 +300,12 @@
       },
 
       createAutomation() {
-        document.automationForm.reportValidity();
         axios.post('/api/automations', this.automation).then((response) => {
           this.$emit('automation-created', this.automation)
         })
       },
 
       saveAutomation() {
-        document.automationForm.reportValidity();
         axios.put('/api/automations/' + this.automation.id, this.automation).then((response) => {
           this.editable = false
         })
