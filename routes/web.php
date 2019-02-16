@@ -11,6 +11,7 @@
 |
 */
 
+
 Route::middleware('mailcare.auth')->group(function () {
 
     Route::view('/', 'emails.index');
@@ -26,8 +27,6 @@ Route::middleware('mailcare.auth')->group(function () {
         return view('emails.show')->withId($id);
     });
 
-    Auth::routes();
-
     Route::view('/statistics', 'statistics.index');
-    Route::view('/automations', 'automations.index')->middleware('can:automations.view');
+    Route::view('/automations', 'automations.index')->middleware('mailcare.config:automations');
 });

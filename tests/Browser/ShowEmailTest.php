@@ -9,6 +9,7 @@ use Artisan;
 use Tests\Browser\Pages\ShowEmail;
 use \App\Email;
 use Carbon\Carbon;
+use App\User;
 
 class ShowEmailTest extends DuskTestCase
 {

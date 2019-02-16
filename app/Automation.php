@@ -14,6 +14,7 @@ class Automation extends Model
         'subject',
         'has_attachments',
         'action_url',
+        'action_email',
         'action_secret_token',
         'action_delete_email',
         'post_raw',

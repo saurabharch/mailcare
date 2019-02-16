@@ -38,12 +38,11 @@ browser_test:
   services:
     - mysql:5.7
   script:
-    - cp .env.example .env
+    - cp .env.dusk.ci .env
     - composer install
     - configure-laravel
     - start-nginx-ci-project
-    - cat .env
-    - php artisan dusk --colors --debug
+    - php artisan dusk --colors --debug --env=dusk.ci
 
   artifacts:
     paths:

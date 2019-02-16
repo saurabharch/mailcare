@@ -41,9 +41,9 @@
     <div class="navbar-end">
       <div class="navbar-tabs">
           <a class="navbar-item is-tab {{ Request::is('/', 'emails*') ? 'is-active' : '' }}" href="{{ url('/') }}">Emails</a>
-          @can('automations.view')
+          @if (config('mailcare.automations'))
             <a class="navbar-item is-tab {{ Request::is('automation') ? 'is-active' : '' }}" href="{{ url('/automations') }}">Automations</a>
-          @endcan
+          @endif
           <a class="navbar-item is-tab {{ Request::is('statistics') ? 'is-active' : '' }}" href="{{ url('/statistics') }}">Statistics</a>
       </div>
     </div>

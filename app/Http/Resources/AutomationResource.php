@@ -16,6 +16,7 @@ class AutomationResource extends JsonResource
             'subject' => $this->subject,
             'has_attachments' => $this->has_attachments,
             'action_url' => $this->action_url,
+            'action_email' => $this->action_email,
             'action_secret_token' => $this->action_secret_token,
             'action_delete_email' => $this->action_delete_email,
             'post_raw' => $this->post_raw,

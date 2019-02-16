@@ -24,8 +24,12 @@ Route::middleware('mailcare.auth')->group(function () {
 
     Route::get('emails/{email}/attachments/{attachmentId}', 'AttachmentsController@show');
 
-    Route::get('automations', 'AutomationsController@index')->middleware('can:automations.view');
-    Route::post('automations', 'AutomationsController@store')->middleware('can:automations.create');
-    Route::put('automations/{automation}', 'AutomationsController@update')->middleware('can:automations.update');
-    Route::delete('automations/{automation}', 'AutomationsController@destroy')->middleware('can:automations.delete');
+    Route::get('automations', 'AutomationsController@index')
+        ->middleware('mailcare.config:automations');
+    Route::post('automations', 'AutomationsController@store')
+        ->middleware('mailcare.config:automations');
+    Route::put('automations/{automation}', 'AutomationsController@update')
+        ->middleware('mailcare.config:automations');
+    Route::delete('automations/{automation}', 'AutomationsController@destroy')
+        ->middleware('mailcare.config:automations');
 });

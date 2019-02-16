@@ -2,6 +2,10 @@
 
 @section('content')
 <div class="container">
-    <automations></automations>
+    @if (config('mailcare.forward'))
+        <automations forward></automations>
+    @else
+        <automations></automations>
+    @endif
 </div>
 @endsection
