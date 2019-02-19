@@ -132,7 +132,7 @@
                 </div>
               </div>
               <div class="field" v-if="selectedTypeOfAction === 'forwarding'">
-                <label class="label">Forward</label>
+                <label class="label">Forward To</label>
                 <div class="control">
                   <input class="input" type="email" 
                   placeholder="notification@example.com" 
@@ -154,14 +154,14 @@
                 <p class="help">Use this token to validate received payloads. It will be sent with the request in the X-Mailcare-Token HTTP header.</p>
               </div>
 
-              <div class="field">
+              <div class="field" v-if="selectedTypeOfAction === 'webhook'">
                 <div class="control">
                   <label class="checkbox">
                     <input type="checkbox"
-                    v-model="automation.action_delete_email"
-                    dusk="delete-checkbox"
+                    v-model="automation.post_raw"
+                    dusk="raw-checkbox"
                     :disabled="!editable">
-                    Delete email after running this automation
+                    Post the raw, full MIME message
                   </label>
                 </div>
               </div>
@@ -170,9 +170,10 @@
                 <div class="control">
                   <label class="checkbox">
                     <input type="checkbox"
-                    v-model="automation.post_raw"
+                    v-model="automation.action_delete_email"
+                    dusk="delete-checkbox"
                     :disabled="!editable">
-                    Post the raw, full MIME message
+                    Delete email after running this automation
                   </label>
                 </div>
               </div>

@@ -33,6 +33,10 @@ class Automations extends Page
         $browser->select('@type-of-action-field', 'webhook');
         $browser->type('@title-field', 'test webhook');
         $browser->type('@url-field', 'http://localhost/webhook/1');
+
+        $browser->assertMissing('@email-field');
+        $browser->assertPresent('@secret-field');
+        $browser->assertPresent('@raw-checkbox');
         $browser->click('@create-button');
     }
 
@@ -53,6 +57,10 @@ class Automations extends Page
         $browser->select('@type-of-action-field', 'forwarding');
         $browser->type('@title-field', 'test forward');
         $browser->type('@email-field', 'toto@example.com');
+
+        $browser->assertMissing('@url-field');
+        $browser->assertMissing('@secret-field');
+        $browser->assertMissing('@raw-checkbox');
         $browser->click('@create-button');
     }
 

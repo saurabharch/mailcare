@@ -81,25 +81,30 @@ class AutomationListener
                 $actionDeleteEmail = true;
             }
 
-            try {
-                if ($automation->post_raw) {
-                    $this->client->request('POST', $automation->action_url, [
-                        'headers' => $headers,
-                        'form_params' => file_get_contents($event->email->fullPath()),
-                    ]);
-                } else {
-                    $this->client->request('POST', $automation->action_url, [
-                        'headers' => $headers,
-                        'form_params' => (new EmailResource($event->email))->response()->getData(),
-                    ]);
-                }
-                $automation->in_error = false;
-            } catch (\Exception $e) {
-                $automation->in_error = true;
-            }
-
             if (config('mailcare.forward') && !empty($automation->action_email)) {
-                Mail::to($automation->action_email)->send(new ForwardEmail($event->email));
+                try {
+                    Mail::to($automation->action_email)->send(new ForwardEmail($event->email));
+                    $automation->in_error = false;
+                } catch (\Exception $e) {
+                    $automation->in_error = true;
+                }
+            } else {
+                try {
+                    if ($automation->post_raw) {
+                        $this->client->request('POST', $automation->action_url, [
+                            'headers' => $headers,
+                            'form_params' => file_get_contents($event->email->fullPath()),
+                        ]);
+                    } else {
+                        $this->client->request('POST', $automation->action_url, [
+                            'headers' => $headers,
+                            'form_params' => (new EmailResource($event->email))->response()->getData(),
+                        ]);
+                    }
+                    $automation->in_error = false;
+                } catch (\Exception $e) {
+                    $automation->in_error = true;
+                }
             }
 
             $automation->save();
