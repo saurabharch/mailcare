@@ -83,5 +83,6 @@ class ForwardEmailTest extends TestCase
         Mail::assertSent(ForwardEmail::class, function ($mail) {
             return  $mail->hasTo('test@example.com');
         });
+        $this->assertFalse(Automation::first()->in_error);
     }
 }
