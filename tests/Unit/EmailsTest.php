@@ -205,7 +205,10 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_whitch_body_type_is_available()
     {
-        $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
+        $this->artisan(
+            'mailcare:email-receive', 
+            ['file' => 'tests/storage/email_without_attachment.eml']
+        );
 
         $response = $this->json('GET', 'api/emails');
         $response = $this->json('GET', 'api/emails/'.$response->getData()->data[0]->id);
@@ -220,7 +223,10 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_the_good_version()
     {
-        $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
+        $this->artisan(
+            'mailcare:email-receive', 
+            ['file' => 'tests/storage/email_without_attachment.eml']
+        );
 
         $response = $this->json('GET', 'api/emails');
         $response = $this->json('GET', 'api/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'application/vnd.mailcare.v1+json']);
@@ -235,7 +241,10 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_html_part_of_specific_email()
     {
-        $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
+        $this->artisan(
+            'mailcare:email-receive', 
+            ['file' => 'tests/storage/email_without_attachment.eml']
+        );
 
         $response = $this->json('GET', 'api/emails');
         $response = $this->json('GET', 'api/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'text/html']);
@@ -250,7 +259,10 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_text_part_of_specific_email()
     {
-        $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
+        $this->artisan(
+            'mailcare:email-receive', 
+            ['file' => 'tests/storage/email_without_attachment.eml']
+        );
 
         $response = $this->json('GET', 'api/emails');
         $response = $this->json('GET', 'api/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'text/plain']);
@@ -266,7 +278,10 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_raw_part_of_specific_email()
     {
-        $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
+        $this->artisan(
+            'mailcare:email-receive', 
+            ['file' => 'tests/storage/email_without_attachment.eml']
+        );
 
         $response = $this->json('GET', 'api/emails');
         $response = $this->json('GET', 'api/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'message/rfc2822']);
@@ -283,7 +298,10 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_html_part_when_i_prefer_it()
     {
-        $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
+        $this->artisan(
+            'mailcare:email-receive', 
+            ['file' => 'tests/storage/email_without_attachment.eml']
+        );
 
         $response = $this->json('GET', 'api/emails');
         $response = $this->json('GET', 'api/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'text/plain; q=0.5, text/html']);
@@ -300,7 +318,10 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_text_part_when_i_prefer_it()
     {
-        $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
+        $this->artisan(
+            'mailcare:email-receive', 
+            ['file' => 'tests/storage/email_without_attachment.eml']
+        );
 
         $response = $this->json('GET', 'api/emails');
         $response = $this->json('GET', 'api/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'text/html; q=0.5, text/plain']);
@@ -315,7 +336,10 @@ class EmailsTest extends TestCase
      */
     public function it_return_not_acceptable_when_i_fetches_unsupported_accept()
     {
-        $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
+        $this->artisan(
+            'mailcare:email-receive', 
+            ['file' => 'tests/storage/email_without_attachment.eml']
+        );
 
         $response = $this->json('GET', 'api/emails');
         $response = $this->json('GET', 'api/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'message/rfc822']);
@@ -384,7 +408,10 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_attachments_of_email()
     {
-        $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_with_attachment.eml']);
+        $this->artisan(
+            'mailcare:email-receive', 
+            ['file' => 'tests/storage/email_with_attachment.eml']
+        );
 
         $response = $this->json('GET', 'api/emails');
         $response = $this->json('GET', 'api/emails/'.$response->getData()->data[0]->id);
@@ -403,7 +430,10 @@ class EmailsTest extends TestCase
      */
     public function it_download_attachments_of_email()
     {
-        $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_with_attachment.eml']);
+        $this->artisan(
+            'mailcare:email-receive', 
+            ['file' => 'tests/storage/email_with_attachment.eml']
+        );
 
         $response = $this->json('GET', 'api/emails');
         $emailId = $response->getData()->data[0]->id;
@@ -442,7 +472,10 @@ class EmailsTest extends TestCase
      */
     public function it_download_attachments_that_doesnt_exist_on_disk()
     {
-        $exitCode = \Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_with_attachment.eml']);
+        $this->artisan(
+            'mailcare:email-receive', 
+            ['file' => 'tests/storage/email_with_attachment.eml']
+        );
 
         $response = $this->json('GET', 'api/emails');
         $emailId = $response->getData()->data[0]->id;

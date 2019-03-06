@@ -19,7 +19,7 @@ class AutomationsTest extends TestCase
 {
     use DatabaseMigrations;
 
-    public function setUp()
+    public function setUp(): void
     {
     	parent::setUp();
         config(['mailcare.automations' => true]);

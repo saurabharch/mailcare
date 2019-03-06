@@ -19,13 +19,7 @@ class Email extends Model
         'has_html' => 'boolean',
         'has_text' => 'boolean',
         'size_in_bytes' => 'integer',
-    ];
-
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-        'read'
+        'read' => 'datetime',
     ];
 
     use Uuids;

@@ -15,7 +15,10 @@ class DeleteEmailTest extends TestCase
      */
     public function it_can_soft_delete_email()
     {
-        $this->artisan('mailcare:email-receive', ['file' => 'tests/storage/email_with_attachment.eml']);
+        $this->artisan(
+            'mailcare:email-receive', 
+            ['file' => 'tests/storage/email_with_attachment.eml']
+        );
 
         $this->assertCount(1, Email::all());
         $this->assertCount(1, Email::first()->attachments()->get());

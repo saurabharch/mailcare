@@ -13,13 +13,14 @@ class AutoDeleteTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $this->delete = $this->mock(AutoDelete::class)->makePartial();
-        $this->delete->shouldReceive('line')->andReturn(null);
-        $this->delete->shouldReceive('comment')->andReturn(null);
-        $this->delete->shouldReceive('info')->andReturn(null);
+        $this->delete = $this->mock(AutoDelete::class, function($mock){
+            $mock->shouldReceive('line')->andReturn(null);
+            $mock->shouldReceive('comment')->andReturn(null);
+            $mock->shouldReceive('info')->andReturn(null);
+        })->makePartial();
     }
 
     private function hasDiskFreeSpace($value)
