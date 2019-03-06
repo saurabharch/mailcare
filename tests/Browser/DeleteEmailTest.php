@@ -4,7 +4,6 @@ namespace Tests\Browser;
 
 use Tests\DuskTestCase;
 use Laravel\Dusk\Browser;
-use Artisan;
 use App\Email;
 use Tests\Browser\Pages\ShowEmail;
 use Illuminate\Foundation\Testing\DatabaseMigrations;

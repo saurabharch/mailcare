@@ -5,7 +5,6 @@ namespace Tests\Browser;
 use Tests\DuskTestCase;
 use Laravel\Dusk\Browser;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Artisan;
 use Tests\Browser\Pages\ShowEmail;
 use \App\Email;
 use Carbon\Carbon;
@@ -17,7 +16,10 @@ class ShowEmailTest extends DuskTestCase
 
     public function testShowEmailWithoutAttachment()
     {
-        Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_without_attachment.eml']);
+        $this->artisan(
+            'mailcare:email-receive', 
+            ['file' => 'tests/storage/email_without_attachment.eml']
+        );
         $email = Email::first();
 
         $this->browse(function (Browser $browser) use ($email) {
@@ -45,7 +47,10 @@ class ShowEmailTest extends DuskTestCase
 
     public function testShowEmailWithAttachment()
     {
-        Artisan::call('mailcare:email-receive', ['file' => 'tests/storage/email_with_attachment.eml']);
+        $this->artisan(
+            'mailcare:email-receive', 
+            ['file' => 'tests/storage/email_with_attachment.eml']
+        );
         $email = Email::first();
 
         $this->browse(function (Browser $browser) use ($email) {
@@ -133,7 +138,10 @@ class ShowEmailTest extends DuskTestCase
         $emailOne = factory(\App\Email::class)->create(['subject' => 'My first email']);
         $emailTwo = factory(\App\Email::class)->create(['subject' => 'My second email']);
 
-        Artisan::call('mailcare:build-statistics', ['date' => Carbon::now()->toDateString()]);
+        $this->artisan(
+            'mailcare:build-statistics', 
+            ['date' => Carbon::now()->toDateString()]
+        );
 
         $this->browse(function (Browser $browser) use ($emailOne, $emailTwo) {
             $browser->visit('/statistics')

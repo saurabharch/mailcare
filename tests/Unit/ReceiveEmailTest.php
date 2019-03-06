@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Artisan;
 
 class ReceiveEmailTest extends TestCase
 {

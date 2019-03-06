@@ -42,11 +42,11 @@ browser_test:
     - composer install
     - configure-laravel
     - start-nginx-ci-project
-    - php artisan dusk --colors --debug --env=dusk.ci
+    - php artisan dusk --colors --env=dusk.ci
 
   artifacts:
     paths:
-      - ./storage/logs # for debugging
+      - ./storage/logs
       - ./tests/Browser/screenshots
       - ./tests/Browser/console
     expire_in: 7 days

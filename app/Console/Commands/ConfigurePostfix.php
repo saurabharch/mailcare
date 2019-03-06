@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class ConfigurePostfix extends Command
 {
@@ -32,7 +34,7 @@ class ConfigurePostfix extends Command
 
     public function configureMainConfigFile($configDirectory, $newDomain)
     {
-        $mainConfigPath = str_finish($configDirectory, '/') . 'main.cf';
+        $mainConfigPath = Str::finish($configDirectory, '/') . 'main.cf';
         $this->info("Configure $mainConfigPath");
 
         if (! file_exists($mainConfigPath)) {
@@ -64,7 +66,7 @@ class ConfigurePostfix extends Command
 
     public function configureMasterConfigFile($configDirectory)
     {
-        $masterConfigPath = str_finish($configDirectory, '/') . 'master.cf';
+        $masterConfigPath = Str::finish($configDirectory, '/') . 'master.cf';
         $this->info("\nConfigure $masterConfigPath");
 
         if (! file_exists($masterConfigPath)) {
@@ -130,7 +132,7 @@ class ConfigurePostfix extends Command
             return null;
         }
 
-        $previousLine = array_first($matches);
+        $previousLine = Arr::first($matches);
 
         $newContent = str_replace($previousLine, $newLine, $previousContent);
         file_put_contents($filePath, $newContent);
