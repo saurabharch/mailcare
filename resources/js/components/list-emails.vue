@@ -146,6 +146,7 @@
             keywords: null,
             filteredBy: null,
             pageRequested: null,
+            cancelSource: null,
           }
         },
 
@@ -245,7 +246,11 @@
           },
 
           getEmails() {
-            axios.get('/api/emails', { params: {
+            if (this.cancelSource){
+              this.cancelSource.cancel()
+            }
+            this.cancelSource = axios.CancelToken.source()
+            axios.get('/api/emails', { cancelToken: this.cancelSource.token, params: {
               'inbox': (this.inbox ? this.inbox : null),
               'sender': (this.sender ? this.sender : null),
               'search': (this.keywords ? this.keywords : null),
@@ -256,6 +261,7 @@
               this.emails = response.data.data
               this.meta = response.data.meta
               this.totalCount = response.data.meta.total
+              this.cancelSource = null
             }.bind(this));
 
           },
