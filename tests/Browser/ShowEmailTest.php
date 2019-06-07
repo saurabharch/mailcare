@@ -60,7 +60,7 @@ class ShowEmailTest extends DuskTestCase
                     ->on(new ShowEmail($email))
                     ->assertSeeEmail()
                     ->assertSeeHtmlBody(function(Browser $browser){
-                        $browser->assertSourceHas('Please find attached the file you requested.<br />');
+                        $browser->assertSourceHas('Please find attached the file you requested.<br>');
                     })
                     ->assertSeeTextBody(function(Browser $browser){
                         $browser->assertSee('Please find attached the file you requested.');
