@@ -7,7 +7,7 @@ use App\Sender;
 
 class EmailFilters extends Filters
 {
-    protected $filters = ['inbox', 'sender', 'search', 'unread', 'favorite'];
+    protected $filters = ['inbox', 'sender', 'subject', 'search', 'unread', 'favorite'];
 
     protected function inbox($email)
     {
@@ -21,6 +21,11 @@ class EmailFilters extends Filters
         $sender = Sender::where('email', $email)->firstOrFail();
 
         return $this->builder->where('sender_id', $sender->id);
+    }
+
+    protected function subject($subject)
+    {
+        return $this->builder->where('subject', $subject);
     }
 
     protected function search($keywords)
