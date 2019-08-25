@@ -25,7 +25,8 @@ class EmailFilters extends Filters
 
     protected function subject($subject)
     {
-        return $this->builder->where('subject', $subject);
+        $subject = str_replace('*', '%', $subject);
+        return $this->builder->where('subject', 'like', "$subject");
     }
 
     protected function search($keywords)
