@@ -124,14 +124,31 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_all_emails_for_specific_subject()
     {
-        $emails = factory(\App\Email::class, 3)->create(['subject' => 'welcome']);
-        $emails = factory(\App\Email::class, 2)->create();
+        $emails = factory(\App\Email::class)->create(['subject' => 'welcome']);
+        $emails = factory(\App\Email::class)->create(['subject' => 'Welcome!']);
+        $emails = factory(\App\Email::class)->create(['subject' => 'Bye']);
 
         $response = $this->json('GET', 'api/emails?subject=welcome');
 
         $response->assertStatus(200);
 
-        $this->assertCount(3, $response->getData()->data);
+        $this->assertCount(1, $response->getData()->data);
+    }
+
+    /**
+     * @test
+     */
+    public function it_fetches_all_emails_for_a_subject_with_a_joker()
+    {
+        $emails = factory(\App\Email::class)->create(['subject' => 'welcome']);
+        $emails = factory(\App\Email::class)->create(['subject' => 'Welcome!']);
+        $emails = factory(\App\Email::class)->create(['subject' => 'Bye']);
+
+        $response = $this->json('GET', 'api/emails?subject=welcome*');
+
+        $response->assertStatus(200);
+
+        $this->assertCount(2, $response->getData()->data);
     }
 
     /**
