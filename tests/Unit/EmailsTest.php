@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use \Carbon\Carbon;
+use App\Email;
 
 class EmailsTest extends TestCase
 {
@@ -15,11 +16,11 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_latest_emails()
     {
-        $emailOne = factory(\App\Email::class)->create([
+        $emailOne = factory(Email::class)->create([
             'subject' => 'My first email',
             'created_at' => Carbon::yesterday()
             ]);
-        $emailTwo = factory(\App\Email::class)->create([
+        $emailTwo = factory(Email::class)->create([
             'subject' => 'My second email',
             'created_at' => Carbon::now()
             ]);
@@ -43,7 +44,7 @@ class EmailsTest extends TestCase
     public function it_fetches_limited_emails_per_default()
     {
         define('MAX_LIMIT', 25);
-        $emails = factory(\App\Email::class, 28)->create();
+        factory(Email::class, 28)->create();
 
         $response = $this->json('GET', 'api/emails');
 
@@ -62,7 +63,7 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_a_single_email()
     {
-        $email = factory(\App\Email::class)->create();
+        $email = factory(Email::class)->create();
 
         $response = $this->json('GET', 'api/emails/'.$email->id);
 
@@ -88,8 +89,8 @@ class EmailsTest extends TestCase
     {
         $inbox = factory(\App\Inbox::class)->create(['email' => 'test@example.com']);
 
-        $emails = factory(\App\Email::class, 3)->create();
-        $emails = factory(\App\Email::class, 2)->create([
+        factory(Email::class, 3)->create();
+        factory(Email::class, 2)->create([
             'inbox_id' => $inbox->id
         ]);
 
@@ -107,8 +108,8 @@ class EmailsTest extends TestCase
     {
         $sender = factory(\App\Sender::class)->create(['email' => 'test@example.com']);
 
-        $emails = factory(\App\Email::class, 3)->create();
-        $emails = factory(\App\Email::class, 2)->create([
+        factory(Email::class, 3)->create();
+        factory(Email::class, 2)->create([
             'sender_id' => $sender->id
         ]);
 
@@ -124,9 +125,9 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_all_emails_for_specific_subject()
     {
-        $emails = factory(\App\Email::class)->create(['subject' => 'welcome']);
-        $emails = factory(\App\Email::class)->create(['subject' => 'Welcome!']);
-        $emails = factory(\App\Email::class)->create(['subject' => 'Bye']);
+        factory(Email::class)->create(['subject' => 'welcome']);
+        factory(Email::class)->create(['subject' => 'Welcome!']);
+        factory(Email::class)->create(['subject' => 'Bye']);
 
         $response = $this->json('GET', 'api/emails?subject=welcome');
 
@@ -140,9 +141,9 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_all_emails_for_a_subject_with_a_joker()
     {
-        $emails = factory(\App\Email::class)->create(['subject' => 'welcome']);
-        $emails = factory(\App\Email::class)->create(['subject' => 'Welcome!']);
-        $emails = factory(\App\Email::class)->create(['subject' => 'Bye']);
+        factory(Email::class)->create(['subject' => 'welcome']);
+        factory(Email::class)->create(['subject' => 'Welcome!']);
+        factory(Email::class)->create(['subject' => 'Bye']);
 
         $response = $this->json('GET', 'api/emails?subject=welcome*');
 
@@ -154,20 +155,36 @@ class EmailsTest extends TestCase
     /**
      * @test
      */
+    public function it_fetches_all_emails_since_a_specific_date()
+    {
+        factory(Email::class)->create(['created_at' => Carbon::now()->subMonths(3)]);
+        factory(Email::class)->create(['created_at' => Carbon::now()->subMonths(1)]);
+
+        $since = Carbon::now()->subMonths(2)->toIso8601String();
+        $response = $this->json('GET', "api/emails?since=$since");
+
+        $response->assertStatus(200);
+
+        $this->assertCount(1, $response->getData()->data);
+    }
+
+    /**
+     * @test
+     */
     public function it_fetches_all_emails_starting_with_the_query_term_for_a_search()
     {
         $matchingInbox = factory(\App\Inbox::class)->create(['email' => 'matching-to@example.com']);
         $matchingSender = factory(\App\Sender::class)->create(['email' => 'matching-from@example.com']);
 
-        factory(\App\Email::class, 5)->create();
+        factory(Email::class, 5)->create();
 
-        factory(\App\Email::class)->create([
+        factory(Email::class)->create([
             'sender_id' => $matchingSender->id
         ]);
-        factory(\App\Email::class)->create([
+        factory(Email::class)->create([
             'inbox_id' => $matchingInbox->id
         ]);
-        factory(\App\Email::class)->create([
+        factory(Email::class)->create([
             'subject' => 'matching subject'
         ]);
 
@@ -185,15 +202,15 @@ class EmailsTest extends TestCase
         $matchingInbox = factory(\App\Inbox::class)->create(['email' => 'email-matching-to@example.com']);
         $matchingSender = factory(\App\Sender::class)->create(['email' => 'email-matching-from@example.com']);
 
-        factory(\App\Email::class, 5)->create();
+        factory(Email::class, 5)->create();
 
-        factory(\App\Email::class)->create([
+        factory(Email::class)->create([
             'sender_id' => $matchingSender->id
         ]);
-        factory(\App\Email::class)->create([
+        factory(Email::class)->create([
             'inbox_id' => $matchingInbox->id
         ]);
-        factory(\App\Email::class)->create([
+        factory(Email::class)->create([
             'subject' => 'a matching subject'
         ]);
 
@@ -208,8 +225,8 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_all_emails_unread()
     {
-        $emails = factory(\App\Email::class)->create();
-        $emails = factory(\App\Email::class, 2)->create(['read' => Carbon::now()]);
+        factory(Email::class)->create();
+        factory(Email::class, 2)->create(['read' => Carbon::now()]);
 
         $response = $this->json('GET', 'api/emails?unread=1');
 
@@ -223,8 +240,8 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_all_emails_favorites()
     {
-        $emails = factory(\App\Email::class)->create();
-        $emails = factory(\App\Email::class, 2)->create(['favorite' => true]);
+        factory(Email::class)->create();
+        factory(Email::class, 2)->create(['favorite' => true]);
 
         $response = $this->json('GET', 'api/emails?favorite=1');
 
@@ -386,7 +403,7 @@ class EmailsTest extends TestCase
      */
     public function email_can_be_read()
     {
-        $email = factory(\App\Email::class)->create();
+        $email = factory(Email::class)->create();
 
         $response = $this->json('GET', 'api/emails');
 
@@ -412,21 +429,21 @@ class EmailsTest extends TestCase
      */
     public function email_can_be_favorite()
     {
-        $email = factory(\App\Email::class)->create();
+        $email = factory(Email::class)->create();
 
         $response = $this->json('GET', 'api/emails/'.$email->id);
         $response
             ->assertStatus(200)
             ->assertJsonFragment(['favorite' => false]);
 
-        $response = $this->json('POST', 'api/emails/'.$email->id.'/favorites');
+        $this->json('POST', 'api/emails/'.$email->id.'/favorites');
 
         $response = $this->json('GET', 'api/emails/'.$email->id);
         $response
             ->assertStatus(200)
             ->assertJsonFragment(['favorite' => true]);
 
-        $response = $this->json('DELETE', 'api/emails/'.$email->id.'/favorites');
+        $this->json('DELETE', 'api/emails/'.$email->id.'/favorites');
 
 
         $response = $this->json('GET', 'api/emails/'.$email->id);
@@ -492,7 +509,7 @@ class EmailsTest extends TestCase
      */
     public function it_download_attachments_that_doesnt_exist_of_email()
     {
-        $email = factory(\App\Email::class)->create();
+        $email = factory(Email::class)->create();
 
         $response = $this->json('GET', 'api/emails/'.$email->id.'/attachments/id-doesnt-exist');
 

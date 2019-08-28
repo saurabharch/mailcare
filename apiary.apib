@@ -117,7 +117,7 @@ For example, to authorize as demo@torm.xyz / p@55w0rd the client would send: Aut
 
 ## Emails Resource [/emails]
 
-### List of emails [GET /emails{?page}{?limit}{?inbox}{?sender}{?subject}{?search}{?unread}{?favorite}]
+### List of emails [GET /emails{?page}{?limit}{?inbox}{?sender}{?subject}{?since}{?search}{?unread}{?favorite}]
 
 + Parameters
     + page: `2` (number, optional) - Page requested
@@ -127,6 +127,7 @@ For example, to authorize as demo@torm.xyz / p@55w0rd the client would send: Aut
     + inbox: `test@example.com` (string, optional) - Filter by inbox
     + sender: `test@example.com` (string, optional) - Filter by sender
     + subject: `Welcome` (string, optional) - Search by subject (joker * accepted)
+    + since: `2018-01-19T12:23:27+00:00` (string, optional) - Filter by createdAt
     + search: `matching` (string, optional) - Search by inbox or sender or subject
     + unread: `true` (boolean, optional) - Filter only by unread
     + favorite: `true` (boolean, optional) - Filter only by favorite
