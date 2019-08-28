@@ -45,3 +45,18 @@ and reload Postfix.
 ### Step 3
 
 https://www.wormly.com/test-smtp-server
+
+
+## Screenshots
+
+### Emails
+
+![Emails](storage/screenshots/emails.png "Emails")
+
+
+### Statistics
+![Statistics](storage/screenshots/statistics.png "Statistics")
+
+
+### Automations
+![Automation](storage/screenshots/automation.png "Automation")
