@@ -12,6 +12,7 @@ class Attachment extends Model
     use StorageForHuman;
     
     public $incrementing = false;
+    protected $keyType = 'string';
     protected $appends = ['size_for_human'];
 
     public function hashHeaders($headers)
