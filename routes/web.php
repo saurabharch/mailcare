@@ -30,6 +30,8 @@ Route::middleware('mailcare.auth')->group(function () {
     Route::view('/statistics', 'statistics.index');
     Route::view('/automations', 'automations.index')->middleware('mailcare.config:automations');
     
-    Route::get('/change-password', 'ChangePasswordController@showChangePasswordForm');
-    Route::post('/change-password', 'ChangePasswordController@changePassword');
+    Route::get('/change-password', 'ChangePasswordController@showChangePasswordForm')
+        ->middleware('mailcare.config:auth');
+    Route::post('/change-password', 'ChangePasswordController@changePassword')
+        ->middleware('mailcare.config:auth');
 });
