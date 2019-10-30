@@ -78,6 +78,10 @@
               <i class="fab fa-gitlab"></i>
             </a>
           </p>
+          @auth
+            <a class="is-size-7" href="{{ url('/change-password') }}">Change password</a>
+          @endauth
+          <p>
         </div>
       </div>
     </footer>

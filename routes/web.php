@@ -29,4 +29,7 @@ Route::middleware('mailcare.auth')->group(function () {
 
     Route::view('/statistics', 'statistics.index');
     Route::view('/automations', 'automations.index')->middleware('mailcare.config:automations');
+    
+    Route::get('/change-password', 'ChangePasswordController@showChangePasswordForm');
+    Route::post('/change-password', 'ChangePasswordController@changePassword');
 });
