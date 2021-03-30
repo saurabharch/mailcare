@@ -47,5 +47,7 @@ class AutoClean extends Command
         $emails = Email::onlyTrashed()->where('deleted_at', '<', $date)->get();
         $this->info("Emails to clean: ".count($emails));
         $emails->each->forceDelete();
+
+        return 0;
     }
 }

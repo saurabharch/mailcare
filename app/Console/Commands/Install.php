@@ -49,6 +49,7 @@ class Install extends Command
         $this->clearCache();
 
         $this->goodbye();
+        return 0;
     }
 
     protected function welcome()

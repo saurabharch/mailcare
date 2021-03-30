@@ -28,18 +28,23 @@ class ShowEmailTest extends DuskTestCase
                     ->clickLink('My first email')
                     ->on(new ShowEmail($email))
                     ->assertSeeEmail()
-                    ->assertSeeHtmlBody(function(Browser $browser){
+                    ->waitFor('li.is-active[data-label="Html"]')
+                    ->withinFrame('[name=iframe-body]', function($browser) {
                         $browser->assertSeeLink('mailcare.io')
                                 ->assertSourceHas('My name is <strong>vincent</strong>.');
                     })
-                    ->assertSeeTextBody(function(Browser $browser){
+                    ->clickLink('Text')
+                    ->waitFor('li.is-active[data-label="Text"]')
+                    ->withinFrame('[name=iframe-body]', function($browser) {
                         $browser->assertSee('Welcome to mailcare.io')
                                 ->assertSee('sorry no link in plain text');
                     })
-                    ->assertSeeRawBody(function(Browser $browser){
+                    ->clickLink('Raw')
+                    ->waitFor('li.is-active[data-label="Raw"]')
+                    ->withinFrame('[name=iframe-body]', function($browser) {
                         $browser->waitForText('Content-Transfer-Encoding')
                                 ->assertSee('sorry no link in plain text')
-                                ->assertSee('My name is <strong>vincent</strong>.')
+                                ->assertSee('My name is <strong>vincent</strong>.', false)
                                 ->assertSee('Content-Transfer-Encoding');
                     });
         });
@@ -59,13 +64,18 @@ class ShowEmailTest extends DuskTestCase
                     ->clickLink('Logo of MailCare')
                     ->on(new ShowEmail($email))
                     ->assertSeeEmail()
-                    ->assertSeeHtmlBody(function(Browser $browser){
+                    ->waitFor('li.is-active[data-label="Html"]')
+                    ->withinFrame('[name=iframe-body]', function($browser) {
                         $browser->assertSourceHas('Please find attached the file you requested.<br>');
                     })
-                    ->assertSeeTextBody(function(Browser $browser){
+                    ->clickLink('Text')
+                    ->waitFor('li.is-active[data-label="Text"]')
+                    ->withinFrame('[name=iframe-body]', function($browser) {
                         $browser->assertSee('Please find attached the file you requested.');
                     })
-                    ->assertSeeRawBody(function(Browser $browser){
+                    ->clickLink('Raw')
+                    ->waitFor('li.is-active[data-label="Raw"]')
+                    ->withinFrame('[name=iframe-body]', function($browser) {
                         $browser->waitForText('logo-mailcare-renard.png')
                                 ->assertSee('Please find attached the file you requested.');
                     });

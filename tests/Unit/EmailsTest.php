@@ -299,7 +299,7 @@ class EmailsTest extends TestCase
         $response = $this->json('GET', 'api/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'text/html']);
         $response
             ->assertStatus(200)
-            ->assertSee('<a href="https://mailcare.io">mailcare.io</a>')
+            ->assertSee('<a href="https://mailcare.io">mailcare.io</a>', false)
             ->assertHeader('Content-Type', 'text/html; charset=UTF-8');
     }
 
@@ -336,7 +336,7 @@ class EmailsTest extends TestCase
         $response = $this->json('GET', 'api/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'message/rfc2822']);
         $response
             ->assertStatus(200)
-            ->assertSee('Welcome to &lt;a href=&quot;https://mailcare.io&quot;&gt;mailcare.io&lt;/a&gt;')
+            ->assertSee('Welcome to &lt;a href=&quot;https://mailcare.io&quot;&gt;mailcare.io&lt;/a&gt;', false)
             ->assertSee('Welcome to mailcare.io, sorry no link in plain text.')
             ->assertHeader('Content-Type', 'message/rfc2822; charset=UTF-8');
     }
@@ -356,7 +356,7 @@ class EmailsTest extends TestCase
         $response = $this->json('GET', 'api/emails/'.$response->getData()->data[0]->id, [], ['Accept' => 'text/plain; q=0.5, text/html']);
         $response
             ->assertStatus(200)
-            ->assertSee('<a href="https://mailcare.io">mailcare.io</a>')
+            ->assertSee('<a href="https://mailcare.io">mailcare.io</a>', false)
             ->assertDontSee('sorry no link in plain text.')
             ->assertHeader('Content-Type', 'text/html; charset=UTF-8');
     }

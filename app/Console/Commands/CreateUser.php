@@ -51,5 +51,6 @@ class CreateUser extends Command
         $user->save();
 
         $this->info("User {$user->name} created");
+        return 0;
     }
 }

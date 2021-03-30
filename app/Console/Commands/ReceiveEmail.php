@@ -99,6 +99,7 @@ class ReceiveEmail extends Command
         }
 
         event(new EmailReceived($email->fresh()));
+        return 0;
     }
 
     /**
