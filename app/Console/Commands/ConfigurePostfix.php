@@ -30,6 +30,8 @@ class ConfigurePostfix extends Command
         $this->configureMainConfigFile($configDirectory, $newDomain);
         $this->configureMasterConfigFile($configDirectory);
         $this->reloadPostfix();
+
+        return 0;
     }
 
     public function configureMainConfigFile($configDirectory, $newDomain)

@@ -32,6 +32,7 @@ class AutoDelete extends Command
                 $this->line("$size deleted");
             }
         });
+        return 0;
     }
 
     public function getCalculatedSize()

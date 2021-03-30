@@ -67,5 +67,6 @@ class BuildStatistics extends Command
 
 
         $this->info("Statistics builded successfully for $date");
+        return 0;
     }
 }
