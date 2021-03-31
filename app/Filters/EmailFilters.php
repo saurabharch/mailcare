@@ -7,7 +7,7 @@ use App\Sender;
 
 class EmailFilters extends Filters
 {
-    protected $filters = ['inbox', 'sender', 'subject', 'since', 'search', 'unread', 'favorite'];
+    protected $filters = ['inbox', 'sender', 'subject', 'since', 'until', 'search', 'unread', 'favorite'];
 
     protected function inbox($email)
     {
@@ -32,6 +32,11 @@ class EmailFilters extends Filters
     protected function since($date)
     {
         return $this->builder->where('created_at', '>', $date);
+    }
+
+    protected function until($date)
+    {
+        return $this->builder->where('created_at', '<', $date);
     }
 
     protected function search($keywords)
