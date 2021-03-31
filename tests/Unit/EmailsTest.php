@@ -157,15 +157,33 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_all_emails_since_a_specific_date()
     {
-        factory(Email::class)->create(['created_at' => Carbon::now()->subMonths(3)]);
+        factory(Email::class)->create(['created_at' => Carbon::now()->subMonths(4)]);
+        factory(Email::class)->create(['created_at' => Carbon::now()->subMonths(2)]);
         factory(Email::class)->create(['created_at' => Carbon::now()->subMonths(1)]);
 
-        $since = Carbon::now()->subMonths(2)->toIso8601String();
+        $since = Carbon::now()->subMonths(3)->toIso8601String();
         $response = $this->json('GET', "api/emails?since=$since");
 
         $response->assertStatus(200);
 
-        $this->assertCount(1, $response->getData()->data);
+        $this->assertCount(2, $response->getData()->data);
+    }
+
+    /**
+     * @test
+     */
+    public function it_fetches_all_emails_until_a_specific_date()
+    {
+        factory(Email::class)->create(['created_at' => Carbon::now()->subMonths(4)]);
+        factory(Email::class)->create(['created_at' => Carbon::now()->subMonths(3)]);
+        factory(Email::class)->create(['created_at' => Carbon::now()->subMonths(1)]);
+
+        $until = Carbon::now()->subMonths(2)->toIso8601String();
+        $response = $this->json('GET', "api/emails?until=$until");
+
+        $response->assertStatus(200);
+
+        $this->assertCount(2, $response->getData()->data);
     }
 
     /**
