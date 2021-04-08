@@ -6,6 +6,9 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use \Carbon\Carbon;
 use App\Email;
+use App\Attachment;
+use App\Inbox;
+use App\Sender;
 
 class EmailsTest extends TestCase
 {
@@ -16,11 +19,11 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_latest_emails()
     {
-        $emailOne = factory(Email::class)->create([
+        $emailOne = Email::factory()->create([
             'subject' => 'My first email',
             'created_at' => Carbon::yesterday()
             ]);
-        $emailTwo = factory(Email::class)->create([
+        $emailTwo = Email::factory()->create([
             'subject' => 'My second email',
             'created_at' => Carbon::now()
             ]);
@@ -44,7 +47,7 @@ class EmailsTest extends TestCase
     public function it_fetches_limited_emails_per_default()
     {
         define('MAX_LIMIT', 25);
-        factory(Email::class, 28)->create();
+        Email::factory()->count(28)->create();
 
         $response = $this->json('GET', 'api/emails');
 
@@ -63,7 +66,7 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_a_single_email()
     {
-        $email = factory(Email::class)->create();
+        $email = Email::factory()->create();
 
         $response = $this->json('GET', 'api/emails/'.$email->id);
 
@@ -87,10 +90,10 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_all_emails_for_specific_inbox()
     {
-        $inbox = factory(\App\Inbox::class)->create(['email' => 'test@example.com']);
+        $inbox = Inbox::factory()->create(['email' => 'test@example.com']);
 
-        factory(Email::class, 3)->create();
-        factory(Email::class, 2)->create([
+        Email::factory()->count(3)->create();
+        Email::factory()->count(2)->create([
             'inbox_id' => $inbox->id
         ]);
 
@@ -106,10 +109,10 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_all_emails_for_specific_sender()
     {
-        $sender = factory(\App\Sender::class)->create(['email' => 'test@example.com']);
+        $sender = Sender::factory()->create(['email' => 'test@example.com']);
 
-        factory(Email::class, 3)->create();
-        factory(Email::class, 2)->create([
+        Email::factory()->count(3)->create();
+        Email::factory()->count(2)->create([
             'sender_id' => $sender->id
         ]);
 
@@ -125,9 +128,9 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_all_emails_for_specific_subject()
     {
-        factory(Email::class)->create(['subject' => 'welcome']);
-        factory(Email::class)->create(['subject' => 'Welcome!']);
-        factory(Email::class)->create(['subject' => 'Bye']);
+        Email::factory()->create(['subject' => 'welcome']);
+        Email::factory()->create(['subject' => 'Welcome!']);
+        Email::factory()->create(['subject' => 'Bye']);
 
         $response = $this->json('GET', 'api/emails?subject=welcome');
 
@@ -141,9 +144,9 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_all_emails_for_a_subject_with_a_joker()
     {
-        factory(Email::class)->create(['subject' => 'welcome']);
-        factory(Email::class)->create(['subject' => 'Welcome!']);
-        factory(Email::class)->create(['subject' => 'Bye']);
+        Email::factory()->create(['subject' => 'welcome']);
+        Email::factory()->create(['subject' => 'Welcome!']);
+        Email::factory()->create(['subject' => 'Bye']);
 
         $response = $this->json('GET', 'api/emails?subject=welcome*');
 
@@ -157,9 +160,9 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_all_emails_since_a_specific_date()
     {
-        factory(Email::class)->create(['created_at' => Carbon::now()->subMonths(4)]);
-        factory(Email::class)->create(['created_at' => Carbon::now()->subMonths(2)]);
-        factory(Email::class)->create(['created_at' => Carbon::now()->subMonths(1)]);
+        Email::factory()->create(['created_at' => Carbon::now()->subMonths(4)]);
+        Email::factory()->create(['created_at' => Carbon::now()->subMonths(2)]);
+        Email::factory()->create(['created_at' => Carbon::now()->subMonths(1)]);
 
         $since = Carbon::now()->subMonths(3)->toIso8601String();
         $response = $this->json('GET', "api/emails?since=$since");
@@ -174,9 +177,9 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_all_emails_until_a_specific_date()
     {
-        factory(Email::class)->create(['created_at' => Carbon::now()->subMonths(4)]);
-        factory(Email::class)->create(['created_at' => Carbon::now()->subMonths(3)]);
-        factory(Email::class)->create(['created_at' => Carbon::now()->subMonths(1)]);
+        Email::factory()->create(['created_at' => Carbon::now()->subMonths(4)]);
+        Email::factory()->create(['created_at' => Carbon::now()->subMonths(3)]);
+        Email::factory()->create(['created_at' => Carbon::now()->subMonths(1)]);
 
         $until = Carbon::now()->subMonths(2)->toIso8601String();
         $response = $this->json('GET', "api/emails?until=$until");
@@ -191,18 +194,18 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_all_emails_starting_with_the_query_term_for_a_search()
     {
-        $matchingInbox = factory(\App\Inbox::class)->create(['email' => 'matching-to@example.com']);
-        $matchingSender = factory(\App\Sender::class)->create(['email' => 'matching-from@example.com']);
+        $matchingInbox = Inbox::factory()->create(['email' => 'matching-to@example.com']);
+        $matchingSender = Sender::factory()->create(['email' => 'matching-from@example.com']);
 
-        factory(Email::class, 5)->create();
+        Email::factory()->count(5)->create();
 
-        factory(Email::class)->create([
+        Email::factory()->create([
             'sender_id' => $matchingSender->id
         ]);
-        factory(Email::class)->create([
+        Email::factory()->create([
             'inbox_id' => $matchingInbox->id
         ]);
-        factory(Email::class)->create([
+        Email::factory()->create([
             'subject' => 'matching subject'
         ]);
 
@@ -217,18 +220,18 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_all_emails_with_the_query_term_inside_for_a_search()
     {
-        $matchingInbox = factory(\App\Inbox::class)->create(['email' => 'email-matching-to@example.com']);
-        $matchingSender = factory(\App\Sender::class)->create(['email' => 'email-matching-from@example.com']);
+        $matchingInbox = Inbox::factory()->create(['email' => 'email-matching-to@example.com']);
+        $matchingSender = Sender::factory()->create(['email' => 'email-matching-from@example.com']);
 
-        factory(Email::class, 5)->create();
+        Email::factory()->count(5)->create();
 
-        factory(Email::class)->create([
+        Email::factory()->create([
             'sender_id' => $matchingSender->id
         ]);
-        factory(Email::class)->create([
+        Email::factory()->create([
             'inbox_id' => $matchingInbox->id
         ]);
-        factory(Email::class)->create([
+        Email::factory()->create([
             'subject' => 'a matching subject'
         ]);
 
@@ -243,8 +246,8 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_all_emails_unread()
     {
-        factory(Email::class)->create();
-        factory(Email::class, 2)->create(['read' => Carbon::now()]);
+        Email::factory()->create();
+        Email::factory()->count(2)->create(['read' => Carbon::now()]);
 
         $response = $this->json('GET', 'api/emails?unread=1');
 
@@ -258,8 +261,8 @@ class EmailsTest extends TestCase
      */
     public function it_fetches_all_emails_favorites()
     {
-        factory(Email::class)->create();
-        factory(Email::class, 2)->create(['favorite' => true]);
+        Email::factory()->create();
+        Email::factory()->count(2)->create(['favorite' => true]);
 
         $response = $this->json('GET', 'api/emails?favorite=1');
 
@@ -421,7 +424,7 @@ class EmailsTest extends TestCase
      */
     public function email_can_be_read()
     {
-        $email = factory(Email::class)->create();
+        $email = Email::factory()->create();
 
         $response = $this->json('GET', 'api/emails');
 
@@ -447,7 +450,7 @@ class EmailsTest extends TestCase
      */
     public function email_can_be_favorite()
     {
-        $email = factory(Email::class)->create();
+        $email = Email::factory()->create();
 
         $response = $this->json('GET', 'api/emails/'.$email->id);
         $response
@@ -527,7 +530,7 @@ class EmailsTest extends TestCase
      */
     public function it_download_attachments_that_doesnt_exist_of_email()
     {
-        $email = factory(Email::class)->create();
+        $email = Email::factory()->create();
 
         $response = $this->json('GET', 'api/emails/'.$email->id.'/attachments/id-doesnt-exist');
 
@@ -547,7 +550,7 @@ class EmailsTest extends TestCase
         $response = $this->json('GET', 'api/emails');
         $emailId = $response->getData()->data[0]->id;
 
-        $attachment = factory(\App\Attachment::class)->create(['email_id' => $emailId]);
+        $attachment = Attachment::factory()->create(['email_id' => $emailId]);
 
         $response = $this->json('GET', 'api/emails/'.$attachment->email->id.'/attachments/'.$attachment->id);
 

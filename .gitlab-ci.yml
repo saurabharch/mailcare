@@ -24,7 +24,7 @@ test_coding_standard:
   script:
     - cp .env.example .env
     - composer install
-    - vendor/bin/phpcs . --ignore="*/vendor/*,*/node_modules/*,*/public/css/*,*/public/js/*,*/database/*,*/autoload.php,*/cache/*,*/*.blade.php,*/storage/*,*/tests/*" --standard=PSR2
+    - vendor/bin/phpcs . --ignore="*/vendor/*,*/node_modules/*,*/public/*,*/database/*,*/autoload.php,*/cache/*,*/*.blade.php,*/storage/*,*/tests/*" --standard=PSR2
 
 browser_test:
   stage: test

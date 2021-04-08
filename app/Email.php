@@ -7,10 +7,12 @@ use App\Traits\Uuids;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Email extends Model
 {
     use SoftDeletes;
+    use HasFactory;
 
     public $incrementing = false;
     protected $keyType = 'string';

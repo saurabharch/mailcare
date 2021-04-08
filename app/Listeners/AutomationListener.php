@@ -3,28 +3,14 @@
 namespace App\Listeners;
 
 use App\Events\EmailReceived;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Automation;
-use GuzzleHttp\Client;
 use App\Http\Resources\EmailResource;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ForwardEmail;
+use Illuminate\Support\Facades\Http;
 
 class AutomationListener
 {
-    protected $client;
-
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct(Client $client)
-    {
-        $this->client = $client;
-    }
-
     /**
      * Handle the event.
      *
@@ -89,21 +75,20 @@ class AutomationListener
                     $automation->in_error = true;
                 }
             } else {
-                try {
-                    if ($automation->post_raw) {
-                        $this->client->request('POST', $automation->action_url, [
-                            'headers' => $headers,
-                            'form_params' => file_get_contents($event->email->fullPath()),
-                        ]);
-                    } else {
-                        $this->client->request('POST', $automation->action_url, [
-                            'headers' => $headers,
-                            'form_params' => (new EmailResource($event->email))->response()->getData(),
-                        ]);
-                    }
-                    $automation->in_error = false;
-                } catch (\Exception $e) {
+                $body = $automation->post_raw ?
+                    file_get_contents($event->email->fullPath())
+                    : (new EmailResource($event->email))->response()->content();
+                $contentType = $automation->post_raw ? 'message/rfc2822' : 'application/json';
+
+                $response = Http::withHeaders($headers)->withBody(
+                    $body,
+                    $contentType
+                )->post($automation->action_url);
+
+                if ($response->failed()) {
                     $automation->in_error = true;
+                } else {
+                    $automation->in_error = false;
                 }
             }
 

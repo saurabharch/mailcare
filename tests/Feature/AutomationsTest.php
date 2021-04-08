@@ -11,9 +11,9 @@ use App\Sender;
 use App\Attachment;
 use App\Listeners\AutomationListener;
 use App\Events\EmailReceived;
-use Mockery;
-use GuzzleHttp\Client;
 use App\Http\Resources\EmailResource;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\Request;
 
 class AutomationsTest extends TestCase
 {
@@ -23,8 +23,6 @@ class AutomationsTest extends TestCase
     {
     	parent::setUp();
         config(['mailcare.automations' => true]);
-    	$this->client = Mockery::spy(Client::class);
-    	app()->instance(Client::class, $this->client);
     }
 
     private function handleAutomationListener($email)
@@ -37,10 +35,10 @@ class AutomationsTest extends TestCase
     private function assertAutomationNotTriggered($automation) 
     {
     	$this->assertEquals(0, $automation->fresh()->emails_received);
-        $this->client->shouldNotHaveReceived('request');
+        Http::assertNothingSent();
     }
 
-    private function assertAutomationTriggered($automation, $hits = [], $email)
+    private function assertAutomationTriggered($automation, $hits, $email)
     {
         $headers = [];
         $headers['X-MailCare-Title'] = $automation->title;
@@ -52,14 +50,12 @@ class AutomationsTest extends TestCase
         }
 
     	$this->assertEquals(1, $automation->fresh()->emails_received);
-        $this->client->shouldHaveReceived('request')->with(
-            'POST', 
-            $automation->action_url,
-            [
-                'headers' => $headers,
-                'form_params' => (new EmailResource($email))->response()->getData(),
-            ]
-        );
+        Http::assertSent(function (Request $request) use ($automation, $headers, $email) {
+            return $request->url() == $automation->action_url
+                    && $request->method() == 'POST'
+                    && $request->hasHeaders($headers)
+                    && $request->body() == (new EmailResource($email))->response()->content();
+        });
     }
 
     public function subjectProvider()
@@ -77,10 +73,12 @@ class AutomationsTest extends TestCase
      */
     public function testSubjectDoesMatch($subjectFilter)
     {
-    	$automation = factory(Automation::class)->create([
+        Http::fake();
+        
+    	$automation = Automation::factory()->create([
             'subject' => $subjectFilter,
     	]);
-    	$email = factory(Email::class)->create([
+    	$email = Email::factory()->create([
             'subject' => 'My first email',
     	]);
 
@@ -105,12 +103,14 @@ class AutomationsTest extends TestCase
      */
     public function testSenderDoesMatch($senderFilter)
     {
-        $sender = factory(Sender::class)->create(['email' => 'test@example.com']);
-        $email = factory(Email::class)->create([
+        Http::fake();
+
+        $sender = Sender::factory()->create(['email' => 'test@example.com']);
+        $email = Email::factory()->create([
             'sender_id' => $sender->id
         ]);
 
-    	$automation = factory(Automation::class)->create([
+    	$automation = Automation::factory()->create([
             'sender' => $senderFilter,
     	]);
 
@@ -138,78 +138,76 @@ class AutomationsTest extends TestCase
      */
     public function testInboxDoesMatch($inboxFilter)
     {
-        $inbox = factory(Inbox::class)->create(['email' => 'test@example.com']);
-        $email = factory(Email::class)->create([
+        Http::fake();
+        
+        $inbox = Inbox::factory()->create(['email' => 'test@example.com']);
+        $email = Email::factory()->create([
             'inbox_id' => $inbox->id
         ]);
 
-    	$automation = factory(Automation::class)->create([
+    	$automation = Automation::factory()->create([
             'inbox' => $inboxFilter,
     	]);
 
-
     	$this->handleAutomationListener($email);
-
-
 		$this->assertAutomationTriggered($automation, ['Inbox'], $email);
     }
 
     public function testHasAttachmentDoesMatch()
     {
-		$email = factory(Email::class)->create();
-        $attachment = factory(Attachment::class)->create(['email_id' => $email->id]);
+        Http::fake();
         
-
-    	$automation = factory(Automation::class)->create([
+		$email = Email::factory()->create();
+        $attachment = Attachment::factory()->create(['email_id' => $email->id]);
+        
+    	$automation = Automation::factory()->create([
             'has_attachments' => true,
     	]);
 
-
     	$this->handleAutomationListener($email);
-
-
 		$this->assertAutomationTriggered($automation, ['Has-Attachments'], $email);
     }
 
     public function testSubjectDoesMatchButSenderNot()
     {
-        $sender = factory(Sender::class)->create(['email' => 'test@example.com']);
+        Http::fake();
+        
+        $sender = Sender::factory()->create(['email' => 'test@example.com']);
 
-    	$automation = factory(Automation::class)->create([
+    	$automation = Automation::factory()->create([
             'subject' => 'My first email',
             'sender' => 'othertest@example\.com',
     	]);
-    	$email = factory(Email::class)->create([
+    	$email = Email::factory()->create([
             'subject' => 'My first email',
             'sender_id' => $sender->id
     	]);
 
     	$this->handleAutomationListener($email);
-
-
 		$this->assertAutomationNotTriggered($automation);
     }
 
     public function testEmptyDoesMatch()
     {
-    	$automation = factory(Automation::class)->create();
-    	$email = factory(Email::class)->create();
+        Http::fake();
+        
+    	$automation = Automation::factory()->create();
+    	$email = Email::factory()->create();
 
     	$this->handleAutomationListener($email);
-
-
 		$this->assertAutomationTriggered($automation, [], $email);
     }
 
     public function testSecretTokenSendedWhenAsked()
     {
-    	$automation = factory(Automation::class)->create([
+        Http::fake();
+        
+    	$automation = Automation::factory()->create([
     		'action_secret_token' => 'secret1234',
     	]);
-    	$email = factory(Email::class)->create();
+    	$email = Email::factory()->create();
 
     	$this->handleAutomationListener($email);
-
 		$this->assertAutomationTriggered($automation, [], $email);
     }
 
@@ -227,16 +225,16 @@ class AutomationsTest extends TestCase
      */
     public function testSubjectDoesntMatch($subjectFilter)
     {
-    	$automation = factory(Automation::class)->create([
+        Http::fake();
+        
+    	$automation = Automation::factory()->create([
             'subject' => $subjectFilter,
     	]);
-    	$email = factory(Email::class)->create([
+    	$email = Email::factory()->create([
             'subject' => 'My first email',
     	]);
 
     	$this->handleAutomationListener($email);
-
-
     	$this->assertAutomationNotTriggered($automation);
     }
 
@@ -254,19 +252,19 @@ class AutomationsTest extends TestCase
      */
     public function testSenderDoesntMatch($senderFilter)
     {
-        $sender = factory(Sender::class)->create(['email' => 'test@example.com']);
-        $email = factory(Email::class)->create([
+        Http::fake();
+        
+        $sender = Sender::factory()->create(['email' => 'test@example.com']);
+        $email = Email::factory()->create([
             'sender_id' => $sender->id
         ]);
 
-    	$automation = factory(Automation::class)->create([
+    	$automation = Automation::factory()->create([
             'sender' => $senderFilter,
     	]);
 
 
     	$this->handleAutomationListener($email);
-
-
     	$this->assertAutomationNotTriggered($automation);
     }
 
@@ -284,44 +282,46 @@ class AutomationsTest extends TestCase
      */
     public function testInboxDoesntMatch($inboxFilter)
     {
-        $inbox = factory(Inbox::class)->create(['email' => 'test@example.com']);
-        $email = factory(Email::class)->create([
+        Http::fake();
+        
+        $inbox = Inbox::factory()->create(['email' => 'test@example.com']);
+        $email = Email::factory()->create([
             'inbox_id' => $inbox->id
         ]);
 
-    	$automation = factory(Automation::class)->create([
+    	$automation = Automation::factory()->create([
             'inbox' => $inboxFilter,
     	]);
 
 
     	$this->handleAutomationListener($email);
-
-
     	$this->assertAutomationNotTriggered($automation);
     }
 
     public function testHasntAttachmentDoesntMatch()
     {
-		$email = factory(Email::class)->create();
+        Http::fake();
+        
+		$email = Email::factory()->create();
 
-    	$automation = factory(Automation::class)->create([
+    	$automation = Automation::factory()->create([
             'has_attachments' => true,
     	]);
 
 
     	$this->handleAutomationListener($email);
-
-
     	$this->assertAutomationNotTriggered($automation);
     }
 
     public function testDeleteEmailAfterProcessingAutomation()
     {
-        $automation = factory(Automation::class)->create([
+        Http::fake();
+        
+        $automation = Automation::factory()->create([
             'subject' => 'Order completed',
             'action_delete_email' => true,
         ]);
-        $email = factory(Email::class)->create([
+        $email = Email::factory()->create([
             'subject' => 'Order completed',
         ]);
 
@@ -335,20 +335,21 @@ class AutomationsTest extends TestCase
 
     public function testDontDeleteEmailIfAutomationDoesntMatch()
     {
-        $automation = factory(Automation::class)->create([
+        Http::fake();
+        
+        $automation = Automation::factory()->create([
             'subject' => 'Order cancelled',
             'action_delete_email' => false,
         ]);
-        $automation = factory(Automation::class)->create([
+        $automation = Automation::factory()->create([
             'subject' => 'Order completed',
         ]);
-        $email = factory(Email::class)->create([
+        $email = Email::factory()->create([
             'subject' => 'Order completed',
         ]);
 
         $this->assertCount(1, Email::all());
         $this->handleAutomationListener($email);
-
 
         $this->assertAutomationTriggered($automation, ['Subject'], $email);
         $this->assertCount(1, Email::all());
@@ -356,11 +357,13 @@ class AutomationsTest extends TestCase
 
     public function testDontDeleteEmailAfterProcessingAutomation()
     {
-        $automation = factory(Automation::class)->create([
+        Http::fake();
+        
+        $automation = Automation::factory()->create([
             'subject' => 'Order completed',
             'action_delete_email' => false,
         ]);
-        $email = factory(Email::class)->create([
+        $email = Email::factory()->create([
             'subject' => 'Order completed',
         ]);
 
@@ -374,30 +377,28 @@ class AutomationsTest extends TestCase
 
     public function testFailed()
     {
-        $this->client->shouldReceive('request')
-            ->once()->andThrow(\Exception::class);
-        $this->client->shouldReceive('request')
-            ->once()->andReturn(true);
-        $this->client->shouldReceive('request')
-            ->once()->andThrow(\Exception::class);
+        Http::fakeSequence()
+            ->push('Hello World', 500)
+            ->push('Hello World', 200)
+            ->push('Hello World', 400);
 
-        $automation = factory(Automation::class)->create([
+        $automation = Automation::factory()->create([
             'subject' => 'Order completed',
         ]);
 
-        $email = factory(Email::class)->create([
+        $email = Email::factory()->create([
             'subject' => 'Order completed',
         ]);
         $this->handleAutomationListener($email);
         $this->assertTrue($automation->fresh()->in_error);
 
-        $email = factory(Email::class)->create([
+        $email = Email::factory()->create([
             'subject' => 'Order completed',
         ]);
         $this->handleAutomationListener($email);
         $this->assertFalse($automation->fresh()->in_error);
 
-        $email = factory(Email::class)->create([
+        $email = Email::factory()->create([
             'subject' => 'Order completed',
         ]);
         $this->handleAutomationListener($email);

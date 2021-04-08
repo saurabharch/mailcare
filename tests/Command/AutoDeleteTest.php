@@ -45,7 +45,7 @@ class AutoDeleteTest extends TestCase
     {
     	$this->hasCalculatedSize(0);
 
-        factory(Email::class)->create();
+        Email::factory()->create();
 
         $this->assertCount(1, Email::all());
 
@@ -61,11 +61,11 @@ class AutoDeleteTest extends TestCase
     {
     	$this->hasCalculatedSize(10);
 
-        $oldestEmail = factory(Email::class)->create([
+        $oldestEmail = Email::factory()->create([
             'created_at' => '2017-01-01',
             'size_in_bytes' => 10
         ]);
-        $email = factory(Email::class)->create([
+        $email = Email::factory()->create([
             'created_at' => '2018-01-01',
             'size_in_bytes' => 20
         ]);
@@ -88,12 +88,12 @@ class AutoDeleteTest extends TestCase
     {
     	$this->hasCalculatedSize(10);
 
-        $favoriteEmail = factory(Email::class)->create([
+        $favoriteEmail = Email::factory()->create([
             'created_at' => '2017-01-01',
             'favorite' => true,
             'size_in_bytes' => 10
         ]);
-        $email = factory(Email::class)->create([
+        $email = Email::factory()->create([
             'created_at' => '2018-01-01',
             'size_in_bytes' => 20
         ]);
@@ -116,13 +116,13 @@ class AutoDeleteTest extends TestCase
     {
     	$this->hasDiskFreeSpace(30);
 
-        factory(Statistic::class)->create([
+        Statistic::factory()->create([
             'emails_received' => 0,
             'inboxes_created' => 0,
             'storage_used' => 20,
             'created_at' => Carbon::now()->subDays(40),
         ]);
-        factory(Statistic::class)->create([
+        Statistic::factory()->create([
             'emails_received' => 0,
             'inboxes_created' => 0,
             'storage_used' => 30,
@@ -140,13 +140,13 @@ class AutoDeleteTest extends TestCase
     {
     	$this->hasDiskFreeSpace(5);
 
-        factory(Statistic::class)->create([
+        Statistic::factory()->create([
             'emails_received' => 0,
             'inboxes_created' => 0,
             'storage_used' => 100,
             'created_at' => Carbon::now()->subDays(40),
         ]);
-        factory(Statistic::class)->create([
+        Statistic::factory()->create([
             'emails_received' => 0,
             'inboxes_created' => 0,
             'storage_used' => 50,
@@ -164,7 +164,7 @@ class AutoDeleteTest extends TestCase
     {
     	$this->hasDiskFreeSpace(10);
 
-        factory(Statistic::class)->create([
+        Statistic::factory()->create([
             'emails_received' => 0,
             'inboxes_created' => 0,
             'storage_used' => 10,
@@ -182,7 +182,7 @@ class AutoDeleteTest extends TestCase
     {
     	$this->hasDiskFreeSpace(10);
 
-        factory(Statistic::class)->create([
+        Statistic::factory()->create([
             'emails_received' => 0,
             'inboxes_created' => 0,
             'storage_used' => 10,
@@ -200,13 +200,13 @@ class AutoDeleteTest extends TestCase
     {
     	$this->hasDiskFreeSpace(150);
 
-        factory(Statistic::class)->create([
+        Statistic::factory()->create([
             'emails_received' => 0,
             'inboxes_created' => 0,
             'storage_used' => 100,
             'created_at' => Carbon::now()->subDays(40),
         ]);
-        factory(Statistic::class)->create([
+        Statistic::factory()->create([
             'emails_received' => 0,
             'inboxes_created' => 0,
             'storage_used' => 120,
@@ -224,20 +224,20 @@ class AutoDeleteTest extends TestCase
     {
     	$this->hasDiskFreeSpace(50);
 
-        factory(Statistic::class)->create([
+        Statistic::factory()->create([
             'emails_received' => 0,
             'inboxes_created' => 0,
             'storage_used' => 100,
             'created_at' => Carbon::now()->subDays(40),
         ]);
-        factory(Statistic::class)->create([
+        Statistic::factory()->create([
             'emails_received' => 0,
             'inboxes_created' => 0,
             'storage_used' => 120,
             'created_at' => Carbon::now()->subDays(15),
         ]);
 
-        factory(Email::class)->create([
+        Email::factory()->create([
             'size_in_bytes' => 80,
             'deleted_at' => Carbon::now()->subDays(10),
         ]);

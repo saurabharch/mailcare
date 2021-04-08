@@ -24,7 +24,7 @@ class StatisticsTest extends TestCase
      */
     public function it_fetches_statistics()
     {
-        factory(Statistic::class)->create([
+        Statistic::factory()->create([
             'emails_received' => 10,
             'inboxes_created' => 2,
             'storage_used' => 20,
@@ -32,7 +32,7 @@ class StatisticsTest extends TestCase
             'emails_deleted' => 0,
             'created_at' => Carbon::parse('20 august 2017')->toDateString(),
         ]);
-        factory(Statistic::class)->create([
+        Statistic::factory()->create([
             'emails_received' => 5,
             'inboxes_created' => 4,
             'storage_used' => 30,
@@ -94,7 +94,7 @@ class StatisticsTest extends TestCase
     public function it_build_statistics_for_specific_date()
     {
 
-        $email = factory(Email::class)->create();
+        $email = Email::factory()->create();
         $email->delete();
 
         $this->artisan(

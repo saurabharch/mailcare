@@ -6,9 +6,11 @@ use Tests\DuskTestCase;
 use Laravel\Dusk\Browser;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\Browser\Pages\ShowEmail;
-use \App\Email;
+use App\Email;
 use Carbon\Carbon;
 use App\User;
+use App\Sender;
+use App\Inbox;
 
 class ShowEmailTest extends DuskTestCase
 {
@@ -84,8 +86,8 @@ class ShowEmailTest extends DuskTestCase
 
     public function testFavoriteEmail()
     {
-        $emailOne = factory(\App\Email::class)->create(['subject' => 'My first email']);
-        $emailTwo = factory(\App\Email::class)->create(['subject' => 'My second email']);
+        $emailOne = Email::factory()->create(['subject' => 'My first email']);
+        $emailTwo = Email::factory()->create(['subject' => 'My second email']);
 
         $this->browse(function (Browser $browser) use ($emailOne, $emailTwo) {
             $browser->visit('/')
@@ -105,8 +107,8 @@ class ShowEmailTest extends DuskTestCase
 
     public function testUnreadEmail()
     {
-        $emailOne = factory(\App\Email::class)->create(['subject' => 'My first email']);
-        $emailTwo = factory(\App\Email::class)->create(['subject' => 'My second email']);
+        $emailOne = Email::factory()->create(['subject' => 'My first email']);
+        $emailTwo = Email::factory()->create(['subject' => 'My second email']);
 
         $this->browse(function (Browser $browser) use ($emailOne, $emailTwo) {
             $browser->visit('/')
@@ -125,8 +127,8 @@ class ShowEmailTest extends DuskTestCase
 
     public function testFilterEmails()
     {
-        $emailOne = factory(\App\Email::class)->create(['subject' => 'My first email']);
-        $emailTwo = factory(\App\Email::class)->create(['subject' => 'My second email']);
+        $emailOne = Email::factory()->create(['subject' => 'My first email']);
+        $emailTwo = Email::factory()->create(['subject' => 'My second email']);
 
         $this->browse(function (Browser $browser) use ($emailOne, $emailTwo) {
             $browser->visit('/')
@@ -145,8 +147,8 @@ class ShowEmailTest extends DuskTestCase
 
     public function testStatistics()
     {
-        $emailOne = factory(\App\Email::class)->create(['subject' => 'My first email']);
-        $emailTwo = factory(\App\Email::class)->create(['subject' => 'My second email']);
+        $emailOne = Email::factory()->create(['subject' => 'My first email']);
+        $emailTwo = Email::factory()->create(['subject' => 'My second email']);
 
         $this->artisan(
             'mailcare:build-statistics', 
@@ -163,10 +165,10 @@ class ShowEmailTest extends DuskTestCase
 
     public function testFilterBySender()
     {
-        $sender = factory(\App\Sender::class)->create(['email' => 'test@example.com']);
+        $sender = Sender::factory()->create(['email' => 'test@example.com']);
 
-        $emails = factory(\App\Email::class, 2)->create();
-        $emailFiltered = factory(\App\Email::class)->create([
+        $emails = Email::factory()->count(2)->create();
+        $emailFiltered = Email::factory()->create([
             'sender_id' => $sender->id
         ]);
 
@@ -188,10 +190,10 @@ class ShowEmailTest extends DuskTestCase
 
     public function testFilterByInbox()
     {
-        $inbox = factory(\App\Inbox::class)->create(['email' => 'test@example.com']);
+        $inbox = Inbox::factory()->create(['email' => 'test@example.com']);
 
-        $emails = factory(\App\Email::class)->create();
-        $emailFiltered = factory(\App\Email::class, 2)->create([
+        $emails = Email::factory()->create();
+        $emailFiltered = Email::factory()->count(2)->create([
             'inbox_id' => $inbox->id
         ])->first();
 

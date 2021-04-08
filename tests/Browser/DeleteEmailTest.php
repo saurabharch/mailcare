@@ -15,7 +15,7 @@ class DeleteEmailTest extends DuskTestCase
 
     public function testDeleteEmail()
     {
-        $email = factory(Email::class)->create();
+        $email = Email::factory()->create();
 
         $this->browse(function (Browser $browser) use ($email) {
             $browser->visit('/')

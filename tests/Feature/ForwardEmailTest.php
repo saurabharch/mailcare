@@ -23,7 +23,7 @@ class ForwardEmailTest extends TestCase
             'mailcare.automations' => true
         ]);
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $this->actingAs($user);
     }
 
@@ -70,7 +70,7 @@ class ForwardEmailTest extends TestCase
         config(['mailcare.forward' => true]);
         $this->assertEquals(true, config('mailcare.forward'));
 
-        factory(Automation::class)->create([
+        Automation::factory()->create([
             'action_url' => null,
             'action_email' => 'test@example.com',
         ]);
