@@ -1,13 +1,31 @@
 <?php
 
-use App\Sender;
-use Faker\Generator as Faker;
+namespace Database\Factories;
 
-$factory->define(Sender::class, function (Faker $faker) {
-    return [
-        'email' => $faker->email,
-        'display_name' => $faker->name,
-        'local_part' => '',
-        'domain' => '',
-    ];
-});
+use App\Sender;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class SenderFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Sender::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'email' => $this->faker->email,
+            'display_name' => $this->faker->name,
+            'local_part' => '',
+            'domain' => '',
+        ];
+    }
+}

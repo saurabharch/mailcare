@@ -5,11 +5,13 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Uuids;
 use App\Traits\StorageForHuman;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Attachment extends Model
 {
     use Uuids;
     use StorageForHuman;
+    use HasFactory;
     
     public $incrementing = false;
     protected $keyType = 'string';

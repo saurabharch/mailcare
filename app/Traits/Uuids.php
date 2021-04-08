@@ -2,14 +2,14 @@
 
 namespace App\Traits;
 
-use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Str;
 
 trait Uuids
 {
     protected static function bootUuids()
     {
         static::creating(function ($model) {
-            $model->{$model->getKeyName()} = Uuid::uuid4();
+            $model->{$model->getKeyName()} = (string) Str::uuid();
         });
     }
 }

@@ -21,7 +21,7 @@ class AuthTest extends TestCase
     public function testWebWithMailCareAuth()
     {
         config(['mailcare.auth' => true]);
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->get('/');
 
@@ -44,7 +44,7 @@ class AuthTest extends TestCase
     public function testApiWithMailCareAuth()
     {
         config(['mailcare.auth' => true]);
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->json('GET', 'api/emails');
 

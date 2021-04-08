@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Statistic extends Model
 {
+    use HasFactory;
+
     public $timestamps = false;
     public $fillable = [
         'created_at',

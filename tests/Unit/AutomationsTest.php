@@ -20,7 +20,7 @@ class AutomationsTest extends TestCase
             'mailcare.automations' => true
         ]);
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $this->actingAs($user);
     }
 
@@ -29,7 +29,7 @@ class AutomationsTest extends TestCase
      */
     public function it_fetches_all_automations()
     {
-        $automations = factory(Automation::class, 2)->create();
+        $automations = Automation::factory()->count(2)->create();
 
         $response = $this->json('GET', 'api/automations');
 
@@ -62,7 +62,7 @@ class AutomationsTest extends TestCase
      */
     public function it_can_delete_automation()
     {
-        $automation = factory(Automation::class)->create();
+        $automation = Automation::factory()->create();
 
         $this->assertCount(1, Automation::all());
 
@@ -78,7 +78,7 @@ class AutomationsTest extends TestCase
      */
     public function it_can_update_automation()
     {
-        $automation = factory(Automation::class)->create();
+        $automation = Automation::factory()->create();
 
         $response = $this->json('PUT', 'api/automations/'.$automation->id, [
             'title' => 'My title has changed',

@@ -18,11 +18,11 @@ class AutoCleanTest extends TestCase
      */
     public function cmd_clean_emails()
     {
-        $email = factory(Email::class)->create();
-        $emailDeleted2MonthsAgo = factory(Email::class)->create([
+        $email = Email::factory()->create();
+        $emailDeleted2MonthsAgo = Email::factory()->create([
             'deleted_at' => Carbon::now()->subMonths(2)
         ]);
-        $emailDeleted10DaysAgo = factory(Email::class)->create([
+        $emailDeleted10DaysAgo = Email::factory()->create([
             'deleted_at' => Carbon::now()->subDays(10)
         ]);
 

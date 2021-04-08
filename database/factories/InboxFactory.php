@@ -1,13 +1,31 @@
 <?php
 
-use App\Inbox;
-use Faker\Generator as Faker;
+namespace Database\Factories;
 
-$factory->define(Inbox::class, function (Faker $faker) {
-    return [
-        'email' => $faker->email,
-        'display_name' => $faker->name,
-        'local_part' => '',
-        'domain' => '',
-    ];
-});
+use App\Inbox;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class InboxFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Inbox::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'email' => $this->faker->email,
+            'display_name' => $this->faker->name,
+            'local_part' => '',
+            'domain' => '',
+        ];
+    }
+}
