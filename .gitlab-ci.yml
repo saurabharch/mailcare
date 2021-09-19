@@ -1,4 +1,4 @@
-image: chilio/laravel-dusk-ci:latest
+image: chilio/laravel-dusk-ci:php-7.4
 
 stages:
   - test
@@ -6,6 +6,7 @@ stages:
 unit_test:
   stage: test
   script:
+    - apt-get update && apt-get install php7.4-mailparse
     - cp .env.example .env
     - composer install
     - php artisan key:generate
@@ -14,6 +15,7 @@ unit_test:
 test_coverage:
   stage: test
   script:
+    - apt-get update && apt-get install php7.4-mailparse
     - cp .env.example .env
     - composer install
     - php artisan key:generate
@@ -22,6 +24,7 @@ test_coverage:
 test_coding_standard:
   stage: test
   script:
+    - apt-get update && apt-get install php7.4-mailparse
     - cp .env.example .env
     - composer install
     - vendor/bin/phpcs . --ignore="*/vendor/*,*/node_modules/*,*/public/*,*/database/*,*/autoload.php,*/cache/*,*/*.blade.php,*/storage/*,*/tests/*" --standard=PSR2
@@ -38,6 +41,7 @@ browser_test:
   services:
     - mysql:5.7
   script:
+    - apt-get update && apt-get install php7.4-mailparse
     - cp .env.dusk.ci .env
     - composer install
     - configure-laravel
