@@ -14,7 +14,7 @@ class EmailsController extends ApiController
     {
         $limit = request()->input('limit') ?: 25;
 
-        $emails = Email::with('inbox')
+        $emails = Email::with(['inbox', 'sender', 'attachments'])
                         ->latest()
                         ->filter($filters)
                         ->paginate($limit);
